@@ -1,6 +1,6 @@
 'use client';
 import { InputWithLabel, Sidebar } from "@/src/forms";
-import { TextInput } from "@/src/forms/components/TextInput";
+
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup';
 
@@ -48,18 +48,7 @@ export default function AuthorForm() {
                         <Form>
                             <div className="flex flex-row">
 
-                            <TextInput
-                                label="Nombres"
-                                name="firsName"
-                                classNameLabel=""
-                                classNameInput=""
-                            />
-                            <TextInput
-                                label="Nombres"
-                                name="firsName"
-                                classNameLabel=""
-                                classNameInput=""
-                            />
+                            
                             </div>
                         </Form>
                     )}
