@@ -9,7 +9,7 @@ import * as Yup from 'yup';
 export default function AuthorForm() {
     return (
         <div className="flex">
-            <Sidebar />
+            {/* <Sidebar /> */}
             <div className="flex flex-col">
                 <text className="font-georgia text-black text-3xl"> Detalles personales del Autor </text>
                 <Formik
