@@ -1,5 +1,5 @@
 'use client';
-import { InputWithLabel, Sidebar } from "@/src/forms";
+import { InputComponent, Sidebar } from "@/src/forms";
 
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup';
