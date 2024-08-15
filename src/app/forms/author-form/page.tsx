@@ -1,6 +1,6 @@
 'use client';
-import { InputComponent, Sidebar } from "@/src/forms";
-
+import { InputComponent } from "@/src/forms";
+import { Sidebar } from "@/src/dashboard/components/Sidebar/Sidebar";
 import { Formik, Form } from 'formik'
 import * as Yup from 'yup';
 
@@ -8,10 +8,11 @@ import * as Yup from 'yup';
 
 export default function AuthorForm() {
     return (
-        <div className="flex">
-            {/* <Sidebar /> */}
-            <div className="flex flex-col">
-                <text className="font-georgia text-black text-3xl"> Detalles personales del Autor </text>
+        <div className="">
+            <Sidebar />
+
+            {/* <div className="flex flex-col">
+                <text className="font-georgia text-black text-3xl"> </text>
                 <Formik
                     initialValues={{
                         firsName: '',
@@ -53,7 +54,7 @@ export default function AuthorForm() {
                         </Form>
                     )}
                 </Formik>
-            </div>
+            </div> */}
         </div>
     );
 }
