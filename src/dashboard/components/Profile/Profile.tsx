@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 import {
     Menu,
@@ -10,8 +8,13 @@ import {
 import { BellIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
-export const Profile = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+interface Props {
+    sendStatusSidebar: (status: boolean) => void;
+}
+
+
+export const Profile = ({sendStatusSidebar}: Props) => {
+
     const userNavigation = [
         { name: 'Your profile', href: '#' },
         { name: 'Sign out', href: '#' },
@@ -20,7 +23,7 @@ export const Profile = () => {
     return (
         <div className="lg:pl-[73vw] xl:pl-[76vw] 2xl:pl-[80vw] ">
             <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 bg-d-fondo px-4 shadow-sm sm:gap-x-6 sm:px-6 ">
-                <button type="button" onClick={() => setSidebarOpen(true)} className="-m-2.5 p-2.5 text-gray-700 lg:hidden">
+                <button type="button" onClick={() => sendStatusSidebar(true)} className="-m-2.5 p-2.5 text-gray-700 lg:hidden">
                     <span className="sr-only">Open sidebar</span>
                     <Bars3Icon aria-hidden="true" className="h-6 w-6" />
                 </button>

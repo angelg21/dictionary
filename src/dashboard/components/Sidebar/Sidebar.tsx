@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import {
     Dialog,
@@ -25,6 +23,12 @@ import {
 } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { SidebarMenuItems } from '../SidebarMenuItems/SidebarMenuItems' 
+
+
+interface Props {
+    sendStatusSidebar: (status: boolean) => void;
+    statusSidebar: boolean;
+}
 
 const navigation = [
     { name: 'Fichas', href: '#', icon: BookOpenIcon, current: true },
@@ -83,13 +87,12 @@ function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export const Sidebar = () => {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+export const Sidebar = ({sendStatusSidebar, statusSidebar}:Props) => {
 
     return (
         <>
             <div>
-                <Dialog open={sidebarOpen} onClose={setSidebarOpen} className="relative z-50 lg:hidden">
+                <Dialog open={statusSidebar} onClose={sendStatusSidebar} className="relative z-50 lg:hidden">
                     <DialogBackdrop
                         transition
                         className="fixed inset-0 bg-gray-900/80 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
@@ -102,7 +105,7 @@ export const Sidebar = () => {
                         >
                             <TransitionChild>
                                 <div className="absolute left-full top-0 flex w-16 justify-center pt-5 duration-300 ease-in-out data-[closed]:opacity-0">
-                                    <button type="button" onClick={() => setSidebarOpen(false)} className="-m-2.5 p-2.5">
+                                    <button type="button" onClick={() => sendStatusSidebar(false)} className="-m-2.5 p-2.5">
                                         <span className="sr-only">Close sidebar</span>
                                         <XMarkIcon aria-hidden="true" className="h-6 w-6 text-white" />
                                     </button>
@@ -145,7 +148,7 @@ export const Sidebar = () => {
                                                 ))}
                                             </ul>
                                         </li>
-                                        <li>
+                                        <li className=''>
                                             <div className="text-xs font-semibold leading-6 text-indigo-200">Your teams</div>
                                             <ul role="list" className="-mx-2 mt-2 space-y-1">
                                                 {teams.map((team) => (
