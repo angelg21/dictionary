@@ -4,16 +4,16 @@ import formsPlugin from '@tailwindcss/forms';
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/forms/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
       colors: {
-        'd-gray': '#ececec',
-        'd-lightblue': '#A5B2CF',
         'd-blue': '#003366',
+        'd-yellow': '#DAA520',
+        'd-fondo': '#F0F0F0',
       },
       fontFamily: {
         georgia: ['Georgia', 'serif'],
