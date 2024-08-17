@@ -7,13 +7,14 @@ interface Props {
     path: string;
     icon: JSX.Element;
     title: string;
+    onClick?: () => void
 }
 
 function classNames(...classes: any[]) {
     return classes.filter(Boolean).join(' ')
 }
 
-export const SidebarMenuItems = ({ path, icon: Icon, title }: Props) => {
+export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) => {
 
     const pathName = usePathname();
 
@@ -25,11 +26,12 @@ export const SidebarMenuItems = ({ path, icon: Icon, title }: Props) => {
         <li>
             <Link href={path} className='relative'>
                 <div
+                    onClick={onClick}
                     className={classNames(
                         pathName === path
                             ? 'bg-d-blue text-d-yellow before:content-[""] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[7px] before:rounded-full before:bg-d-yellow'
                             : 'text-indigo-200 hover:text-white',
-                        'group flex gap-x-3 rounded-md p-2 text-lg font-medium leading-6  pl-4',
+                        'group flex gap-x-3 rounded-md p-2 text-lg font-medium leading-6  pl-5 transition-colors duration-300 ease-in-out',
                     )}
                 >
                     {React.cloneElement(Icon, { className: `${iconClasses}` })}
