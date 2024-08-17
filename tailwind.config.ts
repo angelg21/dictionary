@@ -13,6 +13,7 @@ const config: Config = {
       colors: {
         'd-gray': '#ececec',
         'd-lightblue': '#A5B2CF',
+        'd-blue': '#003366',
       },
       fontFamily: {
         georgia: ['Georgia', 'serif'],

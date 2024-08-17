@@ -2,16 +2,27 @@
 import { InputComponent, Sidebar } from "@/src/forms";
 
 import { Formik, Form } from 'formik'
+import Link from "next/link";
 import * as Yup from 'yup';
 
 
 
 export default function AuthorForm() {
+
     return (
         <div className="flex">
             {/* <Sidebar /> */}
             <div className="flex flex-col">
-                <text className="font-georgia text-black text-3xl"> Detalles personales del Autor </text>
+                <div className="flex flex-row justify-between">
+                    <text className="font-georgia text-black text-3xl"> Detalles personales del Autor </text>
+                    <div className="flex gap-4 ml-auto">
+                        <button
+                            className="text-red-500"
+                        >
+                            Sign Out
+                        </button>
+                    </div>
+                </div>
                 <Formik
                     initialValues={{
                         firsName: '',
