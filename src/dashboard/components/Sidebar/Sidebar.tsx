@@ -25,7 +25,7 @@ interface Props {
 
 const menuItems = [
     {
-        path: '/dashboard/files',
+        path: '/dashboard/worksheets',
         title: 'Fichas',
         icon: <BookOpenIcon />,
     },

@@ -1,6 +1,5 @@
 'use client'
 
-import { DialogPanelMobile } from "@/src/dashboard/components/DialogPanelMobile/DialogPanelMobile";
 import { Profile } from "@/src/dashboard/components/Profile/Profile";
 import { Sidebar } from "@/src/dashboard/components/Sidebar/Sidebar";
 import { useState } from "react";
