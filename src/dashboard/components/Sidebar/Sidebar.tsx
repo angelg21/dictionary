@@ -15,6 +15,7 @@ import {
     ArrowLeftStartOnRectangleIcon
 } from '@heroicons/react/24/outline'
 import { SidebarMenuItems } from '../SidebarMenuItems/SidebarMenuItems'
+import { signOut } from 'next-auth/react';
 
 
 interface Props {
@@ -168,13 +169,18 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                 </li>
                                 <li className="mt-auto pl-[14px]">
                                     <ul
-                                        className="group flex gap-x-3 rounded-md p-2 text-md font-medium leading-6 text-indigo-200 hover:text-red-500"
+                                        className=""
                                     >
-                                        <ArrowLeftStartOnRectangleIcon
-                                            aria-hidden="true"
-                                            className="h-6 w-6 shrink-0 hover:text-red-500"
-                                        />
-                                        Cerrar Sesion
+                                        <button 
+                                            className='group flex gap-x-3 rounded-md p-2 text-md font-medium leading-6 text-indigo-200 hover:text-red-500'
+                                            onClick={() => signOut()}
+                                        >
+                                            <ArrowLeftStartOnRectangleIcon
+                                                aria-hidden="true"
+                                                className="h-6 w-6 shrink-0 hover:text-red-500"
+                                            />
+                                            Cerrar Sesion
+                                        </button>
                                     </ul>
                                 </li>
                             </ul>

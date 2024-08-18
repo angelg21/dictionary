@@ -8,11 +8,13 @@
  * @property {string} width - The width of the button, defined using Tailwind CSS width classes.
  * @property {string} fontSize - The font size of the button text, defined using Tailwind CSS font size classes.
  * @property {string} type - The type of the button, which can be "button", "submit", or "reset".
+ * @property {boolean} isDisabled - A flag to indicate if the button is disabled.
  */
 export interface ButtonProps {
   bgColor: string;
   text: string;
   width: string;
   fontSize: string;
-  type?: "button" | "submit" | "reset"; // Adding the type property to the interface
+  type?: "button" | "submit" | "reset";
+  isDisabled?: boolean;
 }

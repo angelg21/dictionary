@@ -1,22 +1,20 @@
-'use server'
+'use server';
 
-const sleep = (seconds: number = 0):Promise<boolean> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true)
-      }, seconds * 1000 );
-    })
-}
+export const registerUser = async (values: any) => {
+  const res = await fetch(process.env.API_URL + "/users/auth/register", {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        fullName: values.name,
+        email: values.email,
+        password: values.password,
+      }),
+  });
 
-export const login = async ( values: any) => {
-    await sleep(3)
-    console.log(values)
-}
-
-
-export const register = async ( values: any) => {
-    await sleep(3)
-    setTimeout(() => {}, 3000)
-    console.log(values)
-}
-
+  if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || "Error al registrar el usuario.");
+  }
+};

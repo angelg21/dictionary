@@ -9,6 +9,7 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 interface Props {
     sendStatusSidebar: (status: boolean) => void;
+    userName: string | undefined;
 }
 
 const userNavigation = [
@@ -16,7 +17,7 @@ const userNavigation = [
     { name: 'Sign out', href: '#' },
 ]
 
-export const Profile = ({ sendStatusSidebar }: Props) => {
+export const Profile = ({ sendStatusSidebar, userName }: Props) => {
     return (
         <div className="bg-d-blue lg:bg-d-fondo flex justify-between items-center p-2">
             {/* Menú Hamburguesa en el lado izquierdo */}
@@ -43,7 +44,7 @@ export const Profile = ({ sendStatusSidebar }: Props) => {
                         />
                         <span className=" hidden lg:flex ">
                             <span aria-hidden="true" className="ml-4 text-lg font-medium leading-6 text-d-blue flex-shrink-0">
-                                Tom Cook
+                                { userName? userName : 'Usuario' }
                             </span>
                             <ChevronDownIcon aria-hidden="true" className="ml-2 h-5 w-5 text-d-blue" />
                         </span>

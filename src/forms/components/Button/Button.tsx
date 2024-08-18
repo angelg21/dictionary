@@ -13,12 +13,14 @@ export const ButtonComponent: React.FC<ButtonProps> = ({
   text,
   width,
   fontSize,
-  type = "button" // Adding the type prop with a default value of "button"
+  type = "button",
+  isDisabled = false,
 }) => {
   return (
     <button
-      type={type} // Setting the button type here
-      className={`rounded-md ${bgColor} ${width} ${fontSize} px-3.5 py-2.5 font-normal text-white shadow-sm hover:bg-[#0c2aa6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform transform active:scale-95`}
+      type={type}
+      disabled={isDisabled}
+      className={`rounded-md ${bgColor} ${width} ${fontSize} px-3.5 py-2.5 font-normal text-white shadow-sm hover:bg-[#0c2aa6] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-transform transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed`}
     >
       {text}
     </button>

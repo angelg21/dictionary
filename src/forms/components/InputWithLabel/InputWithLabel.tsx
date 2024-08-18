@@ -59,8 +59,8 @@ export const InputComponent: React.FC<InputProps> = ({
         {/* Password visibility toggle icon */}
         {type === 'password' && (
           <span 
-            onClick={togglePasswordVisibility} 
-            className={`absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 ${disabled}`}
+            onClick={togglePasswordVisibility}
+            className={`absolute inset-y-0 right-3 flex items-center cursor-pointer text-gray-500 ${disabled ? 'invisible' : 'visible'}`}
           >
             {showPassword ? (
               <img src="/assets/eye-on.svg" alt="show-password-icon" />

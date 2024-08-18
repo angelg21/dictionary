@@ -11,7 +11,7 @@ export default function AuthorForm() {
 
     return (
         <div className="">
-            <Sidebar />
+            {/* <Sidebar /> */}
 
             {/* <div className="flex flex-col">
                 <text className="font-georgia text-black text-3xl"> </text>

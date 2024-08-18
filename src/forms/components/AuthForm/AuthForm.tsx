@@ -14,7 +14,7 @@ import { Alert } from '../Alert/Alert';
  * @param {FormProps} props - The properties for customizing the form.
  * @returns {JSX.Element} A JSX element representing a customizable form with inputs, a button, a link, and a title.
  */
-export const FormComponent: React.FC<FormProps> = ({
+export const AuthForm: React.FC<FormProps> = ({
   formTitle,
   inputs,
   buttonText,
@@ -41,6 +41,10 @@ export const FormComponent: React.FC<FormProps> = ({
       } else if (input.name === 'password') {
         schema[input.name] = Yup.string()
           .min(6, 'La contraseña debe tener al menos 6 caracteres')
+          .matches(
+            /(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/,
+            'La contraseña debe tener una letra mayúscula, una letra minúscula y un número'
+          )
           .required('Campo requerido');
       }
       return schema;
@@ -96,6 +100,7 @@ export const FormComponent: React.FC<FormProps> = ({
                   width="w-full"
                   fontSize="text-sm"
                   type='submit'
+                  isDisabled={isPending}
                 />
                 <p className="mt-4 text-center text-sm text-white">
                 {linkQuestion} <a href={linkHref} className="font-bold text-d-blue hover:text-[#0c2aa6]">
