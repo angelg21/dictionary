@@ -112,8 +112,7 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
 
                                                         <SidebarMenuItems
                                                             key={item.path}
-                                                            onClick={() => sendStatusSidebar(false)}
-                                                            //Como se le puso los mismos nombres se puede hacer asi 
+                                                            onClick={() => sendStatusSidebar(false)} 
                                                             {...item}
                                                         />
                                                         
@@ -123,13 +122,18 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                         </li>
                                         <li className='mt-auto mb-3 px-5'>
                                             <ul
-                                                className="group flex gap-x-3 rounded-md text-md font-medium leading-6 text-indigo-200 hover:text-red-500"
+                                                className=""
                                             >
-                                                <ArrowLeftStartOnRectangleIcon
-                                                    aria-hidden="true"
-                                                    className="h-6 w-6 shrink-0 hover:text-red-500"
-                                                />
-                                                Cerrar Sesion
+                                                <button 
+                                                    className='group flex gap-x-3 rounded-md text-md font-medium leading-6 text-indigo-200 hover:text-red-500'
+                                                    onClick={() => signOut()}
+                                                >    
+                                                    <ArrowLeftStartOnRectangleIcon
+                                                        aria-hidden="true"
+                                                        className="h-6 w-6 shrink-0 hover:text-red-500"
+                                                    />
+                                                    Cerrar Sesion
+                                                </button>
                                             </ul>
                                         </li>
                                     </ul>
