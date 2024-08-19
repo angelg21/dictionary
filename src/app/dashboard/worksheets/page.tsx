@@ -1,8 +1,15 @@
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
+export default async function Worksheets() {
+    
+    const session = await getServerSession(authOptions)
 
+    if (session?.user.roles.includes("researcher")){
+        redirect("/dashboard/searcher");
+    }
 
-
-export default function Worksheets() {
     return (
         <div className="flex flex-col">
             <span></span>

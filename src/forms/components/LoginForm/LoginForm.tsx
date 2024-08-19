@@ -1,13 +1,14 @@
 "use client";
 import { AuthForm } from '../../../forms/components/AuthForm/AuthForm';
 import { signIn } from 'next-auth/react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
 const LoginForm: React.FC = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const router = useRouter(); 
 
   const handleSubmit = async (values: any) => {
     setError(null);
@@ -22,7 +23,7 @@ const LoginForm: React.FC = () => {
       if (res?.error) {
         setError(res.error);
       } else {
-        redirect('/dashboard/worksheets');
+        router.replace('/dashboard/worksheets');
       }
     });
   };

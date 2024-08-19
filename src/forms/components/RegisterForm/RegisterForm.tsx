@@ -25,7 +25,7 @@ const RegisterForm: React.FC = () => {
                 if (signInResponse?.error) {
                     setError(signInResponse.error);
                 } else {
-                    router.push('/dashboard/worksheets');
+                    router.replace('/dashboard/searcher');
                 }
             } catch (error: any) {
                 if (error.message === "fetch failed") {
