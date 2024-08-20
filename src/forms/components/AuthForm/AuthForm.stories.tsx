@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { FormComponent } from '../AuthForm/AuthForm'; // Importing the FormComponent
+import { AuthForm } from '../AuthForm/AuthForm'; // Importing the FormComponent
 
-const meta: Meta<typeof FormComponent> = {
+const meta: Meta<typeof AuthForm> = {
     title: 'Form/FormComponent',
-    component: FormComponent,
+    component: AuthForm,
     parameters: {
         layout: 'centered',
         backgrounds: {

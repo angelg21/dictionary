@@ -6,10 +6,12 @@ import {
 } from '@headlessui/react'
 import { BellIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { use } from 'react';
 
 interface Props {
     sendStatusSidebar: (status: boolean) => void;
     userName: string | undefined;
+    userImg: string | undefined;
 }
 
 const userNavigation = [
@@ -17,7 +19,7 @@ const userNavigation = [
     { name: 'Sign out', href: '#' },
 ]
 
-export const Profile = ({ sendStatusSidebar, userName }: Props) => {
+export const Profile = ({ sendStatusSidebar, userName, userImg }: Props) => {
     return (
         <div className="bg-d-blue lg:bg-d-fondo flex justify-between items-center p-2">
             {/* Menú Hamburguesa en el lado izquierdo */}
@@ -37,11 +39,18 @@ export const Profile = ({ sendStatusSidebar, userName }: Props) => {
                 <Menu as="div" className="py-2">
                     <MenuButton className="flex lg:items-center">
                         <span className="sr-only">Open user menu</span>
-                        <img
-                            alt=""
-                            src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                            className="h-9 w-9 rounded-full bg-gray-50"
-                        />
+                        {
+                            userImg ? (<img
+                                alt=""
+                                src={userImg}
+                                className="h-9 w-9 rounded-full bg-gray-50"
+                            />) : 
+                            <span className="inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-100">
+                                <svg fill="currentColor" viewBox="0 0 24 24" className="h-full w-full text-gray-300">
+                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                            </span>
+                        }
                         <span className=" hidden lg:flex ">
                             <span aria-hidden="true" className="ml-4 text-lg font-medium leading-6 text-d-blue flex-shrink-0">
                                 { userName? userName : 'Usuario' }

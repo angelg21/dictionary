@@ -6,6 +6,8 @@ export default async function Worksheets() {
     
     const session = await getServerSession(authOptions)
 
+    console.log(session);
+
     if (session?.user.roles.includes("researcher")){
         redirect("/dashboard/searcher");
     }
