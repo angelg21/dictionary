@@ -17,12 +17,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     return (
         <div className="bg-d-fondo min-h-screen antialiased">
             <div className="">
-                <Sidebar sendStatusSidebar={handleSidebar} statusSidebar={sidebarOpen}/>
-                <Profile sendStatusSidebar={handleSidebar} userName={session?.user.fullName}/>
+                <Sidebar sendStatusSidebar={handleSidebar} statusSidebar={sidebarOpen} />
+                <Profile sendStatusSidebar={handleSidebar} userName={session?.user.fullName} />
                 <div className=" lg:ml-[256px]">
-                    { children }
-                    </div>
+                    {children}
                 </div>
+            </div>
         </div>
     );
 }

@@ -26,7 +26,7 @@ interface Props {
 
 const menuItems = [
     {
-        path: '/dashboard/worksheets',
+        path: '/dashboard/worksheets/allSheets',
         title: 'Fichas',
         icon: <BookOpenIcon />,
     },
@@ -109,7 +109,6 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                             <ul role="list" className=" space-y-5" >
                                                 {
                                                     menuItems.map(item => (
-
                                                         <SidebarMenuItems
                                                             key={item.path}
                                                             onClick={() => sendStatusSidebar(false)} 
