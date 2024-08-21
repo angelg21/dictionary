@@ -42,7 +42,7 @@ export const TabsMenu = () => {
 
                 {/* Worksheets Menu mobile  */}
                 <div className="relative mt-2 sm:hidden">
-                    <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-12 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-d-blue sm:text-sm sm:leading-6">
+                    <ListboxButton className="relative w-full  max-w-lg  cursor-default rounded-md bg-white py-1.5 pl-3 pr-12 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-d-blue sm:text-sm sm:leading-6">
                         <span className="block truncate">{selected.name}</span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                             <ChevronUpDownIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />

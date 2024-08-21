@@ -22,7 +22,7 @@ const LoginForm: React.FC = () => {
       if (res?.error) {
         setError(res.error);
       } else {
-        redirect('/dashboard/worksheets');
+        redirect('/dashboard/worksheets/allSheets');
       }
     });
   };
