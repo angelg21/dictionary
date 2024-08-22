@@ -7,11 +7,8 @@ declare module "next-auth" {
       email: string;
       fullName: string;
       roles: string[];
-      assignedCardsAsEditor: string[];
-      assignedCardsAsReviewer: string[];
-      assignedCollectiveWorksAsEditor: string[];
-      assignedCollectiveWorksAsReviewer: string[];
-      token: string;      
+      token: string;
+      imageUrl: string;      
     };
   }
 }
@@ -22,13 +19,9 @@ declare module "next-auth/jwt" {
   interface JWT {
     _id: string;
     email: string;
-    username: string;
     fullName: string;
     roles: string[];
-    assignedCardsAsEditor: string[];
-    assignedCardsAsReviewer: string[];
-    assignedCollectiveWorksAsEditor: string[];
-    assignedCollectiveWorksAsReviewer: string[];
     token: string;
+    imageUrl: string;
   }
 }

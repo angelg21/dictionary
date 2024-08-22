@@ -1,3 +1,4 @@
+"use client"
 import {
     Dialog,
     DialogBackdrop,
@@ -15,7 +16,7 @@ import {
     ArrowLeftStartOnRectangleIcon
 } from '@heroicons/react/24/outline'
 import { SidebarMenuItems } from '../SidebarMenuItems/SidebarMenuItems'
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 
 interface Props {
@@ -37,7 +38,7 @@ const menuItems = [
     },
     {
         path: '/dashboard/notes',
-        title: 'Block de notas',
+        title: 'Bloc de notas',
         icon: <ClipboardDocumentListIcon />,
     },
     {
@@ -69,6 +70,10 @@ function classNames(...classes: any[]) {
 }
 
 export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
+
+    const { data: session } = useSession();
+    const isAdmin = session?.user?.roles.includes('admin')
+    const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer')
 
     return (
         <>
@@ -107,16 +112,40 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                         <li>
                                             <ul role="list" className=" space-y-5" >
-                                                {
-                                                    menuItems.map(item => (
-                                                        <SidebarMenuItems
-                                                            key={item.path}
-                                                            onClick={() => sendStatusSidebar(false)} 
-                                                            {...item}
-                                                        />
-                                                        
-                                                    ))
-                                                }
+                                                { isAdmin || isEdOrRev ? 
+                                                (   <SidebarMenuItems
+                                                        key={menuItems[0].path}
+                                                        onClick={() => sendStatusSidebar(false)} 
+                                                        {...menuItems[0]}
+                                                    /> 
+                                                ) : null }
+                                                <SidebarMenuItems
+                                                    key={menuItems[1].path}
+                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    {...menuItems[1]}
+                                                />
+                                                <SidebarMenuItems
+                                                    key={menuItems[2].path}
+                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    {...menuItems[2]}
+                                                />
+                                                { isAdmin ? 
+                                                (   <SidebarMenuItems
+                                                        key={menuItems[3].path}
+                                                        onClick={() => sendStatusSidebar(false)} 
+                                                        {...menuItems[3]}
+                                                    /> 
+                                                ) : null }
+                                                <SidebarMenuItems
+                                                    key={menuItems[4].path}
+                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    {...menuItems[4]}
+                                                />
+                                                <SidebarMenuItems
+                                                    key={menuItems[5].path}
+                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    {...menuItems[5]}
+                                                />
                                             </ul>
                                         </li>
                                         <li className='mt-auto mb-3 px-5'>
@@ -158,16 +187,40 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                 <li>
                                     <ul role="list" className=" space-y-5">
-                                        {
-                                            menuItems.map(item => (
-
-                                                <SidebarMenuItems
-                                                    key={item.path}
-                                                    {...item}
-                                                />
-
-                                            ))
-                                        }
+                                        { isAdmin || isEdOrRev ? 
+                                        (   <SidebarMenuItems
+                                                key={menuItems[0].path}
+                                                onClick={() => sendStatusSidebar(false)} 
+                                                {...menuItems[0]}
+                                            /> 
+                                        ) : null }
+                                        <SidebarMenuItems
+                                            key={menuItems[1].path}
+                                            onClick={() => sendStatusSidebar(false)} 
+                                            {...menuItems[1]}
+                                        />
+                                        <SidebarMenuItems
+                                            key={menuItems[2].path}
+                                            onClick={() => sendStatusSidebar(false)} 
+                                            {...menuItems[2]}
+                                        />
+                                        { isAdmin ? 
+                                        (   <SidebarMenuItems
+                                                key={menuItems[3].path}
+                                                onClick={() => sendStatusSidebar(false)} 
+                                                {...menuItems[3]}
+                                            /> 
+                                        ) : null }
+                                        <SidebarMenuItems
+                                            key={menuItems[4].path}
+                                            onClick={() => sendStatusSidebar(false)} 
+                                            {...menuItems[4]}
+                                        />
+                                        <SidebarMenuItems
+                                            key={menuItems[5].path}
+                                            onClick={() => sendStatusSidebar(false)} 
+                                            {...menuItems[5]}
+                                        />
                                     </ul>
                                 </li>
                                 <li className="mt-auto pl-[14px]">

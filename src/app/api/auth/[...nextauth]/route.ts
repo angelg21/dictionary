@@ -1,9 +1,17 @@
 import { NextAuthOptions } from "next-auth";
+import { connect } from "@/utils/config/dbConfig";
+import User from "@/utils/models/User";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import { createToken } from "@/utils/config/jwt.handle";
 
-const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = {
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+        }),
         CredentialsProvider({
             name: "Credentials",
             credentials: {
@@ -44,10 +52,12 @@ const authOptions: NextAuthOptions = {
         strategy: "jwt",
     },
     pages: {
-        signIn: "/auth/login"
+        signIn: "/auth/login",
     },
     callbacks: {
+      
       async jwt({ token, user }): Promise<any> {
+        console.log("User", user, "Token:", token)
         if (user) return { ...token, ...user };
         return token;
       },
@@ -58,6 +68,42 @@ const authOptions: NextAuthOptions = {
   
         return session;
       },
+
+      async signIn({user, account}: { user: any; account: any }) {
+        if (account.provider === "google") {
+          try {
+            const { name, email } = user;
+            await connect();
+            const ifUserExists = await User.findOne({ email });
+            console.log("ifUserExists: ", ifUserExists)
+            if (ifUserExists) {
+              user._id = ifUserExists._id;
+              user.roles = ifUserExists.roles;
+              user.token = createToken(ifUserExists._id);
+              user.imageUrl = ifUserExists.imageUrl;
+              user.fullName = ifUserExists.fullName;
+              return true;
+            }
+            const newUser = new User({
+              fullName: name,
+              email: email,
+              imageUrl: user.image,
+            });
+            const res = await newUser.save();
+            if (res._id) {
+              user._id = res._id;
+              user.roles = res.roles;
+              user.token = createToken(res._id);
+              user.imageUrl = res.imageUrl;
+              user.fullName = res.fullName;
+              return true;
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        }
+        return true;
+      }
     },
 };
 
