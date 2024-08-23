@@ -65,15 +65,14 @@ const userNavigation = [
     { name: 'Sign out', href: '#' },
 ]
 
-function classNames(...classes: any[]) {
-    return classes.filter(Boolean).join(' ')
-}
-
 export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
 
     const { data: session } = useSession();
-    const isAdmin = session?.user?.roles.includes('admin')
-    const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer')
+    // const isAdmin = session?.user?.roles.includes('admin')
+    // const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer')
+    const isAdmin = Array.isArray(session?.user?.roles) && session.user.roles.includes('admin');
+    const isEdOrRev = Array.isArray(session?.user?.roles) && (session.user.roles.includes('editor') || session.user.roles.includes('reviewer'));
+
 
     return (
         <>
@@ -112,38 +111,38 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                         <li>
                                             <ul role="list" className=" space-y-5" >
-                                                { isAdmin || isEdOrRev ? 
-                                                (   <SidebarMenuItems
+                                                {isAdmin || isEdOrRev ?
+                                                    (<SidebarMenuItems
                                                         key={menuItems[0].path}
-                                                        onClick={() => sendStatusSidebar(false)} 
+                                                        onClick={() => sendStatusSidebar(false)}
                                                         {...menuItems[0]}
-                                                    /> 
-                                                ) : null }
+                                                    />
+                                                    ) : null}
                                                 <SidebarMenuItems
                                                     key={menuItems[1].path}
-                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    onClick={() => sendStatusSidebar(false)}
                                                     {...menuItems[1]}
                                                 />
                                                 <SidebarMenuItems
                                                     key={menuItems[2].path}
-                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    onClick={() => sendStatusSidebar(false)}
                                                     {...menuItems[2]}
                                                 />
-                                                { isAdmin ? 
-                                                (   <SidebarMenuItems
+                                                {isAdmin ?
+                                                    (<SidebarMenuItems
                                                         key={menuItems[3].path}
-                                                        onClick={() => sendStatusSidebar(false)} 
+                                                        onClick={() => sendStatusSidebar(false)}
                                                         {...menuItems[3]}
-                                                    /> 
-                                                ) : null }
+                                                    />
+                                                    ) : null}
                                                 <SidebarMenuItems
                                                     key={menuItems[4].path}
-                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    onClick={() => sendStatusSidebar(false)}
                                                     {...menuItems[4]}
                                                 />
                                                 <SidebarMenuItems
                                                     key={menuItems[5].path}
-                                                    onClick={() => sendStatusSidebar(false)} 
+                                                    onClick={() => sendStatusSidebar(false)}
                                                     {...menuItems[5]}
                                                 />
                                             </ul>
@@ -152,10 +151,10 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                             <ul
                                                 className=""
                                             >
-                                                <button 
+                                                <button
                                                     className='group flex gap-x-3 rounded-md text-md font-medium leading-6 text-indigo-200 hover:text-red-500'
                                                     onClick={() => signOut()}
-                                                >    
+                                                >
                                                     <ArrowLeftStartOnRectangleIcon
                                                         aria-hidden="true"
                                                         className="h-6 w-6 shrink-0 hover:text-red-500"
@@ -187,38 +186,38 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
                                 <li>
                                     <ul role="list" className=" space-y-5">
-                                        { isAdmin || isEdOrRev ? 
-                                        (   <SidebarMenuItems
+                                        {isAdmin || isEdOrRev ?
+                                            (<SidebarMenuItems
                                                 key={menuItems[0].path}
-                                                onClick={() => sendStatusSidebar(false)} 
+                                                onClick={() => sendStatusSidebar(false)}
                                                 {...menuItems[0]}
-                                            /> 
-                                        ) : null }
+                                            />
+                                            ) : null}
                                         <SidebarMenuItems
                                             key={menuItems[1].path}
-                                            onClick={() => sendStatusSidebar(false)} 
+                                            onClick={() => sendStatusSidebar(false)}
                                             {...menuItems[1]}
                                         />
                                         <SidebarMenuItems
                                             key={menuItems[2].path}
-                                            onClick={() => sendStatusSidebar(false)} 
+                                            onClick={() => sendStatusSidebar(false)}
                                             {...menuItems[2]}
                                         />
-                                        { isAdmin ? 
-                                        (   <SidebarMenuItems
+                                        {isAdmin ?
+                                            (<SidebarMenuItems
                                                 key={menuItems[3].path}
-                                                onClick={() => sendStatusSidebar(false)} 
+                                                onClick={() => sendStatusSidebar(false)}
                                                 {...menuItems[3]}
-                                            /> 
-                                        ) : null }
+                                            />
+                                            ) : null}
                                         <SidebarMenuItems
                                             key={menuItems[4].path}
-                                            onClick={() => sendStatusSidebar(false)} 
+                                            onClick={() => sendStatusSidebar(false)}
                                             {...menuItems[4]}
                                         />
                                         <SidebarMenuItems
                                             key={menuItems[5].path}
-                                            onClick={() => sendStatusSidebar(false)} 
+                                            onClick={() => sendStatusSidebar(false)}
                                             {...menuItems[5]}
                                         />
                                     </ul>
@@ -227,7 +226,7 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                     <ul
                                         className=""
                                     >
-                                        <button 
+                                        <button
                                             className='group flex gap-x-3 rounded-md p-2 text-md font-medium leading-6 text-indigo-200 hover:text-red-500'
                                             onClick={() => signOut()}
                                         >

@@ -12,11 +12,14 @@ const config: Config = {
     extend: {
       colors: {
         'd-blue': '#003366',
+        'd-blue-light-button': '#6699CC',
         'd-yellow': '#DAA520',
+        'd-yellow-light-button': '#F3DFA7',
         'd-fondo': '#F0F0F0',
         'd-gray-light': '#9CA3AF',
         'd-green': '#2E8B57', 
         'd-green-light': '#379B63',
+        'd-green-light-button': '#A3D3B4',
         'd-gray-text': '#6B7280',
       },
       fontFamily: {
