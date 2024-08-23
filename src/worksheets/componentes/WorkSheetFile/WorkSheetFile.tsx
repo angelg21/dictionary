@@ -31,8 +31,8 @@ export const WorkSheetFile = ({
     buttonTextColor
 }: Props) => {
     return (
-        <div className="flex-col max-w-[360px] space-y-4 xl:flex xl:flex-row xl:max-w-none xl:justify-between bg-white py-5 px-6 items-center rounded-md">
-            <div className="flex justify-between xl:hidden">
+        <div className="flex-col max-w-[360px] my-3 xl:flex xl:flex-row xl:max-w-none xl:justify-between xl:my-4 bg-white py-5 px-6 items-center rounded-md">
+            <div className="flex mb-2 justify-between xl:hidden">
                 <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
                 <EllipsisHorizontalIcon className="w-7 h-7 text-d-gray-text" />
             </div>

@@ -22,7 +22,14 @@ const Items = [
 
 export default function AllSheets() {
     return (
-        <div className="">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col">
+            <WorkSheetFile {...Items[0]}/>
+            <WorkSheetFile {...Items[0]}/>
+            <WorkSheetFile {...Items[0]}/>
+            <WorkSheetFile {...Items[0]}/>
+            <WorkSheetFile {...Items[0]}/>
+            <WorkSheetFile {...Items[0]}/>
+            <WorkSheetFile {...Items[0]}/>
             <WorkSheetFile {...Items[0]}/>
         </div>
     );
