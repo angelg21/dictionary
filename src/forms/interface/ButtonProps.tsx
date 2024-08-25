@@ -9,6 +9,8 @@
  * @property {string} fontSize - The font size of the button text, defined using Tailwind CSS font size classes.
  * @property {string} type - The type of the button, which can be "button", "submit", or "reset".
  * @property {boolean} isDisabled - A flag to indicate if the button is disabled.
+ * @property {() => void} onClick - The function to be executed when the button is clicked.
+ * @property {string} hoverColor - The background color of the button on hover, defined using Tailwind CSS classes.
  */
 export interface ButtonProps {
   bgColor: string;
@@ -17,4 +19,6 @@ export interface ButtonProps {
   fontSize: string;
   type?: "button" | "submit" | "reset";
   isDisabled?: boolean;
+  hoverColor?: string;
+  onClick?: () => void;
 }

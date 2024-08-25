@@ -14,6 +14,9 @@ const config: Config = {
         'd-blue': '#003366',
         'd-yellow': '#DAA520',
         'd-fondo': '#F0F0F0',
+        'd-green': '#2E8B57',
+        'd-red': '#DC2626',
+        'd-gray': '#374151',
       },
       fontFamily: {
         georgia: ['Georgia', 'serif'],

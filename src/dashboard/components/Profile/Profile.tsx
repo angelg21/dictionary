@@ -6,7 +6,6 @@ import {
 } from '@headlessui/react'
 import { BellIcon, Bars3Icon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
-import { use } from 'react';
 
 interface Props {
     sendStatusSidebar: (status: boolean) => void;
