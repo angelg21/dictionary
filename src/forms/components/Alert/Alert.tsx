@@ -9,7 +9,7 @@ import { AlertProps } from '../../interface/AlertProps';
  * @param {ErrorAlertProps} props - The properties for customizing the alert.
  * @returns {JSX.Element} A JSX element representing a customizable alert.
  */
-export const Alert: React.FC<AlertProps> = ({ type, text }) => {
+export const Alert: React.FC<AlertProps> = ({ type, text, padding, fontSize, iconSize}) => {
   let bgColor, textColor, Icon;
 
   switch (type) {
@@ -36,13 +36,13 @@ export const Alert: React.FC<AlertProps> = ({ type, text }) => {
   }
 
   return (
-    <div className={`rounded-md ${bgColor} p-2`}>
+    <div className={`rounded-md ${bgColor} ${padding}`}>
       <div className="flex">
         <div className="flex-shrink-0">
-          <Icon aria-hidden="true" className={`h-5 w-5 ${textColor}`} />
+          <Icon aria-hidden="true" className={`${iconSize} ${textColor}`} />
         </div>
         <div className="ml-3">
-          <h3 className={`text-sm font-medium ${textColor}`}>{text}</h3>
+          <h3 className={`${fontSize} font-medium ${textColor}`}>{text}</h3>
         </div>
       </div>
     </div>

@@ -90,11 +90,11 @@ export const AuthForm: React.FC<FormProps> = ({
                             />
                         )}
                         </Field>
-                        <ErrorMessage name={input.name} render={msg => <Alert text={msg} type='error'/>} />
+                        <ErrorMessage name={input.name} render={msg => <Alert text={msg} type='error' fontSize='text-sm' iconSize='h-5 w-5' padding='p-2'/>} />
                     </div>
                     ))}
                 </div>
-                  {error && <Alert type="error" text={error} />}
+                  {error && <Alert type="error" text={error} fontSize='text-sm' iconSize='h-5 w-5' padding='p-2'  />}
                   
                   <ButtonComponent
                     bgColor="bg-d-blue"

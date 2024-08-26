@@ -21,6 +21,8 @@ const config: Config = {
         'd-green-light': '#379B63',
         'd-green-light-button': '#A3D3B4',
         'd-gray-text': '#6B7280',
+        'd-red': '#DC2626',
+        'd-gray': '#374151',
       },
       fontFamily: {
         georgia: ['Georgia', 'serif'],
