@@ -18,12 +18,12 @@ export default function WorksheetsLayout({ children }: { children: React.ReactNo
             <div className="flex flex-col sm:flex-row mt-5 justify-between">
                 <TabsMenu />
                 <ButtonWithIconLeft
-                    title="Nueva Ficha"
-                    textColor="text-white"
-                    backgroundColor="bg-d-green hidden xl:flex"
-                    hover="hover:bg-d-green-light"
-                    icon=<PlusIcon />
-                    iconColor="text-white"
+                    title= "Nueva Ficha"
+                    textColor= "text-white"
+                    backgroundColor= "bg-d-green hidden xl:flex"
+                    hover= "hover:bg-d-green-light"
+                    icon= <PlusIcon />
+                    iconColor= "text-white"
                 />
             </div>
 

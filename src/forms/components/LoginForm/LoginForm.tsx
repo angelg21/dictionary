@@ -1,7 +1,7 @@
 "use client";
 import { AuthForm } from '../../../forms/components/AuthForm/AuthForm';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 
 const LoginForm: React.FC = () => {
