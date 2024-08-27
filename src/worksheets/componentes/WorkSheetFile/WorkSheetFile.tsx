@@ -10,18 +10,23 @@ import {
     MenuItems,
 } from '@headlessui/react'
 
+interface User {
+    _id: string,
+    fullName: string,
+    email: string,
+    imageUrl: string,
+}
+
 interface Props {
-    workSheetName: string;
-    workSheetDate: string;
-    workSheetType: string;
-    editorImg: string;
-    editorName: string;
-    reviserImg: string;
-    reviserName: string;
-    buttonTitle: string;
-    buttonPointStyle: string;
-    buttonBackground: string;
-    buttonTextColor: string;
+    workSheetDate: string,
+    workSheetName: string,
+    workSheetType: string,
+    editors: User[],
+    reviewers: User[],
+    buttonBackground: string,
+    buttonPointStyle: string,
+    buttonTextColor: string,
+    buttonTitle: string,
 }
 
 const workSheetsOptions = [
@@ -34,14 +39,12 @@ export const WorkSheetFile = ({
     workSheetName,
     workSheetDate,
     workSheetType,
-    editorImg,
-    editorName,
-    reviserImg,
-    reviserName,
-    buttonTitle,
-    buttonPointStyle,
+    editors,
+    reviewers,
     buttonBackground,
-    buttonTextColor
+    buttonPointStyle,
+    buttonTextColor,
+    buttonTitle,
 }: Props) => {
     return (
         <div className="flex-col max-w-[360px] my-3 xl:flex xl:flex-row xl:max-w-none xl:justify-between xl:my-4 bg-white py-5 px-6 items-center rounded-md">
@@ -71,13 +74,20 @@ export const WorkSheetFile = ({
             <div className="flex flex-col xl:contents">
                 <WorkSheetCreator workSheeetName={workSheetName} workSheeetDate={workSheetDate} workSheeetType={workSheetType} />
                 <div className="flex flex-col">
-                    <WorkSheetProfile userImg={editorImg} userName={editorName} userRol="Editor" />
-                    <WorkSheetProfile userImg={editorImg} userName={editorName} userRol="Editor" />
-                    <WorkSheetProfile userImg={editorImg} userName={editorName} userRol="Editor" />
+                    {
+                        editors.map((editor) => (
+                            <WorkSheetProfile key={editor._id} userImg={editor.imageUrl} userName={editor.fullName} userRol="Editor" />
+                        ))
+                    }
                 </div>
 
-
-                <WorkSheetProfile userImg={reviserImg} userName={reviserName} userRol="Revisor" />
+                <div className="flex flex-col">
+                {
+                    reviewers.map((reviewer) => (
+                        <WorkSheetProfile key={reviewer._id} userImg={reviewer.imageUrl} userName={reviewer.fullName} userRol="Revisor" />
+                    ))
+                }
+                </div>
 
             </div>
             <div className="hidden xl:contents">
