@@ -12,7 +12,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ placeholder = 'Buscar', onSearchC
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-    onSearchChange(value); // Notifica al componente padre del cambio en el término de búsqueda
+    onSearchChange(value);
   };
 
   return (

@@ -1,3 +1,4 @@
+"use client";
 import { WorkSheetCreator } from "../WorkSheetCreator/WorkSheetCreator"
 import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile"
 import { EyeIcon, PencilSquareIcon, TrashIcon  } from '@heroicons/react/24/outline'
@@ -9,6 +10,7 @@ import {
     MenuItem,
     MenuItems,
 } from '@headlessui/react'
+import { useWorksheetsContext } from "../../context/WorkSheetsContext";
 
 interface User {
     _id: string,

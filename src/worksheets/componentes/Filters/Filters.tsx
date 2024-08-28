@@ -1,5 +1,5 @@
 
-import React from "react"
+import React, { useState } from "react"
 import { BookOpenIcon, UsersIcon, FolderIcon } from '@heroicons/react/24/outline'
 
 const WorkSheetsFilters = [
@@ -8,7 +8,17 @@ const WorkSheetsFilters = [
     { id: '3', title: 'Trabajos Colectivos', Icon: <BookOpenIcon />, iconStyle: 'bg-d-blue' },
 ]
 
-export const Filters = () => {
+interface FilterProps {
+    onFilterChange: (selectedType: string) => void;
+}
+
+export const Filters = ({ onFilterChange }: FilterProps) => {
+    const [selectedType, setSelectedType] = useState<string>(WorkSheetsFilters[0].title);
+    
+    const handleCheckboxChange = (type: string) => {
+        setSelectedType(type);
+        onFilterChange(type);
+    }
 
     return (
 
@@ -25,6 +35,7 @@ export const Filters = () => {
                             name="notification-method"
                             type="radio"
                             className="h-4 w-4 border-gray-300 text-d-blue focus:ring-d-blue hover:ring-d-blue"
+                            onChange={() => handleCheckboxChange(filter.title)}
                         />
                         <div className={`p-1  ml-3 rounded-md hidden sm:flex ${filter.iconStyle}`}>
                             {React.cloneElement(filter.Icon, { className: `w-4 h-4 text-white` })}

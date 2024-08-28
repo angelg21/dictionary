@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 interface InputWithIconLeftProps {
     name: string;
@@ -9,12 +9,19 @@ interface InputWithIconLeftProps {
     iconColor: string;
     inputWidth: string;
     hover: string;
+    onSearchChange: (searchTerm: string) => void;
 }
 
+export const InputWithIconLeft = ({ name, backgroundColor, icon: Icon, iconColor, inputWidth, hover, onSearchChange }: InputWithIconLeftProps) => {
+    
+    const [searchTerm, setSearchTerm] = useState('');
+    
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setSearchTerm(value);
+        onSearchChange(value);
+    };
 
-
-
-export const InputWithIconLeft = ({ name, backgroundColor, icon: Icon, iconColor, inputWidth, hover }: InputWithIconLeftProps) => {
     return (
         <div className="relative mt-2 rounded-md">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -22,8 +29,10 @@ export const InputWithIconLeft = ({ name, backgroundColor, icon: Icon, iconColor
             </div>
             <input
                 name={name}
+                value={searchTerm}
                 type="text"
                 className={`block w-full ${inputWidth} ${backgroundColor} ${hover} rounded-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-1 focus:ring-inset focus:ring-d-blue sm:text-sm sm:leading-6 `}
+                onChange={handleInputChange}
             />
         </div>
     )
