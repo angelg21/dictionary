@@ -36,6 +36,11 @@ export default function FilteredWorksheets({ data }: { data: any }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }
+    , [searchTerm, filterType]);
+
     const filteredItems = data.filter((item: any) => {
         const matchesSearchTerm = searchTerm
           ? item.title.toLowerCase().includes(searchTerm.toLowerCase())

@@ -17,7 +17,6 @@ export default function WorksheetsLayout({ children }: { children: React.ReactNo
 }
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
-  // Acceder al contexto dentro del componente que ya está envuelto por el proveedor
   const { setSearchTerm, setFilterType } = useWorksheetsContext();
 
   return (
