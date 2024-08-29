@@ -16,7 +16,7 @@ export const WorkSheetProfile = ({ userRol, userName, userImg }: Props) => {
                     userImg ? (<img
                         alt=""
                         src={userImg}
-                        className={`h-9 w-9 bg-gray-50 rounded-full`}
+                        className={`h-11 w-11 bg-gray-50 rounded-full`}
                     />) :
                         <span className={`inline-block h-11 w-11 overflow-hidden bg-gray-100 rounded-full`}>
                             <svg fill="currentColor" viewBox="0 0 24 24" className="h-full w-full text-gray-300">
@@ -33,7 +33,6 @@ export const WorkSheetProfile = ({ userRol, userName, userImg }: Props) => {
                             {userRol ? userRol : 'Rol'}
                         </span>
                     </div>
-                    <ChevronDownIcon aria-hidden="true" className="ml-2 h-5 w-5 text-d-blue" />
                 </span>
             </MenuButton>
             {/* <MenuItems

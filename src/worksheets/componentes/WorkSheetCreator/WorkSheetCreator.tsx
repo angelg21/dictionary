@@ -16,7 +16,7 @@ export const WorkSheetCreator = ({ workSheeetType, workSheeetName, workSheeetDat
             <MenuButton className="flex items-center">
                 <span className="sr-only">Open user menu</span>
                 {
-                    workSheeetType === 'Autor' ?
+                    workSheeetType === 'AuthorCard' ?
                         <div className='p-[7px] bg-d-green rounded-lg'>
                             <UsersIcon
                                 className={`h-7 w-7 text-white`}

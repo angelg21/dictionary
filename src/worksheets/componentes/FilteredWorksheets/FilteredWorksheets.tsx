@@ -1,7 +1,8 @@
+"use client"
+import { useEffect, useState } from "react";
 import { WorkSheetFile } from "@/src/worksheets/componentes/WorkSheetFile/WorkSheetFile";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
-import { getAllValidated } from "../actions/get-all-validated";
+import { useWorksheetsContext } from "@/src/worksheets/context/WorkSheetsContext";
+import Pagination from "@/src/users/components/Pagination/Pagination";
 
 const greenVariant = {
     buttonBackground: 'bg-d-green-light-button',
@@ -30,13 +31,26 @@ const statusVariants: { [key: string]: typeof greenVariant } = {
     'Pending Edit': blueVariant,
 };
 
-export default async function SheetsValidated() {
-    
-    const session = await getServerSession(authOptions);
+export default function FilteredWorksheets({ data }: { data: any }) {
+    const { searchTerm, filterType } = useWorksheetsContext();
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(5);
 
-    const { data = [] } = session?.user.roles.includes('admin') ? await getAllValidated() : await getAllValidated(session?.user._id);
-    
-    const Items = data.map((item: any) => {
+    const filteredItems = data.filter((item: any) => {
+        const matchesSearchTerm = searchTerm
+          ? item.title.toLowerCase().includes(searchTerm.toLowerCase())
+          : true;
+      
+        const matchesFilterType = filterType === "Todos" 
+          ? true 
+          : filterType === "Autores" 
+            ? item.type === "AuthorCard" 
+            : item.type !== "AuthorCard";
+      
+        return matchesSearchTerm && matchesFilterType;
+      });
+
+    const Items = filteredItems.map((item: any) => {
         const variant = statusVariants[item.status] || {};
     
         return {
@@ -53,13 +67,26 @@ export default async function SheetsValidated() {
         };
     });
 
+    const indexOfLastUser = currentPage * itemsPerPage;
+    const indexOfFirstUser = indexOfLastUser - itemsPerPage;
+    const currentWorksheets = Items.slice(indexOfFirstUser, indexOfLastUser);
+
+     const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
     return (
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col">
             {
-                Items.map((item: any) => (
+                currentWorksheets.map((item: any) => (
                     <WorkSheetFile {...item} />
                 ))
             }
+            <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(Items.length / itemsPerPage)}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 }

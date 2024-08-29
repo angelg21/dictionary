@@ -70,5 +70,8 @@ export default function WorksheetsLayout({ children }: { children: React.ReactNo
             )}
 
         </div>
-    );
+      </div>
+      {children}
+    </div>
+  );
 }
