@@ -7,7 +7,7 @@ const RegisterPage: React.FC = async () => {
   const session = await getServerSession(authOptions)
 
   if (session) {
-    redirect("/dashboard/worksheets");
+    redirect("/dashboard/worksheets/allSheets");
     return null;
   }
 

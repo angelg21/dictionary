@@ -68,10 +68,8 @@ const userNavigation = [
 export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
 
     const { data: session } = useSession();
-    // const isAdmin = session?.user?.roles.includes('admin')
-    // const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer')
-    const isAdmin = Array.isArray(session?.user?.roles) && session.user.roles.includes('admin');
-    const isEdOrRev = Array.isArray(session?.user?.roles) && (session.user.roles.includes('editor') || session.user.roles.includes('reviewer'));
+    const isAdmin = session?.user?.roles.includes('admin')
+    const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer')
 
 
     return (

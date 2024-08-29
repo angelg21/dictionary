@@ -16,7 +16,7 @@ interface GoogleSignInButtonProps {
 const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ callbackUrl, isDisabled }) => {
 
   const handleSignIn = () => {
-    signIn('google', { callbackUrl: '/dashboard/worksheets' });
+    signIn('google', { callbackUrl: '/dashboard/worksheets/allSheets' });
   };
 
   return (
