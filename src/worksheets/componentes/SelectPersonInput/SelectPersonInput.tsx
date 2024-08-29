@@ -150,15 +150,15 @@ export const SelectPersonInput = ({ title }: SelectPersonProps) => {
             {/* Table to display selected items */}
             {selectedItems.length > 0 && (
                 <div className="mt-4">
-                    <table className="min-w-full bg-white border border-gray-200">
+                    <table className="min-w-full bg-white border border-gray-200 overflow-y-auto max-h-[300px]">
                         <tbody>
                             {selectedItems.map((item) => (
-                                <tr key={item.id} className='flex justify-between h-9'>
-                                    <td className="flex items-center px-3 py-2 border-b">
+                                <tr key={item.id} className='flex justify-between h-9 border-b'>
+                                    <td className="flex items-center px-3 py-2">
                                         <img src={item.avatar} alt={item.name} className="h-5 w-5 rounded-full" />
                                         <span className='text-sm font-medium ml-3'>{item.name}</span>
                                     </td>
-                                    <td className="flex items-center px-4 py-2 border-b text-center">
+                                    <td className="flex items-center px-4 py-2 text-center">
                                         <button
                                             type="button"
                                             onClick={() => handleRemoveItem(item.id)}
