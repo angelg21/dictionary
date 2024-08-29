@@ -1,4 +1,5 @@
 import { ErrorMessage, useField } from "formik"
+import { Alert } from "../Alert/Alert"
 
 interface SimpleInputProps {
     id: string,
@@ -20,10 +21,10 @@ export const SimpleInputWithLabel = ({id, name, type, placeholder, label, labelT
             <input 
                 type={type} 
                 className={`text-input ${inputWidth} rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset 
-                ring-gray-300 hover:ring-gray-400 h-9 placeholder:text-gray-400 focus:ring-2 ${focusBorderColor} sm:text-sm sm:leading-6 font-normal disabled:opacity-70 disabled:cursor-not-allowed`}  
+                ring-gray-300 hover:ring-gray-400 h-9 placeholder:text-gray-400 focus:ring-2 ${focusBorderColor} sm:text-sm sm:leading-6 font-normal disabled:opacity-70 disabled:cursor-not-allowed mb-2`}  
                 { ...field}  
             />
-            <ErrorMessage name={name} component="span" className="text-sm text-red-700" />
+            <ErrorMessage name={name} render={msg => <Alert text={msg} type='error' fontSize='text-sm' iconSize='h-5 w-5' padding='p-2'/>} />
         </div>
     )
 }

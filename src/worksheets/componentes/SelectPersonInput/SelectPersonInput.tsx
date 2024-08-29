@@ -1,111 +1,82 @@
-'use client'
+'use client';
+import { useState, useEffect } from 'react';
+import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import { getUsersByRole } from '@/src/worksheets/actions/get-users-byrole';
 
-import { useState } from 'react'
-import { Label, Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { TrashIcon } from '@heroicons/react/24/outline'
-
-const people = [
-    {
-        id: 1,
-        name: 'Wade Cooper',
-        avatar:
-            'https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 2,
-        name: 'Arlene Mccoy',
-        avatar:
-            'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 3,
-        name: 'Devon Webb',
-        avatar:
-            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80',
-    },
-    {
-        id: 4,
-        name: 'Tom Cook',
-        avatar:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 5,
-        name: 'Tanya Fox',
-        avatar:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 6,
-        name: 'Hellen Schmidt',
-        avatar:
-            'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 7,
-        name: 'Caroline Schultz',
-        avatar:
-            'https://images.unsplash.com/photo-1568409938619-12e139227838?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 8,
-        name: 'Mason Heaney',
-        avatar:
-            'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 9,
-        name: 'Claudie Smitham',
-        avatar:
-            'https://images.unsplash.com/photo-1584486520270-19eca1efcce5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    {
-        id: 10,
-        name: 'Emil Schaefer',
-        avatar:
-            'https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-]
 interface personItem {
-    id: number;
-    name: string;
-    avatar: string;
+    id: string;
+    fullName: string;
+    imageUrl: string;
 }
-
 
 interface SelectPersonProps {
     title: string;
-    people?: personItem[];
+    type: 'editor' | 'reviewer';
+    excludeIds?: string[];
+    onAdd: (id: string) => void;
+    onRemove: (id: string) => void;
+    currentSelection: string | null; // Agregar para manejar la selección actual
+    onSelectionChange: (id: string | null) => void; // Agregar para manejar los cambios de selección
 }
-export const SelectPersonInput = ({ title }: SelectPersonProps) => {
 
-    const [selected, setSelected] = useState<personItem>(people[3])
+export const SelectPersonInput = ({ title, type, excludeIds = [], onAdd, onRemove, currentSelection, onSelectionChange }: SelectPersonProps) => {
     const [selectedItems, setSelectedItems] = useState<personItem[]>([]);
+    const [people, setPeople] = useState<personItem[]>([]);
 
-    // Add the selected item to the selectedItems array if it's not already added
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const response = await getUsersByRole({ type, excludeIds });
+            if (response.ok) {
+                setPeople(response.data);
+            } else {
+                console.error(response.message);
+            }
+        };
+        fetchUsers();
+    }, [type, excludeIds]);
+
     const handleAddItem = () => {
-        if (!selectedItems.find(item => item.id === selected.id)) {
-            setSelectedItems([...selectedItems, selected]);
+        if (currentSelection && !selectedItems.find(item => item.id === currentSelection)) {
+            const selectedPerson = people.find(person => person.id === currentSelection);
+            if (selectedPerson) {
+                setSelectedItems([...selectedItems, selectedPerson]);
+                onAdd(currentSelection);
+                onSelectionChange(null);
+            }
         }
     };
 
-    //Remove the selected item to the selectedItems array
-    const handleRemoveItem = (id: number) => {
+    const handleRemoveItem = (id: string) => {
         setSelectedItems(selectedItems.filter(item => item.id !== id));
+        onRemove(id);
     };
 
     return (
         <div className='my-3'>
-            <Listbox value={selected} onChange={setSelected} >
+            <Listbox value={currentSelection} onChange={onSelectionChange}>
                 <Label className="block text-sm font-medium leading-6 text-gray-900">{title}</Label>
                 <div className="relative mt-2">
                     <div className='flex'>
-
                         <ListboxButton className="relative w-full cursor-default rounded-tl-md rounded-bl-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400 focus:outline-none focus:ring-2 focus:ring-d-blue sm:text-sm sm:leading-6">
                             <span className="flex items-center">
-                                <img alt="" src={selected.avatar} className="h-5 w-5 flex-shrink-0 rounded-full" />
-                                <span className="text-sm font-medium ml-3 block truncate">{selected.name}</span>
+                                {currentSelection ? (
+                                    <>
+                                        {people.find(person => person.id === currentSelection)?.imageUrl !== '' ? (
+                                            <img alt="" src={people.find(person => person.id === currentSelection)?.imageUrl} className="h-5 w-5 flex-shrink-0 rounded-full" />
+                                        ) : (
+                                            <span className="inline-block h-5 w-5 overflow-hidden rounded-full bg-gray-100">
+                                                <svg fill="currentColor" viewBox="0 0 24 24" className="h-full w-full text-gray-300">
+                                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                </svg>
+                                            </span>
+                                        )}
+                                        <span className="text-sm font-medium ml-3 block truncate">{people.find(person => person.id === currentSelection)?.fullName}</span>
+                                    </>
+                                ) : (
+                                    <span className="text-sm font-medium ml-3 block truncate">Seleccionar...</span>
+                                )}
                             </span>
                             <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                                 <ChevronUpDownIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
@@ -128,13 +99,21 @@ export const SelectPersonInput = ({ title }: SelectPersonProps) => {
                         {people.map((person) => (
                             <ListboxOption
                                 key={person.id}
-                                value={person}
+                                value={person.id}
                                 className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-d-blue data-[focus]:text-white"
                             >
                                 <div className="flex items-center">
-                                    <img alt="" src={person.avatar} className="h-5 w-5 flex-shrink-0 rounded-full" />
+                                    {person.imageUrl !== '' ? (
+                                        <img alt="" src={person.imageUrl} className="h-5 w-5 flex-shrink-0 rounded-full" />
+                                    ) : (
+                                        <span className="inline-block h-5 w-5 overflow-hidden rounded-full bg-gray-100">
+                                            <svg fill="currentColor" viewBox="0 0 24 24" className="h-full w-full text-gray-300">
+                                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                            </svg>
+                                            </span>
+                                        )}
                                     <span className="ml-3 block truncate text-sm font-medium group-data-[selected]:font-semibold">
-                                        {person.name}
+                                        {person.fullName}
                                     </span>
                                 </div>
 
@@ -147,16 +126,23 @@ export const SelectPersonInput = ({ title }: SelectPersonProps) => {
                 </div>
             </Listbox>
 
-            {/* Table to display selected items */}
             {selectedItems.length > 0 && (
-                <div className="mt-4">
-                    <table className="min-w-full bg-white border border-gray-200 overflow-y-auto max-h-[300px]">
+                <div className="mt-4 max-h-[72px] overflow-y-auto overflow-hidden">
+                    <table className="min-w-full bg-white border border-gray-200 overflow-y-auto">
                         <tbody>
                             {selectedItems.map((item) => (
                                 <tr key={item.id} className='flex justify-between h-9 border-b'>
                                     <td className="flex items-center px-3 py-2">
-                                        <img src={item.avatar} alt={item.name} className="h-5 w-5 rounded-full" />
-                                        <span className='text-sm font-medium ml-3'>{item.name}</span>
+                                        {item.imageUrl !== '' ? (
+                                            <img alt={item.fullName} src={item.imageUrl} className="h-5 w-5 rounded-full" />
+                                        ) : (
+                                            <span className="inline-block h-5 w-5 overflow-hidden rounded-full bg-gray-100">
+                                                <svg fill="currentColor" viewBox="0 0 24 24" className="h-full w-full text-gray-300">
+                                                    <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                                </svg>
+                                            </span>
+                                        )}
+                                        <span className='text-sm font-medium ml-3'>{item.fullName}</span>
                                     </td>
                                     <td className="flex items-center px-4 py-2 text-center">
                                         <button
@@ -174,5 +160,6 @@ export const SelectPersonInput = ({ title }: SelectPersonProps) => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
+

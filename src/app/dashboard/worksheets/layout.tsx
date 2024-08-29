@@ -1,5 +1,4 @@
 'use client'
-
 import { ButtonWithIconLeft } from "@/src/components/ButtonWithIconLeft/ButtonWithIconLeft";
 import { InputWithIconLeft } from "@/src/components/InputWithIconLeft/InputWithIconLeft";
 import { Filters } from "@/src/worksheets/componentes/Filters/Filters";
@@ -8,6 +7,7 @@ import { MagnifyingGlassIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { useState } from "react";
 import { NewWorkSheetModal } from "@/src/worksheets/componentes/NewWorkSheetModal/NewWorkSheetModal";
 import { useWorksheetsContext, WorksheetsProvider } from "@/src/worksheets/context/WorkSheetsContext";
+import { useSession } from "next-auth/react";
 
 export default function WorksheetsLayout({ children }: { children: React.ReactNode; }) {
   return (
@@ -29,6 +29,9 @@ function LayoutContent({ children }: { children: React.ReactNode; }) {
     setNewWorkSheetOpen(true);
   };
   const { setSearchTerm, setFilterType } = useWorksheetsContext();
+  const { data: session } = useSession();
+  const isEditor = session?.user.roles.includes('editor');
+  const isReviewer = session?.user.roles.includes('reviewer');
 
   return (
         <div>
@@ -41,7 +44,9 @@ function LayoutContent({ children }: { children: React.ReactNode; }) {
             </div>
             <div className="flex flex-col sm:flex-row mt-5 justify-between">
               <TabsMenu />
-              <div onClick={() => handleOpenNewWorkSheetModal()}>
+              <div 
+                onClick={() => handleOpenNewWorkSheetModal()} 
+                className={`${isEditor === true || isReviewer === true ? 'hidden' : ''}`}>
 
                 <ButtonWithIconLeft
                   title="Nueva Ficha"
