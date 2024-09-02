@@ -32,7 +32,7 @@ function LayoutContent({ children }: { children: React.ReactNode; }) {
 
   return (
         <div>
-          <div className="flex flex-col mx-5 lg:mx-16 xl:mx-20">
+          <div className="flex flex-col mx-5 lg:mx-9 xl:mx-20">
             <div className="flex justify-between mt-2">
               <span className="text-4xl text-d-blue font-bold ">Mis Fichas</span>
               <div className="p-2 rounded-full bg-d-green xl:hidden ">

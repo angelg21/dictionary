@@ -31,11 +31,11 @@ export const WorkSheetCreator = ({ workSheeetType, workSheeetName, workSheeetDat
                         </div>
                 }
                 <span className="flex ">
-                    <div className='flex flex-col items-start'>
-                        <span aria-hidden="true" className="ml-4 text-[16px] font-medium leading-6 text-black flex-shrink-0">
+                    <div className='flex flex-col items-start lg:w-[120px] xl:w-[150px]'>
+                        <span aria-hidden="true" className="text-left ml-4 text-sm xl:text-[16px] font-medium leading-6 text-black flex-shrink-0">
                             {workSheeetName}
                         </span>
-                        <span aria-hidden="true" className="ml-4 text-[16px] font-medium leading-6 text-d-gray-text flex-shrink-0">
+                        <span aria-hidden="true" className="text-left ml-4 text-sm xl:text-[16px] font-medium leading-6 text-d-gray-text flex-shrink-0">
                             {workSheeetDate}
                         </span>
                     </div>

@@ -49,8 +49,8 @@ export const WorkSheetFile = ({
     buttonTitle,
 }: Props) => {
     return (
-        <div className="flex-col max-w-[360px] my-3 xl:flex xl:flex-row xl:max-w-none xl:justify-between xl:my-4 bg-white py-5 px-6 items-center rounded-md">
-            <div className="flex mb-2 justify-between xl:hidden">
+        <div className="flex-col min-w-[308px] max-w-[360px] lg:w-full my-3 lg:flex lg:flex-row lg:max-w-none lg:justify-between lg:my-4 bg-white py-4 xl:py-5 px-5 xl:px-6 items-center rounded-md">
+            <div className="flex mb-2 justify-between lg:hidden">
                 <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
                 <Menu as="div" className='relative'>
                     <MenuButton>
@@ -73,7 +73,7 @@ export const WorkSheetFile = ({
                     </MenuItems>
                 </Menu>
             </div>
-            <div className="flex flex-col xl:contents">
+            <div className="flex flex-col lg:contents">
                 <WorkSheetCreator workSheeetName={workSheetName} workSheeetDate={workSheetDate} workSheeetType={workSheetType} />
                 <div className="flex flex-col">
                     {
@@ -92,7 +92,7 @@ export const WorkSheetFile = ({
                 </div>
 
             </div>
-            <div className="hidden xl:contents">
+            <div className="hidden lg:contents">
 
                 <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
                 <Menu as="div" className='relative'>
