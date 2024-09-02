@@ -3,6 +3,8 @@ import { getAllSheets } from "../actions/get-all-sheets";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import FilteredWorksheets from "@/src/worksheets/componentes/FilteredWorksheets/FilteredWorksheets";
 
+export const revalidate = 0;
+
 export default async function AllSheets() {
     
     const session = await getServerSession(authOptions);

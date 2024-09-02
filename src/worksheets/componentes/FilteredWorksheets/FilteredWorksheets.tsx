@@ -36,6 +36,11 @@ export default function FilteredWorksheets({ data }: { data: any }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }
+    , [searchTerm, filterType]);
+
     const filteredItems = data.filter((item: any) => {
         const matchesSearchTerm = searchTerm
           ? item.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -76,7 +81,7 @@ export default function FilteredWorksheets({ data }: { data: any }) {
     };
 
     return (
-        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col mb-20">
             {
                 currentWorksheets.map((item: any) => (
                     <WorkSheetFile {...item} />
