@@ -13,7 +13,7 @@ export default async function Users() {
     const { ok, data = [] } = await getUsers(session?.user._id);
 
     if (!ok) {
-        redirect("/dashboard/worksheets");
+        redirect("/dashboard/worksheets/allSheets");
     }
 
     const users = data.map((user: any) => ({

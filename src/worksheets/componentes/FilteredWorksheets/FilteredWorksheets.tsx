@@ -39,25 +39,25 @@ export default function FilteredWorksheets({ data }: { data: any }) {
     useEffect(() => {
         setCurrentPage(1);
     }
-    , [searchTerm, filterType]);
+        , [searchTerm, filterType]);
 
     const filteredItems = data.filter((item: any) => {
         const matchesSearchTerm = searchTerm
-          ? item.title.toLowerCase().includes(searchTerm.toLowerCase())
-          : true;
-      
-        const matchesFilterType = filterType === "Todos" 
-          ? true 
-          : filterType === "Autores" 
-            ? item.type === "AuthorCard" 
-            : item.type !== "AuthorCard";
-      
+            ? item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            : true;
+
+        const matchesFilterType = filterType === "Todos"
+            ? true
+            : filterType === "Autores"
+                ? item.type === "AuthorCard"
+                : item.type !== "AuthorCard";
+
         return matchesSearchTerm && matchesFilterType;
-      });
+    });
 
     const Items = filteredItems.map((item: any) => {
         const variant = statusVariants[item.status] || {};
-    
+
         return {
             workSheetDate: new Date(item.createdAt).toLocaleDateString('es-ES', {
                 day: '2-digit',
@@ -76,7 +76,7 @@ export default function FilteredWorksheets({ data }: { data: any }) {
     const indexOfFirstUser = indexOfLastUser - itemsPerPage;
     const currentWorksheets = Items.slice(indexOfFirstUser, indexOfLastUser);
 
-     const handlePageChange = (page: number) => {
+    const handlePageChange = (page: number) => {
         setCurrentPage(page);
     };
 

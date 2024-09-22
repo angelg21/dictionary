@@ -1,7 +1,7 @@
 "use client";
 import { WorkSheetCreator } from "../WorkSheetCreator/WorkSheetCreator"
 import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile"
-import { EyeIcon, PencilSquareIcon, TrashIcon  } from '@heroicons/react/24/outline'
+import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon  } from '@heroicons/react/24/outline'
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { ButtonWithPointLeft } from "@/src/components/ButtonWithPointLeft/ButtonWithPointLeft";
 import {
@@ -33,6 +33,7 @@ interface Props {
 
 const workSheetsOptions = [
     { name: 'Visualizar', Icon: EyeIcon },
+    { name: 'Formulario', Icon: DocumentTextIcon },
     { name: 'Editar', Icon:  PencilSquareIcon },
     { name: 'Eliminar', Icon: TrashIcon },
 ]

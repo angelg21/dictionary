@@ -103,8 +103,8 @@ export const NewWorkSheetModal = ({ onClose }: NewWorkSheetModalProps) => {
                         onSubmit={handleSubmit}
                         validationSchema={Yup.object({
                             title: Yup.string()
-                                .max(50, 'El titulo no puede ser tan extenso')
-                                .required('El titulo es requerido'),
+                                .max(50, 'El título no puede ser tan extenso')
+                                .required('El título es requerido'),
                             workSheetType: Yup.string().required('El tipo de ficha es requerido'),
                             editors: Yup.array().min(1, 'Debe haber al menos un editor seleccionado'),
                             reviewers: Yup.array().min(1, 'Debe haber al menos un revisor seleccionado'),
@@ -116,7 +116,7 @@ export const NewWorkSheetModal = ({ onClose }: NewWorkSheetModalProps) => {
                                     id='title'
                                     name={"title"}
                                     type={"text"}
-                                    label={"Titulo"}
+                                    label={"Título"}
                                     labelTextStyle={"text-gray-900 text-sm"}
                                     inputWidth={"w-full"}
                                     focusBorderColor={"focus:ring-[#003366]"}

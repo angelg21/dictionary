@@ -5,25 +5,25 @@ import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
 interface AddNewWorksheetPayload {
-  type: string;
-  title: string;
-  createdBy: string;
-  assignedEditors: string[];
-  assignedReviewers: string[];
+    type: string;
+    title: string;
+    createdBy: string;
+    assignedEditors: string[];
+    assignedReviewers: string[];
 }
 
-export const addNewWorksheet = async( payload: AddNewWorksheetPayload) => {
+export const addNewWorksheet = async (payload: AddNewWorksheetPayload) => {
 
     const session = await getServerSession(authOptions);
 
-    if ( !session?.user.roles.includes('admin') ) {
+    if (!session?.user.roles.includes('admin')) {
         return {
             ok: false,
             message: 'No tienes permisos para realizar esta acción',
         };
     }
 
-    try{
+    try {
         const response = await fetch(process.env.API_URL + `/cards`, {
             method: 'POST',
             headers: {

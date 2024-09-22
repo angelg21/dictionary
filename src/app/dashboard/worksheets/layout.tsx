@@ -39,7 +39,10 @@ function LayoutContent({ children }: { children: React.ReactNode; }) {
             <div className="flex justify-between mt-2">
               <span className="text-4xl text-d-blue font-bold ">Mis Fichas</span>
               <div className="p-2 rounded-full bg-d-green xl:hidden ">
-                <PlusIcon className="h-6 w-6 text-white" />
+                <PlusIcon className="h-6 w-6 text-white" 
+                onClick={() => handleOpenNewWorkSheetModal()}
+              />
+                
               </div>
             </div>
             <div className="flex flex-col sm:flex-row mt-5 justify-between">
