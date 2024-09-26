@@ -23,7 +23,7 @@ export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) =>
         '/dashboard/worksheets/validatedSheets',
         '/dashboard/worksheets/sheetsToComplete',
         '/dashboard/worksheets/sheetsToReview',
-        '/dashboard/worksheets/validatedSheets'
+        '/dashboard/worksheets/rejectedSheets'
     ];
 
     const authorFormPaths = [
