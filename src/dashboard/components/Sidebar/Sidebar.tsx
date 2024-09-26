@@ -17,6 +17,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { SidebarMenuItems } from '../SidebarMenuItems/SidebarMenuItems'
 import { signOut, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
 
 
 interface Props {
@@ -25,39 +26,7 @@ interface Props {
 }
 
 
-const menuItems = [
-    {
-        path: '/dashboard/worksheets/allSheets',
-        title: 'Fichas',
-        icon: <BookOpenIcon />,
-    },
-    {
-        path: '/dashboard/searcher',
-        title: 'Buscador',
-        icon: <DocumentMagnifyingGlassIcon />,
-    },
-    {
-        path: '/dashboard/notes',
-        title: 'Bloc de notas',
-        icon: <ClipboardDocumentListIcon />,
-    },
-    {
-        path: '/dashboard/users',
-        title: 'Usuarios',
-        icon: <UserGroupIcon />,
-    },
-    {
-        path: '/dashboard/downloads',
-        title: 'Descargas',
-        icon: <ArrowDownTrayIcon />,
-    },
-    {
-        path: '/dashboard/profile',
-        title: 'Perfil',
-        icon: <UserIcon />,
-    },
 
-]
 
 
 const userNavigation = [
@@ -68,10 +37,58 @@ const userNavigation = [
 export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
 
     const { data: session } = useSession();
-    const isAdmin = session?.user?.roles.includes('admin')
-    const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer')
+    const isAdmin = session?.user?.roles.includes('admin');
+    const isEditor = session?.user?.roles.includes('editor');
+    const isEdOrRev = session?.user?.roles.includes('editor') || session?.user?.roles.includes('reviewer');
+    const isReviewer = session?.user?.roles.includes('reviewer');
+    const [fichasPath, setFichasPath] = useState('');
 
 
+    useEffect(() => {
+        if (isAdmin) {
+            setFichasPath('/dashboard/worksheets/validatedSheets');
+        } else if (isEditor && !isReviewer) {
+            setFichasPath('/dashboard/worksheets/sheetsToComplete');
+        } else if (isReviewer && !isEditor) {
+            setFichasPath('/dashboard/worksheets/sheetsToReview');
+        } else if (isEditor && isReviewer) {
+            setFichasPath('/dashboard/worksheets/sheetsToComplete');
+        }
+    }, []);
+
+    const menuItems = [
+        {
+            path: fichasPath,
+            title: 'Fichas',
+            icon: <BookOpenIcon />,
+        },
+        {
+            path: '/dashboard/searcher',
+            title: 'Buscador',
+            icon: <DocumentMagnifyingGlassIcon />,
+        },
+        {
+            path: '/dashboard/notes',
+            title: 'Bloc de notas',
+            icon: <ClipboardDocumentListIcon />,
+        },
+        {
+            path: '/dashboard/users',
+            title: 'Usuarios',
+            icon: <UserGroupIcon />,
+        },
+        {
+            path: '/dashboard/downloads',
+            title: 'Descargas',
+            icon: <ArrowDownTrayIcon />,
+        },
+        {
+            path: '/dashboard/profile',
+            title: 'Perfil',
+            icon: <UserIcon />,
+        },
+
+    ]
     return (
         <>
             <div>

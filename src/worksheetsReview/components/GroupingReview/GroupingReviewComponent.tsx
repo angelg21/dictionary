@@ -27,7 +27,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
     const [showObservation, setShowObservation] = useState(false); // Controla la visibilidad del campo de observación
     const [showRejectButton, setShowRejectButton] = useState(false); // Controla la visibilidad del botón de rechazar
 
-    const handleValidateAuthor = async () => {
+    const handleValidateGrouping = async () => {
         setIsLoadingValidate(true)
         const validatedData = {
             text: groupingText,
@@ -38,7 +38,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
         if (response.ok) {
             showAlert("Ficha validada", "success");
             setIsLoadingValidate(false);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al validar la ficha", "error");
             setIsLoadingValidate(false)
@@ -56,7 +56,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
         if (response.ok) {
             showAlert("Ficha Rechazada", "success");
             setIsLoadingRejected(false);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al rechazar la ficha", "error");
             setIsLoadingRejected(false)
@@ -217,7 +217,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
                     <button
                         type="button"
                         className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
-                        onClick={() => handleValidateAuthor()}
+                        onClick={() => handleValidateGrouping()}
                     >
                         <span className="text-sm font-medium text-white">Validar ficha</span>
                         {isLoadingValidate ?

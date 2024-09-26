@@ -37,7 +37,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
         if (response.ok) {
             showAlert("Ficha validada", "success");
             setIsLoadingValidate(false);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al validar la ficha", "error");
             setIsLoadingValidate(false)
@@ -55,7 +55,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
         if (response.ok) {
             showAlert("Ficha Rechazada", "success");
             setIsLoadingRejected(false);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al rechazar la ficha", "error");
             setIsLoadingRejected(false)

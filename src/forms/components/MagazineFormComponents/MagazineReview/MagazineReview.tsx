@@ -51,7 +51,7 @@ export const MagazineReview = () => {
             showAlert("Ficha agregada", "success");
             setIsLoading(false);
             localStorage.removeItem(`magazineFormData-${id}`);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al cargar la ficha", "error");
             setIsLoading(false)

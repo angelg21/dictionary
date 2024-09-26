@@ -49,7 +49,7 @@ export const GroupingFormsReview = () => {
             showAlert("Ficha agregada", "success");
             setIsLoading(false);
             localStorage.removeItem(`groupingFormData-${id}`);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al cargar la ficha", "error");
             setIsLoading(false)
