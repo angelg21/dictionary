@@ -23,6 +23,7 @@ const config: Config = {
         'd-green-light-button': '#A3D3B4',
         'd-gray-text': '#6B7280',
         'd-red': '#DC2626',
+        'd-red-light-button': '#F3D9D9',
         'd-gray': '#374151',
       },
       fontFamily: {
