@@ -25,10 +25,18 @@ const blueVariant = {
     buttonTitle: 'Por Completar',
 }
 
+const redVariant = {
+    buttonBackground: 'bg-d-red-light-button',
+    buttonPointStyle: 'bg-d-red',
+    buttonTextColor: 'text-d-red',
+    buttonTitle: 'Rechazada',
+}
+
 const statusVariants: { [key: string]: typeof greenVariant } = {
     'Validated': greenVariant,
     'Pending Review': yellowVariant,
     'Pending Edit': blueVariant,
+    'Rejected': redVariant,
 };
 
 export default function FilteredWorksheets({ data }: { data: any }) {
