@@ -20,10 +20,10 @@ export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) =>
     const pathName = usePathname();
 
     const worksheetsPaths = [
-        '/dashboard/worksheets/allSheets',
+        '/dashboard/worksheets/validatedSheets',
         '/dashboard/worksheets/sheetsToComplete',
         '/dashboard/worksheets/sheetsToReview',
-        '/dashboard/worksheets/validatedSheets'
+        '/dashboard/worksheets/rejectedSheets'
     ];
 
     const authorFormPaths = [

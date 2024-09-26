@@ -59,7 +59,7 @@ export const AuthorFormReviews = () => {
             showAlert("Ficha agregada", "success");
             setIsLoading(false);
             localStorage.removeItem(`authorFormData-${id}`);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error", "error");
             setIsLoading(false)

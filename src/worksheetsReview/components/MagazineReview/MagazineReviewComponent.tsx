@@ -8,11 +8,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useAlert } from '@/src/users/context/AlertContext';
 import { AuthorCardData } from '../../interfaces/AuthorWorkSheetReview';
 import { ValidateMagazineWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-magazine-worksheet';
+import { RejectWorksheet } from '@/src/app/dashboard/workSheetReview/actions/reject-worksheet';
 
 export const MagazineReviewComponent : React.FC<{ data: MagazineCardData }> = ({ data }) => {
 
     const [isLoadingValidate, setIsLoadingValidate] = useState(false);
-    const [isLoadingRefused, setIsLoadingRefused] = useState(false);
+    const [isLoadingRejected, setIsLoadingRejected] = useState(false);
     const [observation, setObservation] = useState('');
     const [magazineText, setMagazineText] = useState(data.magazine.text);
     const [criticismText, setCriticismText] = useState(data.criticism.map(criticism => criticism.text));
@@ -23,7 +24,7 @@ export const MagazineReviewComponent : React.FC<{ data: MagazineCardData }> = ({
     const [showObservation, setShowObservation] = useState(false); // Controla la visibilidad del campo de observación
     const [showRejectButton, setShowRejectButton] = useState(false); // Controla la visibilidad del botón de rechazar
 
-    const handleValidateAuthor = async () => {
+    const handleValidateMagazine = async () => {
         setIsLoadingValidate(true)
         const validatedData = {
             text: magazineText,
@@ -34,7 +35,7 @@ export const MagazineReviewComponent : React.FC<{ data: MagazineCardData }> = ({
         if (response.ok) {
             showAlert("Ficha validada", "success");
             setIsLoadingValidate(false);
-            router.push('/dashboard/worksheets/allSheets')
+            router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al validar la ficha", "error");
             setIsLoadingValidate(false)
@@ -46,6 +47,19 @@ export const MagazineReviewComponent : React.FC<{ data: MagazineCardData }> = ({
         setShowRejectButton(e.target.checked); // Muestra o esconde el botón de rechazar
     };
 
+    const handleRejectWorksheet = async () => {
+        setIsLoadingRejected(true)
+        const response = await RejectWorksheet(observation, id);
+        if (response.ok) {
+            showAlert("Ficha Rechazada", "success");
+            setIsLoadingRejected(false);
+            router.push('/dashboard/worksheets/sheetsToComplete')
+        } else {
+            showAlert("Error al rechazar la ficha", "error");
+            setIsLoadingRejected(false)
+        }
+    }
+    
     return (
         <div className='flex flex-col space-y-9 mb-12'>
             <div>
@@ -186,10 +200,10 @@ export const MagazineReviewComponent : React.FC<{ data: MagazineCardData }> = ({
                         <button
                             type="button"
                             className="flex justify-center items-center bg-red-600 hover:bg-red-700 h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
-
+                            onClick={() => handleRejectWorksheet()}
                         >
                             <span className="text-sm font-medium text-white">Rechazar</span>
-                            {isLoadingRefused ?
+                            {isLoadingRejected ?
                                 <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
                                 :
                                 <XMarkIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
@@ -200,7 +214,7 @@ export const MagazineReviewComponent : React.FC<{ data: MagazineCardData }> = ({
                     <button
                         type="button"
                         className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
-                        onClick={() => handleValidateAuthor()}
+                        onClick={() => handleValidateMagazine()}
                     >
                         <span className="text-sm font-medium text-white">Validar ficha</span>
                         {isLoadingValidate ?

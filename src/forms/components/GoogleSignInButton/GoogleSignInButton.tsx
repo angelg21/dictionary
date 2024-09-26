@@ -5,6 +5,7 @@
  * with different callback URLs.
  */
 
+import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 
@@ -14,12 +15,14 @@ interface GoogleSignInButtonProps {
 }
 
 
-const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ callbackUrl, isDisabled }) => {
+const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = async ({ callbackUrl, isDisabled }) => {
 
+  const session = await getServerSession(authOptions)
+  const userRoles = session?.user?.roles || [];
   
   const getRedirectPath = (userRoles: string[]): string => {
     if (userRoles.includes('admin')) {
-        return "/dashboard/worksheets/allSheets";
+        return "/dashboard/worksheets/validatedSheets";
     } else if (userRoles.includes('editor') && !userRoles.includes('reviewer')) {
         return "/dashboard/worksheets/sheetsToComplete";
     } else if (userRoles.includes('reviewer') && !userRoles.includes('editor')) {
@@ -30,7 +33,7 @@ const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ callbackUrl, is
     return "/"; // Ruta por defecto si no se cumplen las condiciones
 };
   const handleSignIn = () => {
-    signIn('google', { callbackUrl: '/dashboard/worksheets/allSheets' });
+    signIn('google', { callbackUrl: getRedirectPath(userRoles) });
   };
 
   return (

@@ -20,7 +20,7 @@ export default function MagazineReview({ params }: { params: { id: string } }) {
                 if (response.ok) {
                     setMagazineData(response.data);
                 } else {
-                    router.push('/dashboard/worksheets/allSheets'); // Redirigir si hay error
+                    router.push('/dashboard/worksheets/sheetsToComplete'); // Redirigir si hay error
                 }
             } catch (err) {
                 setError(true);

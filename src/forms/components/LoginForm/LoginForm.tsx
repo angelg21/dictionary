@@ -35,7 +35,7 @@ const LoginForm: React.FC = () => {
 
       // Lógica de redirección basada en roles
       if (userRoles.includes('admin')) {
-        router.push("/dashboard/worksheets/allSheets");
+        router.push("/dashboard/worksheets/validatedSheets");
       } else if (userRoles.includes('editor') && !userRoles.includes('reviewer')) {
         router.push("/dashboard/worksheets/sheetsToComplete");
       } else if (userRoles.includes('reviewer') && !userRoles.includes('editor')) {
