@@ -3,13 +3,12 @@
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { MagazineFormValues } from "@/src/forms/components/MagazineFormComponents/interfaces/MagazineForm";
 import { getServerSession } from "next-auth";
-;
 
 
-export const saveMagazineForm = async (payload: MagazineFormValues) => {
+export const saveMagazineForm = async (payload: MagazineFormValues, magazineId: string | string[]) => {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user.roles.includes('admin')) {
+    if (!session?.user.roles.includes('admin' || 'editor')) {
         return {
             ok: false,
             message: 'No tienes permisos para realizar esta acción',
@@ -17,7 +16,7 @@ export const saveMagazineForm = async (payload: MagazineFormValues) => {
     }
 
     try {
-        const response = await fetch(process.env.API_URL + `/cards/save/magazine/66cfa38bf43c2e26a816e21c`, {
+        const response = await fetch(process.env.API_URL + `/cards/save/magazine/${magazineId}`, {
             method: 'PUT',
             headers: { 
                 'Content-Type': 'application/json',

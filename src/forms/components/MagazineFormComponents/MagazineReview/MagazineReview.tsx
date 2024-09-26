@@ -1,11 +1,14 @@
 'use client'
 
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { MagazineFormValues } from "../interfaces/MagazineForm";
 import { useFormikContext } from "formik";
-import { ChevronUpDownIcon, PaperClipIcon, EyeIcon } from '@heroicons/react/24/outline'
+import { ChevronUpDownIcon, PaperClipIcon, EyeIcon, ArrowUpTrayIcon  } from '@heroicons/react/24/outline'
 import { PreviewModalImage } from "../../AuthorFormComponents/PreviewModalImage/PreviewModalImage";
-
+import { loadMagazineForm } from "@/src/app/dashboard/forms/magazineForm/actions/load-magazine-form";
+import { useAlert } from "@/src/users/context/AlertContext";
+import { useRouter } from 'next/navigation';
 
 
 
@@ -17,6 +20,10 @@ export const MagazineReview = () => {
     const [isPreviewImageOpen, setIsPreviewImageOpen] = useState(false)
     const [fileUrl, setFileUrl] = useState('');
     const [fileType, setFileType] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const { showAlert } = useAlert();
+    const router = useRouter();
+    const { id } = useParams();
 
     const handleMagazineDetailsVisible = () => {
         isMagazineDetailsVisible ?
@@ -36,6 +43,20 @@ export const MagazineReview = () => {
     const handleClosePreviewImage = () => {
         setIsPreviewImageOpen(false)
     };
+
+    const handleLoadForm = async () => {
+        setIsLoading(true)
+        const response = await loadMagazineForm(values, id);
+        if (response.ok) {
+            showAlert("Ficha agregada", "success");
+            setIsLoading(false);
+            localStorage.removeItem(`magazineFormData-${id}`);
+            router.push('/dashboard/worksheets/allSheets')
+        } else {
+            showAlert("Error al cargar la ficha", "error");
+            setIsLoading(false)
+        }
+    }
 
     return (
         <div>
@@ -88,20 +109,6 @@ export const MagazineReview = () => {
                                             )}
                                         </div>
                                     </div>
-                                    {/* <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-gray-900">Lugar de publicación</dt>
-                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                            <span>
-                                                <span className="text-sm font-semibold">Ciudad: </span>{values.publicationPlace.city}<br />
-                                            </span>
-                                            <span>
-                                                <span className="text-sm font-semibold">Imprenta: </span>{values.publicationPlace.printing}<br />
-                                            </span>
-                                            <span>
-                                                <span className="text-sm font-semibold">Editorial: </span>{values.publicationPlace.publisher}<br />
-                                            </span>
-                                        </dd>
-                                    </div> */}
 
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Creadores</dt>
@@ -183,7 +190,7 @@ export const MagazineReview = () => {
                                             </div>
                                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                                 <dt className="text-sm font-medium leading-6 text-gray-900">Referencia Bibliográfrica</dt>
-                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{criticis.link}</dd>
+                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{criticis.bibliographicReference}</dd>
                                             </div>
                                             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                                 <dt className="text-sm font-medium leading-6 text-gray-900">Enlace</dt>
@@ -223,6 +230,23 @@ export const MagazineReview = () => {
                             </div>
                         )
                     }
+                </div>
+
+                <div className='flex justify-end w-full'>
+
+                    <button
+                        type="button"
+                        className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-12 mb-8"
+                        onClick={() => handleLoadForm()}
+                    >
+                        <span className="text-sm font-medium text-white">Subir ficha</span>
+                        {isLoading? 
+                        <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' /> 
+                            :
+                        <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                        }
+                    </button>
+
                 </div>
             </div>
 

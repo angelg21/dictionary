@@ -1,11 +1,13 @@
 'use client'
-
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useFormikContext } from "formik";
-import { ChevronUpDownIcon, PaperClipIcon, EyeIcon } from '@heroicons/react/24/outline'
+import { ChevronUpDownIcon, PaperClipIcon, EyeIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { PreviewModalImage } from "../../AuthorFormComponents/PreviewModalImage/PreviewModalImage";
 import { GroupingFormValues } from "../interfaces/GroupingForm";
-import { div } from "framer-motion/client";
+import { useAlert } from "@/src/users/context/AlertContext";
+import { useRouter } from 'next/navigation';
+import { loadGroupingForm } from "@/src/app/dashboard/forms/groupingForm/actions/load-grouping-form";
 
 
 export const GroupingFormsReview = () => {
@@ -14,8 +16,12 @@ export const GroupingFormsReview = () => {
     const [isGroupingDetailsVisible, setGroupingDetailsVisible] = useState(false);;
     const [isGroupingCriticismsVisible, setIsGroupingCriticismsVisible] = useState(false);
     const [isPreviewImageOpen, setIsPreviewImageOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const { showAlert } = useAlert();
+    const router = useRouter();
     const [fileUrl, setFileUrl] = useState('');
     const [fileType, setFileType] = useState('');
+    const { id } = useParams();
 
     const handleGroupingDetailsVisible = () => {
         isGroupingDetailsVisible ?
@@ -36,9 +42,22 @@ export const GroupingFormsReview = () => {
         setIsPreviewImageOpen(false)
     };
 
+    const handleLoadForm = async () => {
+        setIsLoading(true)
+        const response = await loadGroupingForm(values, id);
+        if (response.ok) {
+            showAlert("Ficha agregada", "success");
+            setIsLoading(false);
+            localStorage.removeItem(`groupingFormData-${id}`);
+            router.push('/dashboard/worksheets/allSheets')
+        } else {
+            showAlert("Error al cargar la ficha", "error");
+            setIsLoading(false)
+        }
+    }
+
     return (
         <div>
-
             <div>
                 <div className='my-5'>
                     <div className="flex px-5 py-3 bg-d-blue rounded-tl-lg rounded-tr-lg justify-between" onClick={handleGroupingDetailsVisible}>
@@ -137,7 +156,6 @@ export const GroupingFormsReview = () => {
                         )
                     }
                 </div>
-
                 <div className='my-5'>
                     <div className="flex px-5 py-3 bg-d-blue rounded-tl-lg rounded-tr-lg justify-between" onClick={handleGroupingCriticismsVisible}>
                         <h3 className="text-base font-semibold leading-7 text-white">Críticas</h3>
@@ -209,11 +227,23 @@ export const GroupingFormsReview = () => {
                         )
                     }
                 </div>
+                <div className='flex justify-end w-full'>
+                    <button
+                        type="button"
+                        className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                        onClick={() => handleLoadForm()}
+                    >
+                        <span className="text-sm font-medium text-white">Subir ficha</span>
+                        {isLoading ?
+                            <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
+                            :
+                            <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                        }
+                    </button>
+                </div>
             </div>
-
             {
                 isPreviewImageOpen &&
-
                 <PreviewModalImage
                     fileUrl={fileUrl}
                     fileType={fileType}

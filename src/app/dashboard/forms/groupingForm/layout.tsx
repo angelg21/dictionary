@@ -1,23 +1,27 @@
 'use client'
 
 import { GroupingFormValues } from "@/src/forms/components/GroupingFormComponent/interfaces/GroupingForm";
+import { AlertProvider } from "@/src/users/context/AlertContext";
 import { Form, Formik, useFormikContext } from "formik";
 import { useEffect } from "react";
 import * as Yup from 'yup';
+import { useParams, usePathname } from "next/navigation";
 
 export default function GroupingFormLayout({ children }: { children: React.ReactNode; }) {
+
+    const { id } = useParams();
 
     const SaveFormValues = () => {
         const { values } = useFormikContext<GroupingFormValues>();
 
         useEffect(() => {
-            localStorage.setItem(`groupingFormData`, JSON.stringify(values));
+            localStorage.setItem(`groupingFormData-${id}`, JSON.stringify(values));
         }, [values]);
 
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`groupingFormData`) || JSON.stringify({
+    const initialValues = JSON.parse(localStorage.getItem(`groupingFormData-${id}`) || JSON.stringify({
         name: '',
         meetingPlace: {
             city: '',
@@ -38,7 +42,7 @@ export default function GroupingFormLayout({ children }: { children: React.React
         name: Yup.string()
             .max(100, 'El nombre no puede superar los 100 caracteres')
             .nullable(),
-    
+
         meetingPlace: Yup.object({
             city: Yup.string()
                 .max(100, 'La ciudad no puede superar los 100 caracteres')
@@ -47,21 +51,21 @@ export default function GroupingFormLayout({ children }: { children: React.React
                 .max(100, 'El municipio no puede superar los 100 caracteres')
                 .nullable(),
         }).nullable(),
-    
+
         startDate: Yup.string()
             .nullable(),
-    
+
         endDate: Yup.string()
             .nullable(),
-    
+
         generalCharacteristics: Yup.string()
             .max(500, 'Las características generales no pueden superar los 500 caracteres')
             .nullable(),
-    
+
         members: Yup.array()
             .of(Yup.string().max(100, 'El nombre del miembro no puede superar los 100 caracteres'))
             .nullable(),
-    
+
         groupPublications: Yup.array().of(
             Yup.object({
                 title: Yup.string()
@@ -77,11 +81,11 @@ export default function GroupingFormLayout({ children }: { children: React.React
                     .nullable(),
             })
         ).nullable(),
-    
+
         groupActivities: Yup.string()
             .max(500, 'Las actividades del grupo no pueden superar los 500 caracteres')
             .nullable(),
-    
+
         multimedia: Yup.array().of(
             Yup.object({
                 title: Yup.string()
@@ -98,7 +102,7 @@ export default function GroupingFormLayout({ children }: { children: React.React
                     .nullable(),
             })
         ).nullable(),
-    
+
         criticism: Yup.array().of(
             Yup.object({
                 title: Yup.string()
@@ -155,7 +159,9 @@ export default function GroupingFormLayout({ children }: { children: React.React
                         <SaveFormValues />
                         <div className=''>
                             <div className='flex flex-col mx-5 lg:mx-9 xl:mx-20'>
-                                {children}
+                                <AlertProvider>
+                                    {children}
+                                </AlertProvider>
                             </div>
                         </div>
                     </Form>

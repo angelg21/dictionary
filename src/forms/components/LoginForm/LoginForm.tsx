@@ -2,13 +2,16 @@
 import { AuthForm } from '../../../forms/components/AuthForm/AuthForm';
 import { signIn } from 'next-auth/react';
 import { redirect, useRouter } from 'next/navigation';
-import { useState, useTransition } from 'react';
+import { useEffect, useState, useTransition } from 'react';
+import { useSession } from "next-auth/react";
 
 const LoginForm: React.FC = () => {
 
+  const { data: session, status } = useSession();
+  const userRoles = session?.user?.roles || [];
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
-  const router = useRouter(); 
+  const router = useRouter();
 
   const handleSubmit = async (values: any) => {
     setError(null);
@@ -22,17 +25,32 @@ const LoginForm: React.FC = () => {
 
       if (res?.error) {
         setError(res.error);
-      } else {
-        redirect('/dashboard/worksheets/allSheets');
       }
     });
   };
 
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user?.roles) {
+      const userRoles = session.user.roles;
+
+      // Lógica de redirección basada en roles
+      if (userRoles.includes('admin')) {
+        router.push("/dashboard/worksheets/allSheets");
+      } else if (userRoles.includes('editor') && !userRoles.includes('reviewer')) {
+        router.push("/dashboard/worksheets/sheetsToComplete");
+      } else if (userRoles.includes('reviewer') && !userRoles.includes('editor')) {
+        router.push("/dashboard/worksheets/sheetsToReview");
+      } else if (userRoles.includes('editor') && userRoles.includes('reviewer')) {
+        router.push("/dashboard/worksheets/sheetsToComplete");
+      }
+    }
+  }, [status, session, router]);
+  
   return (
     <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background image with a dark overlay */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat" 
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url('/assets/tepuis.webp')` }}
       >
         {/* Dark overlay to darken the background image */}

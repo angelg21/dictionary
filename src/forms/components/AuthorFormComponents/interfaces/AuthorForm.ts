@@ -7,21 +7,12 @@ export interface AuthorFormValues {
     placeOfDeath: string;
     gender: string;
     text: string;
-    relatives: [
-        {
-            name: '',
-            relationship: '',
-        }
-    ],
+    relatives: { name: string; relationship: string }[];
     relevantActivities: string;
     mainTheme: string;
     mainGenre: string;
     context: string;
-    publicationPlace: {
-        city: '',
-        printingHouse: '',
-        publisher: '',
-    },
+    publicationPlace: { city: string; printingHouse: string; publisher: string }[];
     multimedia: {
         title: '',
         link: string;

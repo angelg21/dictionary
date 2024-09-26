@@ -2,22 +2,26 @@
 
 import { AnthologyFormValues } from "@/src/forms/components/AnthologyFormComponents/interfaces/AnthologyForm";
 import { Form, Formik, useFormikContext } from "formik";
+import { AlertProvider } from "@/src/users/context/AlertContext";
 import { useEffect } from "react";
 import * as Yup from 'yup';
+import { useParams, usePathname } from "next/navigation";
 
 export default function MagazineFormLayout({ children }: { children: React.ReactNode; }) {
+
+    const { id } = useParams();
 
     const SaveFormValues = () => {
         const { values } = useFormikContext<AnthologyFormValues>();
 
         useEffect(() => {
-            localStorage.setItem(`anthologyFormData`, JSON.stringify(values));
+            localStorage.setItem(`anthologyFormData-${id}`, JSON.stringify(values));
         }, [values]);
 
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`anthologyFormData`) || JSON.stringify({
+    const initialValues = JSON.parse(localStorage.getItem(`anthologyFormData-${id}`) || JSON.stringify({
         anthologyTitle: '',
         genre: '',
         author: '',
@@ -38,22 +42,22 @@ export default function MagazineFormLayout({ children }: { children: React.React
         anthologyTitle: Yup.string()
             .max(100, 'El título de la antología no puede superar los 100 caracteres')
             .nullable(),
-    
+
         genre: Yup.string()
             .max(50, 'El género no puede superar los 50 caracteres')
             .nullable(),
-    
+
         author: Yup.string()
             .max(100, 'El nombre del autor no puede superar los 100 caracteres')
             .nullable(),
-    
+
         originalLanguage: Yup.string()
             .max(50, 'El idioma original no puede superar los 50 caracteres')
             .nullable(),
-    
+
         publicationDate: Yup.string()
             .nullable(),
-    
+
         publicationPlace: Yup.object({
             city: Yup.string()
                 .max(100, 'La ciudad no puede superar los 100 caracteres')
@@ -65,11 +69,11 @@ export default function MagazineFormLayout({ children }: { children: React.React
                 .max(100, 'El nombre del editor no puede superar los 100 caracteres')
                 .nullable(),
         }).nullable(),
-    
+
         description: Yup.string()
             .max(500, 'La descripción no puede superar los 500 caracteres')
             .nullable(),
-    
+
         multimedia: Yup.array().of(
             Yup.object({
                 title: Yup.string()
@@ -86,7 +90,7 @@ export default function MagazineFormLayout({ children }: { children: React.React
                     .nullable(),
             })
         ).nullable(),
-    
+
         criticism: Yup.array().of(
             Yup.object({
                 title: Yup.string()
@@ -146,7 +150,9 @@ export default function MagazineFormLayout({ children }: { children: React.React
                         <SaveFormValues />
                         <div className=''>
                             <div className='flex flex-col mx-5 lg:mx-9 xl:mx-20'>
-                                {children}
+                                <AlertProvider>
+                                    {children}
+                                </AlertProvider>
                             </div>
                         </div>
                     </Form>

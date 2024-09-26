@@ -59,6 +59,7 @@ export default function FilteredWorksheets({ data }: { data: any }) {
         const variant = statusVariants[item.status] || {};
 
         return {
+            workSheetId: item._id,
             workSheetDate: new Date(item.createdAt).toLocaleDateString('es-ES', {
                 day: '2-digit',
                 month: '2-digit',
@@ -84,7 +85,7 @@ export default function FilteredWorksheets({ data }: { data: any }) {
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col mb-20">
             {
                 currentWorksheets.map((item: any) => (
-                    <WorkSheetFile {...item} />
+                    <WorkSheetFile key={item.workSheetName} {...item} />
                 ))
             }
             <Pagination

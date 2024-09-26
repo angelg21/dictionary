@@ -40,6 +40,7 @@ export default async function SheetsValidated() {
         const variant = statusVariants[item.status] || {};
     
         return {
+            workSheetId: item._id,
             workSheetDate: new Date(item.createdAt).toLocaleDateString('es-ES', {
                 day: '2-digit',
                 month: '2-digit',
@@ -57,7 +58,7 @@ export default async function SheetsValidated() {
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col">
             {
                 Items.map((item: any) => (
-                    <WorkSheetFile {...item} />
+                    <WorkSheetFile key={item.workSheetName} {...item} />
                 ))
             }
         </div>

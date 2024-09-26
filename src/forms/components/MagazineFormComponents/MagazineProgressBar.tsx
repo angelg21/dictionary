@@ -1,6 +1,6 @@
 'use client'
 
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { saveMagazineForm } from "@/src/app/dashboard/forms/magazineForm/actions/save-magazine-form";
@@ -8,21 +8,23 @@ import { useFormikContext } from "formik";
 import { MagazineFormValues } from "./interfaces/MagazineForm";
 import { useAlert } from "@/src/users/context/AlertContext";
 
-const steps =
-    [
-        { id: '01', title: 'Revista', name: 'Detalles de la Revista', href: '/dashboard/forms/magazineForm/magazineDetails' },
-        { id: '02', title: 'Críticas', name: 'Críticas', href: '/dashboard/forms/magazineForm/magazineCriticisms' },
-        { id: '03', title: 'Revisión de los datos ingresados', name: 'Revisión', href: '/dashboard/forms/magazineForm/magazineFormReview' },
-    ]
 
 export const MagazineProgressBar = () => {
     
-    const { values, setFieldValue } = useFormikContext<MagazineFormValues>();
+    const { values } = useFormikContext<MagazineFormValues>();
     const pathName = usePathname();
-    const MagazineDetails = pathName === '/dashboard/forms/magazineForm/magazineDetails';
-    const MagazineCriticisms = pathName === '/dashboard/forms/magazineForm/magazineCriticisms';
-    const MagazineFormReview = pathName === '/dashboard/forms/magazineForm/magazineFormReview';
+    const { id } = useParams();
+    const MagazineDetails = pathName === `/dashboard/forms/magazineForm/${id}/magazineDetails`;
+    const MagazineCriticisms = pathName === `/dashboard/forms/magazineForm/${id}/magazineCriticisms`;
+    const MagazineFormReview = pathName === `/dashboard/forms/magazineForm/${id}/magazineFormReview`;
     const { showAlert } = useAlert();
+    
+    const steps =
+        [
+            { id: '01', title: 'Revista', name: 'Detalles de la Revista', href: `/dashboard/forms/magazineForm/${id}/magazineDetails` },
+            { id: '02', title: 'Críticas', name: 'Críticas', href: `/dashboard/forms/magazineForm/${id}/magazineCriticisms` },
+            { id: '03', title: 'Confirmar datos', name: 'Revisión', href: `/dashboard/forms/magazineForm/${id}/magazineFormReview` },
+        ];
 
     const Status = (id: string) => {
         if ((MagazineDetails && id === '01') || (MagazineCriticisms && id === '02') || (MagazineFormReview && id === '03')) {
@@ -41,7 +43,7 @@ export const MagazineProgressBar = () => {
 
     const handleSafeForm = async () => {
 
-        const response = await saveMagazineForm(values);
+        const response = await saveMagazineForm(values, id);
 
         if (response.ok) {
             showAlert("Informacion guardada", "success");
@@ -54,14 +56,17 @@ export const MagazineProgressBar = () => {
         <div className='felx -flex-col'>
             <div className="flex justify-between mt-6">
                 <span className="text-4xl text-d-blue font-bold ">{getPageTitle()}</span>
-                <button
-                    type="button"
-                    onClick={() => handleSafeForm()}
-                    className="flex justify-center items-center bg-d-blue h-[45px] w-full max-w-16 sm:max-w-32 text-white px-4 py-2 rounded-full col-span-1 md:row-span-1"
-                >
-                    <span className="max-sm:hidden text-sm font-medium">Guardar</span>
-                    <CloudArrowUpIcon aria-hidden="true" className="h-6 w-6 text-white sm:ml-4" />
-                </button>
+
+                {pathName != `/dashboard/forms/magazineForm/${id}/magazineFormReview` &&
+                    <button
+                        type="button"
+                        onClick={() => handleSafeForm()}
+                        className="flex justify-center items-center bg-d-blue h-[45px] w-full max-w-16 sm:max-w-32 text-white px-4 py-2 rounded-full col-span-1 md:row-span-1"
+                    >
+                        <span className="max-sm:hidden text-sm font-medium">Guardar</span>
+                        <CloudArrowUpIcon aria-hidden="true" className="h-6 w-6 text-white sm:ml-4" />
+                    </button>
+                }
             </div>
 
             <nav aria-label="Progress">

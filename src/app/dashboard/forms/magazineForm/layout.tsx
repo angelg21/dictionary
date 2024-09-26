@@ -5,21 +5,23 @@ import { AlertProvider } from "@/src/users/context/AlertContext";
 import { Form, Formik, useFormikContext } from "formik";
 import { useEffect } from "react";
 import * as Yup from 'yup';
-
+import { useParams, usePathname } from "next/navigation";
 
 export default function MagazineFormLayout({ children }: { children: React.ReactNode; }) {
+
+    const { id } = useParams();
 
     const SaveFormValues = () => {
         const { values } = useFormikContext<MagazineFormValues>();
 
         useEffect(() => {
-            localStorage.setItem(`magazineFormData`, JSON.stringify(values));
+            localStorage.setItem(`magazineFormData-${id}`, JSON.stringify(values));
         }, [values]);
 
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`magazineFormData`) || JSON.stringify({
+    const initialValues = JSON.parse(localStorage.getItem(`magazineFormData-${id}`) || JSON.stringify({
         magazineTitle: '',
         originalLanguage: '',
         sections: '',

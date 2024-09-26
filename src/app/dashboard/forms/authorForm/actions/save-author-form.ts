@@ -6,10 +6,10 @@ import { getServerSession } from "next-auth";
 
 
 
-export const saveAuthorForm = async (payload: AuthorFormValues) => {
+export const saveAuthorForm = async (payload: AuthorFormValues, authorId: string | string[]) => {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user.roles.includes('admin')) {
+    if (!session?.user.roles.includes('admin' || 'editor')) {
         return {
             ok: false,
             message: 'No tienes permisos para realizar esta acción',
@@ -17,7 +17,7 @@ export const saveAuthorForm = async (payload: AuthorFormValues) => {
     }
 
     try {
-        const response = await fetch(process.env.API_URL + `/cards/save/author/66ce43f875ad7576b705fafe`, {
+        const response = await fetch(process.env.API_URL + `/cards/save/author/${authorId}`, {
             method: 'PUT',
             headers: { 
                 'Content-Type': 'application/json',

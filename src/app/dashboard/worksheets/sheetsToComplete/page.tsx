@@ -1,8 +1,10 @@
+
+
 import { WorkSheetFile } from "@/src/worksheets/componentes/WorkSheetFile/WorkSheetFile";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getAllPendingEdits } from "../actions/get-all-pending-edits";
-
+import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon  } from '@heroicons/react/24/outline';
 const greenVariant = {
     buttonBackground: 'bg-d-green-light-button',
     buttonPointStyle: 'bg-d-green',
@@ -30,16 +32,20 @@ const statusVariants: { [key: string]: typeof greenVariant } = {
     'Pending Edit': blueVariant,
 };
 
+
+
 export default async function SheetsToComplete() {
     
     const session = await getServerSession(authOptions);
 
     const { data = [] } = session?.user.roles.includes('admin') ? await getAllPendingEdits() : await getAllPendingEdits(session?.user._id);
+
     
     const Items = data.map((item: any) => {
         const variant = statusVariants[item.status] || {};
     
         return {
+            workSheetId: item._id,
             workSheetDate: new Date(item.createdAt).toLocaleDateString('es-ES', {
                 day: '2-digit',
                 month: '2-digit',
@@ -57,7 +63,7 @@ export default async function SheetsToComplete() {
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col">
             {
                 Items.map((item: any) => (
-                    <WorkSheetFile {...item} />
+                    <WorkSheetFile key={item.workSheetName} {...item} />
                 ))
             }
         </div>

@@ -9,7 +9,6 @@ export default async function AllSheets() {
     
     const session = await getServerSession(authOptions);
     const { data = [] } = session?.user.roles.includes('admin') ? await getAllSheets() : await getAllSheets(session?.user._id);
-
     return (
         <FilteredWorksheets data={data} />
     );

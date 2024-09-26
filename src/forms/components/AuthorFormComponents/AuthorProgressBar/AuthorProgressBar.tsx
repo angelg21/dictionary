@@ -1,7 +1,7 @@
 'use client'
 
 
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { useAlert } from '@/src/users/context/AlertContext';
@@ -13,20 +13,30 @@ const steps =
     [
         { id: '01', title: 'Autor', name: 'Detalles del Autor', href: '/dashboard/forms/authorForm/authorDetails' },
         { id: '02', title: 'Obras', name: 'Obras', href: '/dashboard/forms/authorForm/works' },
-        { id: '03', title: 'Críticas', name: 'Crítica', href: '/dashboard/forms/authorForm/criticisms' },
-        { id: '04', title: 'Revisión de los datos ingresados', name: 'Revisión', href: '/dashboard/forms/authorForm/authorFormReview' },
-    ]
+        { id: '03', title: 'Críticas', name: 'Críticas', href: '/dashboard/forms/authorForm/criticisms' },
+        { id: '04', title: 'Confirmar datos', name: 'Revisión', href: '/dashboard/forms/authorForm/authorFormReview' },
+    ];
 
 
 export const AuthorProgressBar = () => {
 
     const { values  } = useFormikContext<AuthorFormValues>();
     const pathName = usePathname();
-    const AuthorDetails = pathName === '/dashboard/forms/authorForm/authorDetails';
-    const AuthorFormReview = pathName === '/dashboard/forms/authorForm/authorFormReview';
-    const Criticisms = pathName === '/dashboard/forms/authorForm/criticisms';
-    const Works = pathName === '/dashboard/forms/authorForm/works';
+    const { id } = useParams();
+    const AuthorDetails = pathName === `/dashboard/forms/authorForm/${id}/authorDetails`;
+    const AuthorFormReview = pathName === `/dashboard/forms/authorForm/${id}/authorFormReview`;
+    const Criticisms = pathName === `/dashboard/forms/authorForm/${id}/criticisms`;
+    const Works = pathName === `/dashboard/forms/authorForm/${id}/works`;
     const { showAlert } = useAlert();
+
+    const steps =
+    [
+        { id: '01', title: 'Autor', name: 'Detalles del Autor', href: `/dashboard/forms/authorForm/${id}/authorDetails` },
+        { id: '02', title: 'Obras', name: 'Obras', href: `/dashboard/forms/authorForm/${id}/works` },
+        { id: '03', title: 'Críticas', name: 'Críticas', href: `/dashboard/forms/authorForm/${id}/criticisms` },
+        { id: '04', title: 'Confirmar datos', name: 'Revisión', href: `/dashboard/forms/authorForm/${id}/authorFormReview` },
+    ];
+
     const Status = (id: string) => {
 
         if ((AuthorDetails && id === '01') || (Works && id === '02') || (Criticisms && id === '03') || (AuthorFormReview && id === '04')) {
@@ -45,7 +55,7 @@ export const AuthorProgressBar = () => {
     const handleSafeForm = async () => {
         showAlert("Informacion guardada", "success");
 
-        const response = await saveAuthorForm(values);
+        const response = await saveAuthorForm(values, id);
 
         if (response.ok) {
             showAlert("Informacion guardada", "success");
@@ -58,14 +68,16 @@ export const AuthorProgressBar = () => {
         <div className='felx -flex-col'>
             <div className="flex justify-between mt-6">
                 <span className="text-4xl text-d-blue font-bold ">{getPageTitle()}</span>
-                <button
-                    type="button"
-                    onClick={() => handleSafeForm()}
-                    className="flex justify-center items-center bg-d-blue h-[45px] w-full max-w-16 sm:max-w-32 text-white px-4 py-2 rounded-full col-span-1 md:row-span-1"
-                >
-                    <span className="max-sm:hidden text-sm font-medium">Guardar</span>
-                    <CloudArrowUpIcon aria-hidden="true" className="h-6 w-6 text-white sm:ml-4" />
-                </button>
+                {pathName != `/dashboard/forms/authorForm/${id}/authorFormReview` &&
+                    <button
+                        type="button"
+                        onClick={() => handleSafeForm()}
+                        className="flex justify-center items-center bg-d-blue h-[45px] w-full max-w-16 sm:max-w-32 text-white px-4 py-2 rounded-full col-span-1 md:row-span-1"
+                    >
+                        <span className="max-sm:hidden text-sm font-medium">Guardar</span>
+                        <CloudArrowUpIcon aria-hidden="true" className="h-6 w-6 text-white sm:ml-4" />
+                    </button>
+                }
             </div>
             <nav aria-label="Progress">
                 <ol role="list" className="divide-y divide-gray-300 rounded-md border border-gray-300 md:flex md:divide-y-0 my-7">
@@ -123,8 +135,5 @@ export const AuthorProgressBar = () => {
             </nav>
         </div>
     )
-}
-function showAlert(arg0: string, arg1: string) {
-    throw new Error('Function not implemented.');
 }
 

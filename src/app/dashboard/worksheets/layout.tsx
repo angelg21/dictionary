@@ -1,4 +1,5 @@
 'use client'
+
 import { ButtonWithIconLeft } from "@/src/components/ButtonWithIconLeft/ButtonWithIconLeft";
 import { InputWithIconLeft } from "@/src/components/InputWithIconLeft/InputWithIconLeft";
 import { Filters } from "@/src/worksheets/componentes/Filters/Filters";
@@ -56,7 +57,7 @@ function LayoutContent({ children }: { children: React.ReactNode; }) {
                   textColor="text-white"
                   backgroundColor="bg-d-green hidden xl:flex"
                   hover="hover:bg-d-green-light"
-                  icon=<PlusIcon />
+                  icon={<PlusIcon />}
                   iconColor="text-white"
                 />
               </div>
@@ -65,7 +66,7 @@ function LayoutContent({ children }: { children: React.ReactNode; }) {
             <div className="flex flex-col xl:flex-row xl:items-center my-5 justify-between ">
               <InputWithIconLeft
                 name="searchWorkSheets"
-                type="text" icon=<MagnifyingGlassIcon />
+                type="text" icon={<MagnifyingGlassIcon />}
                 iconColor="text-d-gray-light"
                 inputWidth="w-full max-w-lg lg:w-[280px]"
                 hover="hover:ring-gray-400"

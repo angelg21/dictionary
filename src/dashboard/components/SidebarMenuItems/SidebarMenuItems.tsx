@@ -1,6 +1,6 @@
 'use client'
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React from "react";
 
 interface Props {
@@ -16,42 +16,62 @@ function classNames(...classes: any[]) {
 
 export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) => {
 
+    const { id } = useParams();
     const pathName = usePathname();
-    const AuthorDetails = pathName === '/dashboard/forms/authorForm/authorDetails'
-    const AuthorFormReview = pathName === '/dashboard/forms/authorForm/authorFormReview'
-    const Criticisms = pathName === '/dashboard/forms/authorForm/criticisms'
-    const Works = pathName === '/dashboard/forms/authorForm/works'
-    const MagazineDetails = pathName === '/dashboard/forms/magazineForm/magazineDetails';
-    const MagazineCriticisms = pathName === '/dashboard/forms/magazineForm/magazineCriticisms';
-    const MagazineFormReview = pathName === '/dashboard/forms/magazineForm/magazineFormReview';
-    const AnthologyDetails = pathName === '/dashboard/forms/anthologyForm/anthologyDetails';
-    const AnthologyCriticisms = pathName === '/dashboard/forms/anthologyForm/anthologyCriticism';
-    const AnthologyFormReview = pathName === '/dashboard/forms/anthologyForm/anthologyFormReview';
-    const GroupingDetails = pathName === '/dashboard/forms/groupingForm/groupingDetails';
-    const GroupingCriticisms = pathName === '/dashboard/forms/groupingForm/groupingCriticism';
-    const GroupingFormReview = pathName === '/dashboard/forms/groupingForm/groupingFormReview';
+
+    const worksheetsPaths = [
+        '/dashboard/worksheets/allSheets',
+        '/dashboard/worksheets/sheetsToComplete',
+        '/dashboard/worksheets/sheetsToReview',
+        '/dashboard/worksheets/validatedSheets'
+    ];
+
+    const authorFormPaths = [
+        `/dashboard/forms/authorForm/${id}/authorDetails`,
+        `/dashboard/forms/authorForm/${id}/authorFormReview`,
+        `/dashboard/forms/authorForm/${id}/criticisms`,
+        `/dashboard/forms/authorForm/${id}/works`
+    ];
+
+    const magazineFormPaths = [
+        `/dashboard/forms/magazineForm/${id}/magazineDetails`,
+        `/dashboard/forms/magazineForm/${id}/magazineCriticisms`,
+        `/dashboard/forms/magazineForm/${id}/magazineFormReview`
+    ];
+
+    const anthologyFormPaths = [
+        `/dashboard/forms/anthologyForm/${id}/anthologyDetails`,
+        `/dashboard/forms/anthologyForm/${id}/anthologyCriticism`,
+        `/dashboard/forms/anthologyForm/${id}/anthologyFormReview`
+    ];
+
+    const groupingFormPaths = [
+        `/dashboard/forms/groupingForm/${id}/groupingDetails`,
+        `/dashboard/forms/groupingForm/${id}/groupingCriticism`,
+        `/dashboard/forms/groupingForm/${id}/groupingFormReview`
+    ];
+
+    const worksheetsReviewPaths = [
+        `/dashboard/workSheetReview/${id}/authorReview`,
+        `/dashboard/workSheetReview/${id}/anthologyReview`,
+        `/dashboard/workSheetReview/${id}/groupingReview`,
+        `/dashboard/workSheetReview/${id}/magazineReview`
+    ];
+
+    // Función para verificar si el path pertenece a alguna lista
+    const isActive = (currentPath: string, paths: string[]) => paths.includes(currentPath);
+
+    // Verificación para el menú "Fichas"
+    const isFichasActive = isActive(pathName, worksheetsPaths) ||
+        isActive(pathName, authorFormPaths) ||
+        isActive(pathName, magazineFormPaths) ||
+        isActive(pathName, anthologyFormPaths) ||
+        isActive(pathName, groupingFormPaths) ||
+        isActive(pathName, worksheetsReviewPaths);
+
     const iconClasses = `
-        ${ pathName === path || (
-            (
-                pathName === '/dashboard/worksheets/allSheets' || 
-                pathName === '/dashboard/worksheets/sheetsToComplete' || 
-                pathName === '/dashboard/worksheets/sheetsToReview' || 
-                pathName === '/dashboard/worksheets/validatedSheets' || 
-                AuthorDetails || 
-                AuthorFormReview || 
-                Criticisms || 
-                Works ||
-                MagazineDetails ||
-                MagazineCriticisms ||
-                MagazineFormReview ||
-                AnthologyDetails ||
-                AnthologyCriticisms ||
-                AnthologyFormReview ||
-                GroupingDetails ||
-                GroupingCriticisms ||
-                GroupingFormReview
-            ) && title === 'Fichas')
-            ?'text-d-yellow' : 'text-indigo-200 group-hover:text-white'} 
+        ${pathName === path || ( isFichasActive && title === 'Fichas')
+            ? 'text-d-yellow' : 'text-indigo-200 group-hover:text-white'} 
         h-6 w-6 shrink-0
     `;
     return (
@@ -60,26 +80,7 @@ export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) =>
                 <div
                     onClick={onClick}
                     className={classNames(
-                        pathName === path || (
-                            (
-                                pathName === '/dashboard/worksheets/allSheets' || 
-                                pathName === '/dashboard/worksheets/sheetsToComplete' || 
-                                pathName === '/dashboard/worksheets/sheetsToReview' || 
-                                pathName === '/dashboard/worksheets/validatedSheets' || 
-                                AuthorDetails || 
-                                AuthorFormReview || 
-                                Criticisms || 
-                                Works ||
-                                MagazineDetails ||
-                                MagazineCriticisms ||
-                                MagazineFormReview ||
-                                AnthologyDetails ||
-                                AnthologyCriticisms ||
-                                AnthologyFormReview ||
-                                GroupingDetails ||
-                                GroupingCriticisms ||
-                                GroupingFormReview
-                            )  && title === 'Fichas')
+                        pathName === path || (isFichasActive && title === 'Fichas')
                             ? 'bg-d-blue text-d-yellow before:content-[""] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-[7px] before:rounded-full before:bg-d-yellow'
                             : 'text-indigo-200 hover:text-white',
                         'group flex gap-x-3 rounded-md p-2 text-lg font-medium leading-6  pl-5 transition-colors duration-300 ease-in-out',

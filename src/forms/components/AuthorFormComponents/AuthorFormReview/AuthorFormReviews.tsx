@@ -1,22 +1,28 @@
 'use client'
 
+import { useParams, usePathname } from "next/navigation";
+import { useRouter } from 'next/navigation'
 import { PaperClipIcon } from '@heroicons/react/20/solid'
-import { ChevronUpDownIcon, EyeIcon } from '@heroicons/react/24/outline'
+import { ChevronUpDownIcon, EyeIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline'
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
-import { AuthorFormValues, Criticism } from '../interfaces/AuthorForm';
-import { div } from 'framer-motion/client';
+import { AuthorFormValues } from '../interfaces/AuthorForm';
 import { PreviewModalImage } from '../PreviewModalImage/PreviewModalImage';
-
+import { loadAuthorForm } from '@/src/app/dashboard/forms/authorForm/actions/load-author-form';
+import { useAlert } from '@/src/users/context/AlertContext';
 export const AuthorFormReviews = () => {
 
     const { values } = useFormikContext<AuthorFormValues>();
+    const { id } = useParams();
     const [isAuthorDetailsVisible, setIsAuthorDetailsVisible] = useState(false);
     const [isWorksVisible, setIsWorksVisible] = useState(false);
     const [isCriticismsVisible, setIsCriticismsVisible] = useState(false);
     const [isPreviewImageOpen, setIsPreviewImageOpen] = useState(false)
     const [fileUrl, setFileUrl] = useState('');
     const [fileType, setFileType] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
+    const { showAlert } = useAlert();
+    const router = useRouter();
 
     const handleAuthorDetailsVisible = () => {
         isAuthorDetailsVisible ?
@@ -46,10 +52,23 @@ export const AuthorFormReviews = () => {
         setIsPreviewImageOpen(false)
     };
 
+    const handleLoadForm = async () => {
+        setIsLoading(true)
+        const response = await loadAuthorForm(values, id);
+        if (response.ok) {
+            showAlert("Ficha agregada", "success");
+            setIsLoading(false);
+            localStorage.removeItem(`authorFormData-${id}`);
+            router.push('/dashboard/worksheets/allSheets')
+        } else {
+            showAlert("Error", "error");
+            setIsLoading(false)
+        }
+    }
+
     return (
         <div>
-
-            <div>
+            <div className='flex flex-col'>
                 <div className='my-5'>
                     <div className="flex px-5 py-3 bg-d-blue rounded-tl-lg rounded-tr-lg justify-between" onClick={handleAuthorDetailsVisible}>
                         <h3 className="text-base font-semibold leading-7 text-white">Autor</h3>
@@ -278,6 +297,23 @@ export const AuthorFormReviews = () => {
                         )
                     }
                 </div>
+
+                <div className='flex justify-end w-full'>
+
+                    <button
+                        type="button"
+                        className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-12 mb-8"
+                        onClick={() => handleLoadForm()}
+                    >
+                        <span className="text-sm font-medium text-white">Subir ficha</span>
+                        {isLoading? 
+                        <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' /> 
+                            :
+                        <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                        }
+                    </button>
+
+                </div>
             </div>
 
             {
@@ -292,3 +328,5 @@ export const AuthorFormReviews = () => {
         </div>
     )
 }
+
+

@@ -2,25 +2,42 @@
 
 import { Formik, Form, useFormikContext } from 'formik'
 import * as Yup from 'yup';
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { useSession } from "next-auth/react";
 import { AuthorFormValues } from '@/src/forms/components/AuthorFormComponents/interfaces/AuthorForm';
 import { AlertProvider } from '@/src/users/context/AlertContext';
+import { getAuthorForm } from './actions/get-author-form';
+
 
 export default function AuthorFormLayout({ children }: { children: React.ReactNode; }) {
 
+    const { id } = useParams();
+    const [authorInitialValue, setAuthorInitialValue] = useState<AuthorFormValues>()
     const SaveFormValues = () => {
         const { values } = useFormikContext<AuthorFormValues>();
 
         useEffect(() => {
-            localStorage.setItem(`authorFormData`, JSON.stringify(values));
+            localStorage.setItem(`authorFormData-${id}`, JSON.stringify(values));
         }, [values]);
 
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`authorFormData`) || JSON.stringify({
+
+    // useEffect(() => {
+    //     const fetchAuthorData = async () => {
+    //         const response = await getAuthorForm(id);
+    //         const { _id, ...initialValues } = response?.responseData;
+    //         setAuthorInitialValue(initialValues)
+    //         console.log(initialValues)
+    //     };
+    //     fetchAuthorData()
+    // }, []);
+
+    
+    
+    const initialValues = JSON.parse( localStorage.getItem(`authorFormData-${id}`) || JSON.stringify({
         fullName: '',
         pseudonym: '',
         dateOfBirth: '',

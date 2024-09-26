@@ -4,9 +4,11 @@ import { useFormikContext } from "formik";
 import { PreviewModalImage } from "../../AuthorFormComponents/PreviewModalImage/PreviewModalImage";
 import { AnthologyFormValues } from "../interfaces/AnthologyForm";
 import { useState } from "react";
-import { ChevronUpDownIcon, PaperClipIcon, EyeIcon } from '@heroicons/react/24/outline'
-
-
+import { ChevronUpDownIcon, PaperClipIcon, EyeIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline'
+import { useAlert } from "@/src/users/context/AlertContext";
+import { useRouter } from 'next/navigation';
+import { loadAnthologyForm } from "@/src/app/dashboard/forms/anthologyForm/actions/load-anthology-form";
+import { useParams } from "next/navigation";
 
 
 export const AnthologyFormsReview = () => {
@@ -17,6 +19,10 @@ export const AnthologyFormsReview = () => {
     const [isPreviewImageOpen, setIsPreviewImageOpen] = useState(false)
     const [fileUrl, setFileUrl] = useState('');
     const [fileType, setFileType] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const { showAlert } = useAlert();
+    const { id } = useParams();
+    const router = useRouter();
 
     const handleAnthologyDetailsVisible = () => {
         isAnthologyDetailsVisible ?
@@ -36,6 +42,20 @@ export const AnthologyFormsReview = () => {
     const handleClosePreviewImage = () => {
         setIsPreviewImageOpen(false)
     };
+
+    const handleLoadForm = async () => {
+        setIsLoading(true)
+        const response = await loadAnthologyForm(values, id);
+        if (response.ok) {
+            showAlert("Ficha agregada", "success");
+            setIsLoading(false);
+            localStorage.removeItem(`anthologyFormData-${id}`);
+            router.push('/dashboard/worksheets/allSheets')
+        } else {
+            showAlert("Error al cargar la ficha", "error");
+            setIsLoading(false)
+        }
+    }
 
     return (
         <div>
@@ -189,6 +209,23 @@ export const AnthologyFormsReview = () => {
                             </div>
                         )
                     }
+                </div>
+
+                <div className='flex justify-end w-full'>
+
+                    <button
+                        type="button"
+                        className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                        onClick={() => handleLoadForm()}
+                    >
+                        <span className="text-sm font-medium text-white">Subir ficha</span>
+                        {isLoading? 
+                        <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' /> 
+                            :
+                        <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                        }
+                    </button>
+
                 </div>
             </div>
 
