@@ -23,4 +23,5 @@ export interface Anthology {
 export interface AnthologyCardData {
     anthology: Anthology;
     criticism: Criticism[];
+    observation: string;
 }

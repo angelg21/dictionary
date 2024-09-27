@@ -30,4 +30,5 @@ export interface AuthorCardData {
     author: Author;
     works: Work[];
     criticism: Criticism[];
+    observation: string;
 }

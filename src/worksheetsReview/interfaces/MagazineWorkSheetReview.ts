@@ -22,4 +22,5 @@ export interface Magazine {
 export interface MagazineCardData {
     magazine: Magazine;
     criticism: Criticism[];
+    observation: string;
 }

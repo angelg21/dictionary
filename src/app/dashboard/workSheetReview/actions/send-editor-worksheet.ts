@@ -2,13 +2,14 @@
 
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 
 
-export const RejectWorksheet = async (payload: string, id: string | string[]) => {
+export const SendEditorWorksheet = async (payload: string, id: string | string[]) => {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user.roles.includes('admin' || 'reviewer')) {
+    if (!session?.user.roles.includes('admin')) {
         return {
             ok: false,
             message: 'No tienes permisos para realizar esta acción',
@@ -16,7 +17,7 @@ export const RejectWorksheet = async (payload: string, id: string | string[]) =>
     }
 
     try {
-        const response = await fetch(process.env.API_URL + `/cards/reject/${id}`, {
+        const response = await fetch(process.env.API_URL + `/cards/mark-pending-edit/${id}`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
@@ -34,6 +35,7 @@ export const RejectWorksheet = async (payload: string, id: string | string[]) =>
             };
         }
 
+        revalidatePath('/dashboard/worksheets/rejectedSheets');
         return {
             ok: true,
             message: 'Formulario de autor guardado correctamente',

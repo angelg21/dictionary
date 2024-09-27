@@ -1,15 +1,20 @@
 'use client'
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { GetWorksheet } from "../../actions/get-worksheet";
-import { MagazineReviewComponent } from "@/src/worksheetsReview/components/MagazineReview/MagazineReviewComponent";
-import { GroupingReviewComponent } from "@/src/worksheetsReview/components/GroupingReview/GroupingReviewComponent";
+import { redirect, useRouter } from 'next/navigation';
+import { useAlert } from '@/src/users/context/AlertContext';
+import { AuthorReviewComponent } from '@/src/worksheetsReview/components/AuthorReview/AuthorReviewComponent';
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
+import { AtSymbolIcon, CodeBracketIcon, LinkIcon } from '@heroicons/react/20/solid'
+import { GetWorksheet } from '../../../actions/get-worksheet';
+import { div } from 'framer-motion/client';
+import { useEffect, useState } from 'react';
 
 
-export default function GroupingReview({ params }: { params: { id: string } }) {
+export default function AuthorReview({ params }: { params: { id: string } }) {
 
-    const [groupingData, setGroupingData] = useState<any>(null); // Para almacenar los datos del autor
+
+    
+    const [authorData, setAuthorData] = useState<any>(null); // Para almacenar los datos del autor
     const [loading, setLoading] = useState(true); // Para controlar el estado de carga
     const [error, setError] = useState(false); // Para controlar errores
     const router = useRouter(); // Usar router para redirección en el cliente
@@ -19,7 +24,7 @@ export default function GroupingReview({ params }: { params: { id: string } }) {
             try {
                 const response = await GetWorksheet(params.id);
                 if (response.ok) {
-                    setGroupingData(response.data);
+                    setAuthorData(response.data);
                 } else {
                     router.push('/dashboard/worksheets/sheetsToComplete'); // Redirigir si hay error
                 }
@@ -37,13 +42,14 @@ export default function GroupingReview({ params }: { params: { id: string } }) {
         return <p className='animate-pulse'>Cargando...</p>; // Mostrar indicador de carga
     }
 
-    if (error || !groupingData) {
+    if (error || !authorData) {
         return <p>Error al cargar los datos del autor.</p>; // Mostrar error
     }
 
+    // const response = await getAuthorWorksheet(params.id);
+
     return (
-        <div className="">
-            <GroupingReviewComponent data={groupingData} />
-        </div>
+        
+        <AuthorReviewComponent data={authorData} />
     );
 }

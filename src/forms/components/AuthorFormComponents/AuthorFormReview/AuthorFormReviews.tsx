@@ -203,7 +203,7 @@ export const AuthorFormReviews = () => {
                                                 <dd className="mt-2 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                                                     <ul role="list" className="divide-y divide-gray-100 rounded-md border border-gray-200">
 
-                                                        {work.multimedia.map((mediafield, index) =>
+                                                        {work.multimedia?.map((mediafield, index) =>
                                                             (mediafield.link != '') &&
                                                             <li key={index} className="flex items-center justify-between py-3 pl-4 pr-5 text-sm leading-6 bg-white">
                                                                 <div className="flex w-0 flex-1 items-center">

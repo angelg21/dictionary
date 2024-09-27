@@ -22,4 +22,5 @@ export interface Grouping {
 export interface GroupingCardData {
     grouping: Grouping;
     criticism: Criticism[];
+    observation: string;
 }
