@@ -1,26 +1,30 @@
-'use client'
+"use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { WorkSheetCreator } from "../WorkSheetCreator/WorkSheetCreator"
-import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile"
-import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
+import { WorkSheetCreator } from "../WorkSheetCreator/WorkSheetCreator";
+import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile";
+import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
 import { ButtonWithPointLeft } from "@/src/components/ButtonWithPointLeft/ButtonWithPointLeft";
+import { NewWorkSheetModal } from "../NewWorkSheetModal/NewWorkSheetModal"; // Importar el modal
+import { useState } from "react";
 import { ObservationText } from '../ObservationText/ObservationText';
 import {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-} from '@headlessui/react'
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from "@headlessui/react";
+import DeleteModal from "@/src/users/components/DeleteModal/DeleteCardModal";
+import { deleteCard } from "../../actions/delete-worksheet";
 
 interface User {
-    _id: string,
-    fullName: string,
-    email: string,
-    imageUrl: string,
+  _id: string;
+  fullName: string;
+  email: string;
+  imageUrl: string;
 }
 
 interface Props {
@@ -37,11 +41,12 @@ interface Props {
     buttonTextColor: string;
     buttonTitle: string;
 }
+
 interface WorkSheetAction {
-    id: string;
-    name: string;
-    Icon: React.ElementType;
-    role: string;
+  id: string;
+  name: string;
+  Icon: React.ElementType;
+  role: string;
 }
 
 const workSheetsActions: WorkSheetAction[] = [
@@ -65,13 +70,16 @@ export const WorkSheetFile = ({
     buttonTextColor,
     buttonTitle,
 }: Props) => {
+  const { data: session } = useSession();
+  const pathName = usePathname();
+  const router = useRouter();
+  const isAdmin = session?.user?.roles.includes("admin");
 
-    const { data: session } = useSession();
-    const pathName = usePathname();
-    const router = useRouter();
-    const isAdmin = session?.user?.roles.includes('admin');
+  const [openEditModal, setOpenEditModal] = useState(false); 
+  const [editModalData, setEditModalData] = useState<any>(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-    let filteredActions: WorkSheetAction[];
+  let filteredActions: WorkSheetAction[];
 
     // Si es admin, mostrar todas las acciones
     if (isAdmin) {
@@ -96,16 +104,9 @@ export const WorkSheetFile = ({
                 break;
         }
     } else {
-        // Si el usuario no es admin, filtramos las opciones según el pathname
-        if (pathName === '/dashboard/worksheets/sheetsToComplete') {
-            filteredActions = workSheetsActions.filter(action => action.role === 'editor');
-        } else if (pathName === '/dashboard/worksheets/sheetsToReview') {
-            filteredActions = workSheetsActions.filter(action => action.role === 'reviewer');
-        } else {
-            // Si el path es otro, podrías manejarlo de otra forma o dejar las opciones vacías
-            filteredActions = [];
-        }
+      filteredActions = [];
     }
+  }
 
     const handleClickActions = (workSheetType: string, action: string, id: string, status: string) => {
         // Manejando acciones de tipo 'formulario'
@@ -164,7 +165,37 @@ export const WorkSheetFile = ({
                     console.error('Tipo de ficha no soportado para revisión');
             }
         }
-    };
+    }   else if (action === '01') {
+        switch (workSheetType) {
+            case 'AuthorCard':
+                router.push(`/dashboard/workSheetReview/${id}/${status}/authorReview`);
+                break;
+            case 'AnthologyCard':
+                router.push(`/dashboard/workSheetReview/${id}/${status}/anthologyReview`);
+                break;
+            case 'GroupingCard':
+                router.push(`/dashboard/workSheetReview/${id}/${status}/groupingReview`);
+                break;
+            case 'MagazineCard':
+                router.push(`/dashboard/workSheetReview/${id}/${status}/magazineReview`);
+                break;
+            default:
+                console.error('Tipo de ficha no soportado para formularios');
+        }
+    }   else if (action === "03") {
+        // Abrir modal con los datos existentes para edición
+        setOpenEditModal(true);
+        setEditModalData({
+            id,
+            title: workSheetName,
+            workSheetType: workSheetType,
+            editors: editors.map((e) => e._id),
+            reviewers: reviewers.map((r) => r._id),
+        });
+    }   else if (action === "04") {
+        setOpenDeleteModal(true);
+    }
+  };
 
     return (
         <div className='flex flex-col my-3 lg:my-4'>
