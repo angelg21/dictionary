@@ -15,13 +15,23 @@ interface SelectPersonProps {
     title: string;
     type: 'editor' | 'reviewer';
     excludeIds?: string[];
+    selectedPeople: string[]; // IDs de las personas preseleccionadas
     onAdd: (id: string) => void;
     onRemove: (id: string) => void;
-    currentSelection: string | null; // Agregar para manejar la selección actual
-    onSelectionChange: (id: string | null) => void; // Agregar para manejar los cambios de selección
+    currentSelection: string | null; // Manejar la selección actual
+    onSelectionChange: (id: string | null) => void; // Manejar los cambios de selección
 }
 
-export const SelectPersonInput = ({ title, type, excludeIds = [], onAdd, onRemove, currentSelection, onSelectionChange }: SelectPersonProps) => {
+export const SelectPersonInput = ({
+    title,
+    type,
+    excludeIds = [],
+    selectedPeople,
+    onAdd,
+    onRemove,
+    currentSelection,
+    onSelectionChange,
+}: SelectPersonProps) => {
     const [selectedItems, setSelectedItems] = useState<personItem[]>([]);
     const [people, setPeople] = useState<personItem[]>([]);
 
@@ -30,12 +40,16 @@ export const SelectPersonInput = ({ title, type, excludeIds = [], onAdd, onRemov
             const response = await getUsersByRole({ type, excludeIds });
             if (response.ok) {
                 setPeople(response.data);
+
+                // Mapea los IDs preseleccionados a los detalles de las personas
+                const preSelectedPeople = response.data.filter((person: { id: string; }) => selectedPeople.includes(person.id));
+                setSelectedItems(preSelectedPeople);
             } else {
                 console.error(response.message);
             }
         };
         fetchUsers();
-    }, [type, excludeIds]);
+    }, [type, excludeIds, selectedPeople]);
 
     const handleAddItem = () => {
         if (currentSelection && !selectedItems.find(item => item.id === currentSelection)) {
@@ -110,8 +124,8 @@ export const SelectPersonInput = ({ title, type, excludeIds = [], onAdd, onRemov
                                             <svg fill="currentColor" viewBox="0 0 24 24" className="h-full w-full text-gray-300">
                                                 <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                                             </svg>
-                                            </span>
-                                        )}
+                                        </span>
+                                    )}
                                     <span className="ml-3 block truncate text-sm font-medium group-data-[selected]:font-semibold">
                                         {person.fullName}
                                     </span>
@@ -162,4 +176,3 @@ export const SelectPersonInput = ({ title, type, excludeIds = [], onAdd, onRemov
         </div>
     );
 };
-
