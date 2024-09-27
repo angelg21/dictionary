@@ -11,7 +11,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="flex justify-center mt-4">
+    <div className="flex justify-center mt-14">
       <nav aria-label="Pagination" className="inline-flex -space-x-px rounded-md shadow-sm">
         <button
           onClick={() => onPageChange(currentPage - 1)}
