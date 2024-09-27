@@ -65,8 +65,10 @@ export default function FilteredWorksheets({ data }: { data: any }) {
 
     const Items = filteredItems.map((item: any) => {
         const variant = statusVariants[item.status] || {};
-
+        console.log(item.status)
         return {
+            workSheetObservation: item.observation,
+            workSheetStatus: item.status,
             workSheetId: item._id,
             workSheetDate: new Date(item.createdAt).toLocaleDateString('es-ES', {
                 day: '2-digit',

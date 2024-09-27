@@ -16,8 +16,15 @@ function classNames(...classes: any[]) {
 
 export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) => {
 
-    const { id } = useParams();
+    const { id, text } = useParams();
     const pathName = usePathname();
+
+    const worksheetsReview = [
+        `/dashboard/workSheetReview/${id}/${text}/magazineReview`,
+        `/dashboard/workSheetReview/${id}/${text}/authorReview`,
+        `/dashboard/workSheetReview/${id}/${text}/anthologyReview`,
+        `/dashboard/workSheetReview/${id}/${text}/groupingReview`,
+    ];
 
     const worksheetsPaths = [
         '/dashboard/worksheets/validatedSheets',
@@ -67,7 +74,8 @@ export const SidebarMenuItems = ({ path, icon: Icon, title, onClick }: Props) =>
         isActive(pathName, magazineFormPaths) ||
         isActive(pathName, anthologyFormPaths) ||
         isActive(pathName, groupingFormPaths) ||
-        isActive(pathName, worksheetsReviewPaths);
+        isActive(pathName, worksheetsReviewPaths) ||
+        isActive(pathName, worksheetsReview);
 
     const iconClasses = `
         ${pathName === path || ( isFichasActive && title === 'Fichas')

@@ -10,18 +10,19 @@ import { AuthorCardData } from '../../interfaces/AuthorWorkSheetReview';
 import { GroupingCardData } from '../../interfaces/GroupingWorkSheetReview';
 import { ValidateGroupingWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-grouping-worksheet';
 import { RejectWorksheet } from '@/src/app/dashboard/workSheetReview/actions/reject-worksheet';
+import { SendEditorWorksheet } from '@/src/app/dashboard/workSheetReview/actions/send-editor-worksheet';
 
 
 
-export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ data })=> {
+export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ data }) => {
 
     const [isLoadingValidate, setIsLoadingValidate] = useState(false);
     const [isLoadingRejected, setIsLoadingRejected] = useState(false);
-    const [observation, setObservation] = useState('');
+    const [observation, setObservation] = useState(data.observation);
     const [groupingText, setGroupingText] = useState(data.grouping.text);
     const [criticismText, setCriticismText] = useState(data.criticism.map(criticism => criticism.text));
     const { showAlert } = useAlert();
-    const { id } = useParams();
+    const { id, text } = useParams();
     const router = useRouter();
 
     const [showObservation, setShowObservation] = useState(false); // Controla la visibilidad del campo de observación
@@ -59,6 +60,19 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
             router.push('/dashboard/worksheets/sheetsToComplete')
         } else {
             showAlert("Error al rechazar la ficha", "error");
+            setIsLoadingRejected(false)
+        }
+    }
+
+    const handleSendEditorWorksheet = async () => {
+        setIsLoadingRejected(true)
+        const response = await SendEditorWorksheet(observation, id);
+        if (response.ok) {
+            showAlert("Ficha enviada al editor", "success");
+            setIsLoadingRejected(false);
+            router.push('/dashboard/worksheets/sheetsToComplete')
+        } else {
+            showAlert("Error al enviar la ficha", "error");
             setIsLoadingRejected(false)
         }
     }
@@ -166,70 +180,121 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
                 }
             </div>
 
-            {/* Checkbox para agregar observación */}
-            <div className='mt-4'>
-                <label className='flex items-center'>
-                    <input
-                        type="checkbox"
-                        name="observationCheckbox"
-                        className='text-d-blue focus:ring-d-blue hover:ring-d-blue mr-2'
-                        checked={showObservation}
-                        onChange={handleRejectToggle}
-                    />
-                    <span className='text-sm font-medium'>¿Desea agregar una observación para rechazar la ficha?</span>
-                </label>
-            </div>
+            {(text === 'Pending%20Review') && (
 
-            {/* Campo de observación, visible solo si el radio está marcado */}
-            {showObservation && (
-                <div className='mt-4'>
-                    <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
-                    <textarea
-                        id="observation"
-                        value={observation}
-                        onChange={(e) => setObservation(e.target.value)}
-                        rows={5}
-                        placeholder="Agregue su observación..."
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-700 sm:text-sm sm:leading-6"
-                    />
-                </div>
-            )}
+                <div className=''>
+
+                    {/* Checkbox para agregar observación */}
+                    <div className='mt-4'>
+                        <label className='flex items-center'>
+                            <input
+                                type="checkbox"
+                                name="observationCheckbox"
+                                className='text-d-blue focus:ring-d-blue hover:ring-d-blue mr-2'
+                                checked={showObservation}
+                                onChange={handleRejectToggle}
+                            />
+                            <span className='text-sm font-medium'>¿Desea agregar una observación para rechazar la ficha?</span>
+                        </label>
+                    </div>
+
+                    {/* Campo de observación, visible solo si el radio está marcado */}
+                    {
+                        showObservation && (
+                            <div className='mt-4'>
+                                <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
+                                <textarea
+                                    id="observation"
+                                    value={observation}
+                                    onChange={(e) => setObservation(e.target.value)}
+                                    rows={5}
+                                    placeholder="Agregue su observación..."
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-700 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        )
+                    }
 
 
-            <div className='flex justify-end w-full'>
-                <div className='flex flex-col max-sm:space-y-4 sm:flex-row sm:space-x-5 w-full justify-end'>
+                    <div className='flex flex-col max-sm:space-y-2 sm:flex-row sm:space-x-5 w-full justify-end'>
+                        {showRejectButton && (
+                            <button
+                                type="button"
+                                className="flex justify-center items-center bg-red-600 hover:bg-red-700 h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                                onClick={() => handleRejectWorksheet()}
+                            >
+                                <span className="text-sm font-medium text-white">Rechazar</span>
+                                {isLoadingRejected ?
+                                    <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
+                                    :
+                                    <XMarkIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                                }
+                            </button>
+                        )}
 
-                    {showRejectButton && (
                         <button
                             type="button"
-                            className="flex justify-center items-center bg-red-600 hover:bg-red-700 h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
-                            onClick={() => handleRejectWorksheet()}
+                            className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                            onClick={() => handleValidateGrouping()}
                         >
-                            <span className="text-sm font-medium text-white">Rechazar</span>
+                            <span className="text-sm font-medium text-white">Validar ficha</span>
+                            {isLoadingValidate ?
+                                <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
+                                :
+                                <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                            }
+                        </button>
+
+                    </div>
+
+                </div>
+
+            )}
+
+            {(text === 'Rejected' || text === 'Validated') && (
+                <div>
+                    <div className='mt-4'>
+                        <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
+                        <textarea
+                            id="observation"
+                            value={observation}
+                            onChange={(e) => setObservation(e.target.value)}
+                            rows={5}
+                            placeholder="Agregue su observación..."
+                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-700 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+
+                    <div className='flex flex-col max-sm:space-y-2 sm:flex-row sm:space-x-5 w-full justify-end'>
+                        <button
+                            type="button"
+                            className="flex justify-center items-center bg-d-blue hover:bg-d-blue h-[45px] w-full sm:max-w-44 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                            onClick={() => handleSendEditorWorksheet()}
+                        >
+                            <span className="text-sm font-medium text-white">Enviar a editor</span>
                             {isLoadingRejected ?
                                 <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
                                 :
                                 <XMarkIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
                             }
                         </button>
-                    )}
 
-                    <button
-                        type="button"
-                        className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
-                        onClick={() => handleValidateGrouping()}
-                    >
-                        <span className="text-sm font-medium text-white">Validar ficha</span>
-                        {isLoadingValidate ?
-                            <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
-                            :
-                            <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
-                        }
-                    </button>
+                        <button
+                            type="button"
+                            className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                            onClick={() => handleValidateGrouping()}
+                        >
+                            <span className="text-sm font-medium text-white">Validar ficha</span>
+                            {isLoadingValidate ?
+                                <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
+                                :
+                                <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                            }
+                        </button>
 
+                    </div>
                 </div>
-
-            </div>
+            )}
         </div>
     )
 }

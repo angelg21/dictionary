@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { GetWorksheet } from "../../actions/get-worksheet";
 import { MagazineReviewComponent } from "@/src/worksheetsReview/components/MagazineReview/MagazineReviewComponent";
+import { GroupingReviewComponent } from "@/src/worksheetsReview/components/GroupingReview/GroupingReviewComponent";
+import { AnthologyReviewComponent } from "@/src/worksheetsReview/components/AnthologyReview/AnthologyReviewComponent";
+import { GetWorksheet } from "../../../actions/get-worksheet";
 
+export default function AnthologyReview({ params }: { params: { id: string } }) {
 
-export default function MagazineReview({ params }: { params: { id: string } }) {
-
-    const [magazineData, setMagazineData] = useState<any>(null); // Para almacenar los datos del autor
+    const [anthologyData, setAnthologyData] = useState<any>(null); // Para almacenar los datos del autor
     const [loading, setLoading] = useState(true); // Para controlar el estado de carga
     const [error, setError] = useState(false); // Para controlar errores
     const router = useRouter(); // Usar router para redirección en el cliente
@@ -18,7 +19,7 @@ export default function MagazineReview({ params }: { params: { id: string } }) {
             try {
                 const response = await GetWorksheet(params.id);
                 if (response.ok) {
-                    setMagazineData(response.data);
+                    setAnthologyData(response.data);
                 } else {
                     router.push('/dashboard/worksheets/sheetsToComplete'); // Redirigir si hay error
                 }
@@ -36,13 +37,13 @@ export default function MagazineReview({ params }: { params: { id: string } }) {
         return <p className='animate-pulse'>Cargando...</p>; // Mostrar indicador de carga
     }
 
-    if (error || !magazineData) {
+    if (error || !anthologyData) {
         return <p>Error al cargar los datos del autor.</p>; // Mostrar error
     }
-    
+
     return (
         <div className="">
-            <MagazineReviewComponent data={magazineData} />
+            <AnthologyReviewComponent data={anthologyData}/>
         </div>
     );
 }

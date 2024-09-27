@@ -25,19 +25,19 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
     };
 
 
-    // useEffect(() => {
-    //     const fetchAuthorData = async () => {
-    //         const response = await getAuthorForm(id);
-    //         const { _id, ...initialValues } = response?.responseData;
-    //         setAuthorInitialValue(initialValues)
-    //         console.log(initialValues)
-    //     };
-    //     fetchAuthorData()
-    // }, []);
+    useEffect(() => {
+        const fetchAuthorData = async () => {
+            const response = await getAuthorForm(id);
+            const { _id, ...initialValues } = response?.responseData;
+            setAuthorInitialValue(initialValues)
+            console.log(initialValues)
+        };
+        fetchAuthorData()
+    }, []);
 
     
     
-    const initialValues = JSON.parse( localStorage.getItem(`authorFormData-${id}`) || JSON.stringify({
+    const initialValues = JSON.parse( JSON.stringify({
         fullName: '',
         pseudonym: '',
         dateOfBirth: '',
@@ -217,7 +217,7 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
 
     return (
         <Formik<AuthorFormValues>
-            initialValues={initialValues}
+            initialValues={authorInitialValue || initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => handleSubmitAuthorForm(values)}
         >

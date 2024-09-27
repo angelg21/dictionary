@@ -8,6 +8,7 @@ import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile"
 import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { ButtonWithPointLeft } from "@/src/components/ButtonWithPointLeft/ButtonWithPointLeft";
+import { ObservationText } from '../ObservationText/ObservationText';
 import {
     Menu,
     MenuButton,
@@ -23,6 +24,8 @@ interface User {
 }
 
 interface Props {
+    workSheetObservation: string,
+    workSheetStatus: string,
     workSheetId: string,
     workSheetDate: string;
     workSheetName: string;
@@ -43,12 +46,14 @@ interface WorkSheetAction {
 
 const workSheetsActions: WorkSheetAction[] = [
     { id: '01', name: 'Visualizar', Icon: EyeIcon, role: 'reviewer' },
-    { id: '02',  name: 'Formulario', Icon: DocumentTextIcon, role: 'editor' },
+    { id: '02', name: 'Formulario', Icon: DocumentTextIcon, role: 'editor' },
     { id: '03', name: 'Editar', Icon: PencilSquareIcon, role: 'admin' },
     { id: '04', name: 'Eliminar', Icon: TrashIcon, role: 'admin' },
 ];
 
 export const WorkSheetFile = ({
+    workSheetObservation,
+    workSheetStatus,
     workSheetId,
     workSheetName,
     workSheetDate,
@@ -70,7 +75,26 @@ export const WorkSheetFile = ({
 
     // Si es admin, mostrar todas las acciones
     if (isAdmin) {
-        filteredActions = workSheetsActions;
+        // Admin specific logic
+        switch (pathName) {
+            case '/dashboard/worksheets/validatedSheets':
+            case '/dashboard/worksheets/rejectedSheets':
+                // Include all actions for these paths
+                filteredActions = workSheetsActions;
+                break;
+            case '/dashboard/worksheets/sheetsToComplete':
+                // Exclude 'Visualizar' action
+                filteredActions = workSheetsActions.filter(action => action.name !== 'Visualizar');
+                break;
+            case '/dashboard/worksheets/sheetsToReview':
+                // Exclude 'Formulario' action
+                filteredActions = workSheetsActions.filter(action => action.name !== 'Formulario');
+                break;
+            default:
+                // Handle other admin paths or set to empty array
+                filteredActions = [];
+                break;
+        }
     } else {
         // Si el usuario no es admin, filtramos las opciones según el pathname
         if (pathName === '/dashboard/worksheets/sheetsToComplete') {
@@ -83,7 +107,7 @@ export const WorkSheetFile = ({
         }
     }
 
-    const handleClickActions = (workSheetType: string, action: string, id: string) => {
+    const handleClickActions = (workSheetType: string, action: string, id: string, status: string) => {
         // Manejando acciones de tipo 'formulario'
         if (action === '02') {
             switch (workSheetType) {
@@ -102,19 +126,19 @@ export const WorkSheetFile = ({
                 default:
                     console.error('Tipo de ficha no soportado para formularios');
             }
-        }   else if (action === '01') {
+        } else if (action === '01') {
             switch (workSheetType) {
                 case 'AuthorCard':
-                    router.push(`/dashboard/workSheetReview/${id}/authorReview`);
+                    router.push(`/dashboard/workSheetReview/${id}/${status}/authorReview`);
                     break;
                 case 'AnthologyCard':
-                    router.push(`/dashboard/workSheetReview/${id}/anthologyReview`);
+                    router.push(`/dashboard/workSheetReview/${id}/${status}/anthologyReview`);
                     break;
                 case 'GroupingCard':
-                    router.push(`/dashboard/workSheetReview/${id}/groupingReview`);
+                    router.push(`/dashboard/workSheetReview/${id}/${status}/groupingReview`);
                     break;
                 case 'MagazineCard':
-                    router.push(`/dashboard/workSheetReview/${id}/magazineReview`);
+                    router.push(`/dashboard/workSheetReview/${id}/${status}/magazineReview`);
                     break;
                 default:
                     console.error('Tipo de ficha no soportado para formularios');
@@ -122,7 +146,7 @@ export const WorkSheetFile = ({
         }
 
         // Manejando acciones de tipo 'reviewer'
-        if (action === '01') {
+        if (action === '03') {
             switch (workSheetType) {
                 case 'AuthorCard':
                     router.push(`/dashboard/workSheetReview/${id}/authorReview`);
@@ -143,76 +167,83 @@ export const WorkSheetFile = ({
     };
 
     return (
-        <div className="flex-col min-w-[308px] max-w-[360px] lg:w-full my-3 lg:flex lg:flex-row lg:max-w-none lg:justify-between lg:my-4 bg-white py-4 xl:py-5 px-5 xl:px-6 items-center rounded-md">
-            <div className="flex mb-2 justify-between lg:hidden">
-                <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
-                <Menu as="div" className='relative'>
-                    <MenuButton>
-                        <EllipsisHorizontalIcon className="w-7 h-7 text-d-gray-text" />
-                    </MenuButton>
-                    <MenuItems
-                        transition
-                        className="absolute right-0 z-10  w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                    >
-                        {filteredActions && filteredActions.map((item) => (
-                            <MenuItem key={item.name}>
-                                <div
-                                    className="flex space-x-3 px-3 py-1 text-sm leading-6 "
-                                >
-                                    {item.Icon && <item.Icon className={`h-5 w-5 ${item.name === 'Eliminar' ? 'text-red-500' : 'text-d-gray-text'}`} />}
-                                    <span className="text-gray-700 data-[focus]:bg-gray-50"> {item.name} </span>
-                                </div>
-                            </MenuItem>
-                        ))}
-                    </MenuItems>
-                </Menu>
-            </div>
-            <div className="flex flex-col lg:contents">
-                <WorkSheetCreator workSheeetName={workSheetName} workSheeetDate={workSheetDate} workSheeetType={workSheetType} />
-                <div className="flex flex-col">
-                    {
-                        editors.map((editor) => (
-                            <WorkSheetProfile key={editor._id} userImg={editor.imageUrl} userName={editor.fullName} userRol="Editor" />
-                        ))
-                    }
+        <div className='flex flex-col my-3 lg:my-4'>
+
+            <div className={`flex-col min-w-[308px] max-w-[360px] lg:w-full lg:flex lg:flex-row lg:max-w-none lg:justify-between  bg-white py-4 xl:py-5 px-5 xl:px-6 items-center ${workSheetObservation !== '' ? 'rounded-t-md' : 'rounded-md'}`}>
+                <div className="flex mb-2 justify-between lg:hidden">
+                    <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
+                    <Menu as="div" className='relative'>
+                        <MenuButton>
+                            <EllipsisHorizontalIcon className="w-7 h-7 text-d-gray-text" />
+                        </MenuButton>
+                        <MenuItems
+                            transition
+                            className="absolute right-0 z-10  w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                        >
+                            {filteredActions && filteredActions.map((item) => (
+                                <MenuItem key={item.name}>
+                                    <div
+                                        className="flex space-x-3 px-3 py-1 text-sm leading-6 "
+                                    >
+                                        {item.Icon && <item.Icon className={`h-5 w-5 ${item.name === 'Eliminar' ? 'text-red-500' : 'text-d-gray-text'}`} />}
+                                        <span className="text-gray-700 data-[focus]:bg-gray-50"> {item.name} </span>
+                                    </div>
+                                </MenuItem>
+                            ))}
+                        </MenuItems>
+                    </Menu>
                 </div>
+                <div className="flex flex-col lg:contents">
+                    <WorkSheetCreator workSheeetName={workSheetName} workSheeetDate={workSheetDate} workSheeetType={workSheetType} />
+                    <div className="flex flex-col">
+                        {
+                            editors.map((editor) => (
+                                <WorkSheetProfile key={editor._id} userImg={editor.imageUrl} userName={editor.fullName} userRol="Editor" />
+                            ))
+                        }
+                    </div>
 
-                <div className="flex flex-col">
-                    {
-                        reviewers.map((reviewer) => (
-                            <WorkSheetProfile key={reviewer._id} userImg={reviewer.imageUrl} userName={reviewer.fullName} userRol="Revisor" />
-                        ))
-                    }
+                    <div className="flex flex-col">
+                        {
+                            reviewers.map((reviewer) => (
+                                <WorkSheetProfile key={reviewer._id} userImg={reviewer.imageUrl} userName={reviewer.fullName} userRol="Revisor" />
+                            ))
+                        }
+                    </div>
+
                 </div>
+                <div className="hidden lg:contents">
 
+                    <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
+                    <Menu as="div" className='relative'>
+                        <MenuButton>
+                            <EllipsisHorizontalIcon className="w-7 h-7 text-d-gray-text" />
+                        </MenuButton>
+                        <MenuItems
+                            transition
+                            className="absolute right-0 z-10  w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
+                        >
+                            {filteredActions && filteredActions.map((item) => (
+                                <MenuItem key={item.name}>
+                                    <div
+                                        role="button"
+                                        className="flex hover:bg-gray-200 space-x-3 px-3 py-1 text-sm leading-6"
+                                        onClick={() => handleClickActions(workSheetType, item.id, workSheetId, workSheetStatus)}
+                                    >
+                                        {item.Icon && <item.Icon className={`h-5 w-5 ${item.name === 'Eliminar' ? 'text-red-500' : 'text-d-gray-text'}`} />}
+                                        <span className="text-gray-700 data-[focus]:bg-gray-50"> {item.name} </span>
+                                    </div>
+                                </MenuItem>
+                            ))}
+                        </MenuItems>
+                    </Menu>
+
+                </div>
             </div>
-            <div className="hidden lg:contents">
-
-                <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
-                <Menu as="div" className='relative'>
-                    <MenuButton>
-                        <EllipsisHorizontalIcon className="w-7 h-7 text-d-gray-text" />
-                    </MenuButton>
-                    <MenuItems
-                        transition
-                        className="absolute right-0 z-10  w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-900/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
-                    >
-                        {filteredActions && filteredActions.map((item) => (
-                            <MenuItem key={item.name}>
-                                <div
-                                    role="button"
-                                    className="flex hover:bg-gray-200 space-x-3 px-3 py-1 text-sm leading-6"
-                                    onClick={() => handleClickActions(workSheetType, item.id, workSheetId)}
-                                >
-                                    {item.Icon && <item.Icon className={`h-5 w-5 ${item.name === 'Eliminar' ? 'text-red-500' : 'text-d-gray-text'}`} />}
-                                    <span className="text-gray-700 data-[focus]:bg-gray-50"> {item.name} </span>
-                                </div>
-                            </MenuItem>
-                        ))}
-                    </MenuItems>
-                </Menu>
-
-            </div>
+            
+            {workSheetObservation && workSheetObservation.length > 3 && (
+                <ObservationText observation={workSheetObservation} />
+            )}
         </div>
     )
 }

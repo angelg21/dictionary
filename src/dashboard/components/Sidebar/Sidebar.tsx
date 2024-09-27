@@ -45,16 +45,23 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
 
 
     useEffect(() => {
-        if (isAdmin) {
+        // Si session es null o undefined, evita la actualización del estado
+        if (!session) return;
+
+        const { roles } = session.user;
+
+        if (roles.includes('admin')) {
             setFichasPath('/dashboard/worksheets/validatedSheets');
-        } else if (isEditor && !isReviewer) {
+        } else if (roles.includes('editor') && !roles.includes('reviewer')) {
             setFichasPath('/dashboard/worksheets/sheetsToComplete');
-        } else if (isReviewer && !isEditor) {
+        } else if (roles.includes('reviewer') && !roles.includes('editor')) {
             setFichasPath('/dashboard/worksheets/sheetsToReview');
-        } else if (isEditor && isReviewer) {
+        } else if (roles.includes('editor') && roles.includes('reviewer')) {
             setFichasPath('/dashboard/worksheets/sheetsToComplete');
+        } else {
+            setFichasPath(''); // Opcional: Maneja el caso por defecto si es necesario
         }
-    }, []);
+    }, [session]); 
 
     const menuItems = [
         {
