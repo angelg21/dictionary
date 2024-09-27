@@ -3,6 +3,7 @@ import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getAllPendingEdits } from "../actions/get-all-pending-edits";
 import FilteredWorksheets from "@/src/worksheets/componentes/FilteredWorksheets/FilteredWorksheets";
 
+export const revalidate= 0;
 
 export default async function SheetsToComplete() {
     

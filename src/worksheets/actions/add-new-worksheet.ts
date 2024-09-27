@@ -42,7 +42,7 @@ export const addNewWorksheet = async (payload: AddNewWorksheetPayload) => {
             };
         }
 
-        revalidatePath('/dashboard/worksheets/validatedSheets');
+        revalidatePath('/dashboard/worksheets/sheetsToComplete');
 
         return {
             ok: true,

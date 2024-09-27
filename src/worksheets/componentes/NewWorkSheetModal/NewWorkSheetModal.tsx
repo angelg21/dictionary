@@ -51,7 +51,7 @@ export const NewWorkSheetModal = ({ onClose, initialData }: NewWorkSheetModalPro
         assignedReviewers: values.reviewers,
     };
 
-    
+    console.log(createPayload)
 
     const response = await (initialData ? updateWorksheet(updatePayload) : addNewWorksheet(createPayload));
 

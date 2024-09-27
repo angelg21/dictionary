@@ -19,13 +19,13 @@ export const ValidateMagazineWorkSheet = async (payload: MagazineTextValues, mag
 
     try {
         console.log(payload)
-        const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${magazineId}`, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ ...payload}),
-        });
+        // const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${magazineId}`, {
+        //     method: 'POST',
+        //     headers: { 
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ ...payload}),
+        // });
 
         const responseNeo4j = await fetch(process.env.API_URL + `/cards/upload/magazine/${magazineId}`, {
             method: 'PUT',
@@ -34,14 +34,22 @@ export const ValidateMagazineWorkSheet = async (payload: MagazineTextValues, mag
             },
         });
 
-        const responseAuthor = await responseValidate.json();
+        // const responseAuthor = await responseValidate.json();
         const responseAuthorNeo4j = await responseNeo4j.json();
 
-        if (!responseAuthor || !responseAuthorNeo4j) {
-            console.error('Error al validar la ficha:', responseAuthor);
+        // if (!responseAuthor || !responseAuthorNeo4j) {
+        //     console.error('Error al validar la ficha:', responseAuthor);
+        //     return {
+        //         ok: false,
+        //         message: responseAuthor.message || 'No se pudo validar la ficha',
+        //     };
+        // }
+
+        if ( !responseAuthorNeo4j) {
+            console.error('Error al validar la ficha:', responseAuthorNeo4j);
             return {
                 ok: false,
-                message: responseAuthor.message || 'No se pudo validar la ficha',
+                message: responseAuthorNeo4j.message || 'No se pudo validar la ficha',
             };
         }
 
