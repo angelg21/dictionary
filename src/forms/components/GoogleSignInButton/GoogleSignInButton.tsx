@@ -15,10 +15,10 @@ interface GoogleSignInButtonProps {
 }
 
 
-const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = async ({ callbackUrl, isDisabled }) => {
+const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ callbackUrl, isDisabled }) => {
 
-  const session = await getServerSession(authOptions)
-  const userRoles = session?.user?.roles || [];
+  // const session = await getServerSession(authOptions)
+  // const userRoles = session?.user?.roles || [];
   
   const getRedirectPath = (userRoles: string[]): string => {
     if (userRoles.includes('admin')) {
@@ -33,7 +33,7 @@ const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = async ({ callbackU
     return "/"; // Ruta por defecto si no se cumplen las condiciones
 };
   const handleSignIn = () => {
-    signIn('google', { callbackUrl: getRedirectPath(userRoles) });
+    signIn('google', { callbackUrl: '/dashboard/worksheets/allSheets' });
   };
 
   return (
