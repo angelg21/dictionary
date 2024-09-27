@@ -8,12 +8,14 @@ import { useSession } from "next-auth/react";
 import { AuthorFormValues } from '@/src/forms/components/AuthorFormComponents/interfaces/AuthorForm';
 import { AlertProvider } from '@/src/users/context/AlertContext';
 import { getAuthorForm } from './actions/get-author-form';
+import { revalidatePath } from 'next/cache';
 
 
 export default function AuthorFormLayout({ children }: { children: React.ReactNode; }) {
 
     const { id } = useParams();
     const [authorInitialValue, setAuthorInitialValue] = useState<AuthorFormValues>()
+    const [isLoading, setIsLoading] = useState(true);
     const SaveFormValues = () => {
         const { values } = useFormikContext<AuthorFormValues>();
 
@@ -27,13 +29,21 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
 
     useEffect(() => {
         const fetchAuthorData = async () => {
-            const response = await getAuthorForm(id);
-            const { _id, ...initialValues } = response?.responseData;
-            setAuthorInitialValue(initialValues)
-            console.log(initialValues)
+            setIsLoading(true);
+            try {
+                const response = await getAuthorForm(id);
+                const { _id, ...initialValues } = response?.responseData;
+                setAuthorInitialValue(initialValues);
+                console.log(initialValues)
+            } catch (error) {
+                console.error('Error fetching author data:', error);
+            } finally {
+                setIsLoading(false);
+            }
         };
-        fetchAuthorData()
-    }, []);
+
+        fetchAuthorData();
+    }, [id]);
 
     
     
@@ -214,6 +224,11 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
     const handleSubmitAuthorForm = (values: any) => {
         console.log('Formulario enviado:', values);
     };
+
+    if (isLoading) {
+        return <div>Loading...</div>; // Puedes reemplazar esto con un componente de carga más elaborado
+    }
+    console.log(authorInitialValue)
 
     return (
         <Formik<AuthorFormValues>

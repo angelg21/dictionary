@@ -2,6 +2,7 @@
 
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 // Función para cargar los datos de agrupamiento
 export const getAuthorForm = async (authorId: string | string[]) => {
@@ -34,7 +35,7 @@ export const getAuthorForm = async (authorId: string | string[]) => {
             //     message: responseData.message || 'No se pudo obtener los datos del agrupamiento',
             // };
         }
-
+        revalidatePath(`/dashboard/forms/authorForm/${authorId}/authorDetails`);
         return {
             responseData, // Devolvemos los datos obtenidos
         };

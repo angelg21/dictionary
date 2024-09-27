@@ -7,6 +7,7 @@ import { revalidatePath } from "next/cache";
 interface UpdateWorksheetPayload {
     id: string | undefined
     title: string;
+    type: string;
     assignedEditors: string[];
     assignedReviewers: string[];
 }
@@ -14,7 +15,7 @@ interface UpdateWorksheetPayload {
 export const updateWorksheet = async (payload: UpdateWorksheetPayload) => {
 
     const session = await getServerSession(authOptions);
-    const { id, ...body } = payload;
+    const { id, type, ...body } = payload;
 
     console.log("ID: ",id)
     if (!session?.user.roles.includes('admin')) {

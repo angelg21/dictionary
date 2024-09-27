@@ -1,30 +1,30 @@
-"use client";
+'use client'
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { WorkSheetCreator } from "../WorkSheetCreator/WorkSheetCreator";
-import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile";
-import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid";
+import { WorkSheetCreator } from "../WorkSheetCreator/WorkSheetCreator"
+import { WorkSheetProfile } from "../WorkSheetsProfile/WorkSheetProfile"
+import { DocumentTextIcon, EyeIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { EllipsisHorizontalIcon } from "@heroicons/react/20/solid"
 import { ButtonWithPointLeft } from "@/src/components/ButtonWithPointLeft/ButtonWithPointLeft";
+import { ObservationText } from '../ObservationText/ObservationText';
 import { NewWorkSheetModal } from "../NewWorkSheetModal/NewWorkSheetModal"; // Importar el modal
 import { useState } from "react";
-import { ObservationText } from '../ObservationText/ObservationText';
-import {
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-} from "@headlessui/react";
 import DeleteModal from "@/src/users/components/DeleteModal/DeleteCardModal";
 import { deleteCard } from "../../actions/delete-worksheet";
+import {
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems,
+} from '@headlessui/react'
 
 interface User {
-  _id: string;
-  fullName: string;
-  email: string;
-  imageUrl: string;
+    _id: string,
+    fullName: string,
+    email: string,
+    imageUrl: string,
 }
 
 interface Props {
@@ -41,12 +41,11 @@ interface Props {
     buttonTextColor: string;
     buttonTitle: string;
 }
-
 interface WorkSheetAction {
-  id: string;
-  name: string;
-  Icon: React.ElementType;
-  role: string;
+    id: string;
+    name: string;
+    Icon: React.ElementType;
+    role: string;
 }
 
 const workSheetsActions: WorkSheetAction[] = [
@@ -70,16 +69,17 @@ export const WorkSheetFile = ({
     buttonTextColor,
     buttonTitle,
 }: Props) => {
-  const { data: session } = useSession();
-  const pathName = usePathname();
-  const router = useRouter();
-  const isAdmin = session?.user?.roles.includes("admin");
 
-  const [openEditModal, setOpenEditModal] = useState(false); 
-  const [editModalData, setEditModalData] = useState<any>(null);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+    const { data: session } = useSession();
+    const pathName = usePathname();
+    const router = useRouter();
+    const isAdmin = session?.user?.roles.includes('admin');
 
-  let filteredActions: WorkSheetAction[];
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [editModalData, setEditModalData] = useState<any>(null);
+    const [openDeleteModal, setOpenDeleteModal] = useState(false);
+
+    let filteredActions: WorkSheetAction[];
 
     // Si es admin, mostrar todas las acciones
     if (isAdmin) {
@@ -104,9 +104,32 @@ export const WorkSheetFile = ({
                 break;
         }
     } else {
-      filteredActions = [];
+        // Si el usuario no es admin, filtramos las opciones según el pathname
+        if (pathName === '/dashboard/worksheets/sheetsToComplete') {
+            filteredActions = workSheetsActions.filter(action => action.role === 'editor');
+        } else if (pathName === '/dashboard/worksheets/sheetsToReview') {
+            filteredActions = workSheetsActions.filter(action => action.role === 'reviewer');
+        } else {
+            // Si el path es otro, podrías manejarlo de otra forma o dejar las opciones vacías
+            filteredActions = [];
+        }
     }
-  }
+
+    const handleDeleteWorkSheet = async () => {
+        try {
+            const response = await deleteCard(workSheetId);
+
+            if (response.ok) {
+                return true;
+            } else {
+                console.error(response.message);
+                return false;
+            }
+        } catch (error) {
+            console.error("Error al eliminar la ficha:", error);
+            return false;
+        }
+    };
 
     const handleClickActions = (workSheetType: string, action: string, id: string, status: string) => {
         // Manejando acciones de tipo 'formulario'
@@ -144,62 +167,23 @@ export const WorkSheetFile = ({
                 default:
                     console.error('Tipo de ficha no soportado para formularios');
             }
+        } else if (action === "03") {
+            // Abrir modal con los datos existentes para edición
+            setOpenEditModal(true);
+            setEditModalData({
+                id,
+                title: workSheetName,
+                workSheetType: workSheetType,
+                editors: editors.map((e) => e._id),
+                reviewers: reviewers.map((r) => r._id),
+            });
+        } else if (action === "04") {
+            setOpenDeleteModal(true);
         }
-
-        // Manejando acciones de tipo 'reviewer'
-        if (action === '03') {
-            switch (workSheetType) {
-                case 'AuthorCard':
-                    router.push(`/dashboard/workSheetReview/${id}/authorReview`);
-                    break;
-                case 'AnthologyCard':
-                    router.push(`/dashboard/workSheetReview/${id}/anthologyReview`);
-                    break;
-                case 'GroupingCard':
-                    router.push(`/dashboard/workSheetReview/${id}/groupingReview`);
-                    break;
-                case 'MagazineCard':
-                    router.push(`/dashboard/workSheetReview/${id}/magazineReview`);
-                    break;
-                default:
-                    console.error('Tipo de ficha no soportado para revisión');
-            }
-        }
-    }   else if (action === '01') {
-        switch (workSheetType) {
-            case 'AuthorCard':
-                router.push(`/dashboard/workSheetReview/${id}/${status}/authorReview`);
-                break;
-            case 'AnthologyCard':
-                router.push(`/dashboard/workSheetReview/${id}/${status}/anthologyReview`);
-                break;
-            case 'GroupingCard':
-                router.push(`/dashboard/workSheetReview/${id}/${status}/groupingReview`);
-                break;
-            case 'MagazineCard':
-                router.push(`/dashboard/workSheetReview/${id}/${status}/magazineReview`);
-                break;
-            default:
-                console.error('Tipo de ficha no soportado para formularios');
-        }
-    }   else if (action === "03") {
-        // Abrir modal con los datos existentes para edición
-        setOpenEditModal(true);
-        setEditModalData({
-            id,
-            title: workSheetName,
-            workSheetType: workSheetType,
-            editors: editors.map((e) => e._id),
-            reviewers: reviewers.map((r) => r._id),
-        });
-    }   else if (action === "04") {
-        setOpenDeleteModal(true);
-    }
-  };
+    };
 
     return (
         <div className='flex flex-col my-3 lg:my-4'>
-
             <div className={`flex-col min-w-[308px] max-w-[360px] lg:w-full lg:flex lg:flex-row lg:max-w-none lg:justify-between  bg-white py-4 xl:py-5 px-5 xl:px-6 items-center ${workSheetObservation !== '' ? 'rounded-t-md' : 'rounded-md'}`}>
                 <div className="flex mb-2 justify-between lg:hidden">
                     <ButtonWithPointLeft title={buttonTitle} textColor={buttonTextColor} backgroundColor={buttonBackground} pointColor={buttonPointStyle} />
@@ -270,8 +254,20 @@ export const WorkSheetFile = ({
                     </Menu>
 
                 </div>
+                {/* Modal para editar la ficha */}
+                {openEditModal && (
+                    <NewWorkSheetModal onClose={() => setOpenEditModal(false)} initialData={editModalData} />
+                )}
+
+                {/* Modal para eliminar la ficha */}
+                {openDeleteModal && (
+                    <DeleteModal
+                        onClose={() => setOpenDeleteModal(false)}
+                        onDelete={handleDeleteWorkSheet}
+                    />
+                )}
             </div>
-            
+
             {workSheetObservation && workSheetObservation.length > 3 && (
                 <ObservationText observation={workSheetObservation} />
             )}
