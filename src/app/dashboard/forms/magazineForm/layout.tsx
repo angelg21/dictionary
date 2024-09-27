@@ -3,13 +3,16 @@
 import { MagazineFormValues } from "@/src/forms/components/MagazineFormComponents/interfaces/MagazineForm";
 import { AlertProvider } from "@/src/users/context/AlertContext";
 import { Form, Formik, useFormikContext } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { useParams, usePathname } from "next/navigation";
+import { getMagazineForm } from "./actions/get-magazine-form";
 
 export default function MagazineFormLayout({ children }: { children: React.ReactNode; }) {
 
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
+    const [magazineInitialValue, setMagazineInitialValue] = useState<MagazineFormValues>();
 
     const SaveFormValues = () => {
         const { values } = useFormikContext<MagazineFormValues>();
@@ -21,7 +24,25 @@ export default function MagazineFormLayout({ children }: { children: React.React
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`magazineFormData-${id}`) || JSON.stringify({
+    useEffect(() => {
+        const fetchMagazineData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getMagazineForm(id);
+                const { _id, ...initialValues } = response?.responseData;
+                setMagazineInitialValue(initialValues);
+                console.log(initialValues)
+            } catch (error) {
+                console.error('Error fetching author data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchMagazineData();
+    }, [id]);
+
+    const initialValues = JSON.parse( JSON.stringify({
         magazineTitle: '',
         originalLanguage: '',
         sections: '',
@@ -136,9 +157,13 @@ export default function MagazineFormLayout({ children }: { children: React.React
         console.log('Formulario enviado:', values);
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>; // Puedes reemplazar esto con un componente de carga más elaborado
+    }
+
     return (
         <Formik<MagazineFormValues>
-            initialValues={initialValues}
+            initialValues={magazineInitialValue || initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => handleSubmitMagazineForm(values)}
         >

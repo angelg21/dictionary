@@ -3,13 +3,16 @@
 import { AnthologyFormValues } from "@/src/forms/components/AnthologyFormComponents/interfaces/AnthologyForm";
 import { Form, Formik, useFormikContext } from "formik";
 import { AlertProvider } from "@/src/users/context/AlertContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { useParams, usePathname } from "next/navigation";
+import { getAnthologyForm } from "./actions/get-anthology-form";
 
 export default function MagazineFormLayout({ children }: { children: React.ReactNode; }) {
 
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
+    const [anthologyInitialValue, setAnthologyInitialValue] = useState<AnthologyFormValues>();
 
     const SaveFormValues = () => {
         const { values } = useFormikContext<AnthologyFormValues>();
@@ -21,7 +24,25 @@ export default function MagazineFormLayout({ children }: { children: React.React
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`anthologyFormData-${id}`) || JSON.stringify({
+    useEffect(() => {
+        const fetchAnthologyData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getAnthologyForm(id);
+                const { _id, ...initialValues } = response?.responseData;
+                setAnthologyInitialValue(initialValues);
+                console.log(initialValues)
+            } catch (error) {
+                console.error('Error fetching author data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchAnthologyData();
+    }, [id]);
+
+    const initialValues = JSON.parse(JSON.stringify({
         anthologyTitle: '',
         genre: '',
         author: '',
@@ -137,9 +158,13 @@ export default function MagazineFormLayout({ children }: { children: React.React
         console.log('Formulario enviado:', values);
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>; // Puedes reemplazar esto con un componente de carga más elaborado
+    }
+
     return (
         <Formik<AnthologyFormValues>
-            initialValues={initialValues}
+            initialValues={anthologyInitialValue || initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => handleSubmitAnthologyForm(values)}
         >

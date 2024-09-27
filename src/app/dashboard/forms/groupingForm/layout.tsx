@@ -3,13 +3,16 @@
 import { GroupingFormValues } from "@/src/forms/components/GroupingFormComponent/interfaces/GroupingForm";
 import { AlertProvider } from "@/src/users/context/AlertContext";
 import { Form, Formik, useFormikContext } from "formik";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as Yup from 'yup';
 import { useParams, usePathname } from "next/navigation";
+import { getGroupingForm } from "./actions/get-grouping-form";
 
 export default function GroupingFormLayout({ children }: { children: React.ReactNode; }) {
 
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
+    const [groupingInitialValue, setGroupingInitialValue] = useState<GroupingFormValues>()
 
     const SaveFormValues = () => {
         const { values } = useFormikContext<GroupingFormValues>();
@@ -21,7 +24,25 @@ export default function GroupingFormLayout({ children }: { children: React.React
         return null; // Este componente solo se utiliza para ejecutar el useEffect
     };
 
-    const initialValues = JSON.parse(localStorage.getItem(`groupingFormData-${id}`) || JSON.stringify({
+    useEffect(() => {
+        const fetchGroupingData = async () => {
+            setIsLoading(true);
+            try {
+                const response = await getGroupingForm(id);
+                const { _id, ...initialValues } = response?.responseData;
+                setGroupingInitialValue(initialValues);
+                console.log(initialValues)
+            } catch (error) {
+                console.error('Error fetching author data:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchGroupingData();
+    }, [id]);
+
+    const initialValues = JSON.parse(JSON.stringify({
         name: '',
         meetingPlace: {
             city: '',
@@ -147,9 +168,13 @@ export default function GroupingFormLayout({ children }: { children: React.React
         console.log('Formulario enviado:', values);
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>; // Puedes reemplazar esto con un componente de carga más elaborado
+    }
+
     return (
         <Formik<GroupingFormValues>
-            initialValues={initialValues}
+            initialValues={groupingInitialValue || initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => handleSubmitGroupingForm(values)}
         >
