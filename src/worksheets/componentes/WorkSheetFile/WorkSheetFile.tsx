@@ -268,7 +268,7 @@ export const WorkSheetFile = ({
                 )}
             </div>
 
-            {workSheetObservation && workSheetObservation.length > 3 && (
+            {workSheetObservation && (
                 <ObservationText observation={workSheetObservation} />
             )}
         </div>

@@ -92,7 +92,7 @@ export default function FilteredWorksheets({ data }: { data: any }) {
     };
 
     return (
-        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-4 xl:gap-0 xl:flex-col mb-20">
+        <div className="flex flex-col sm:gap-4 xl:gap-0  mb-20">
             {
                 currentWorksheets.map((item: any) => (
                     <WorkSheetFile key={item.workSheetName} {...item} />
