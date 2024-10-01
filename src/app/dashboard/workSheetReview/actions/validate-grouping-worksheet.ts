@@ -3,6 +3,7 @@
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { GroupingTextValues } from "@/src/worksheetsReview/interfaces/GroupingWorkSheetReview";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 
 
@@ -43,6 +44,8 @@ export const ValidateGroupingWorkSheet = async (payload: GroupingTextValues, gro
                 message: responseAuthorNeo4j.message || 'No se pudo validar la ficha',
             };
         }
+
+        revalidatePath('/dashboard/worksheets/validatedSheets');
 
         return {
             ok: true,
