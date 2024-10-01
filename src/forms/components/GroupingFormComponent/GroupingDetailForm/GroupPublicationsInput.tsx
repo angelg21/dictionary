@@ -38,7 +38,9 @@ export const GroupPublicationsInput = ({globalStyle}: PublicationInputProps) => 
             const updatedPublications = [...publications, newPublication];
 
             setPublications(updatedPublications);
-            setFieldValue("groupPublications", [...values.groupPublications, newPublication]); // Concatenar con los valores existentes
+            setFieldValue("groupPublications", Array.isArray(values.groupPublications) 
+            ? [...values.groupPublications, newPublication] 
+            : [newPublication]); // Concatenar con los valores existentes
         }
 
         // Reseteamos los campos de entrada

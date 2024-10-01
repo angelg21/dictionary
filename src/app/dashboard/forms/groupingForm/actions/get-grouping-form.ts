@@ -18,7 +18,7 @@ export const getGroupingForm = async (groupingId: string | string[]) => {
 
     try {
         // Realizar la solicitud GET para obtener los datos de agrupamiento
-        const response = await fetch(process.env.API_URL + `/cards/magazine/${groupingId}`, {
+        const response = await fetch(process.env.API_URL + `/cards/grouping/${groupingId}`, {
             method: 'GET', // Cambiado a GET
             headers: {
                 'Content-Type': 'application/json',

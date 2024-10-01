@@ -15,6 +15,7 @@ import { PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/out
 import { MultimediaCharged } from "../../MultimediaCharged/MultimediaCharged"
 import { ExpandableInput } from "../../ExandableInput/ExpandableInput"
 import Link from "next/link"
+import { DescriptionMultimedia } from "../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia"
 
 
 export const GroupingDetailForm = () => {
@@ -84,7 +85,10 @@ export const GroupingDetailForm = () => {
     useEffect(() => {
         if (multimediaField.description) {
             setFieldValue("multimedia", [...values.multimedia, multimediaField]);
-            setDescriptionMedia(''); // Resetea la descripción
+            setDescriptionMedia('');
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
 
@@ -164,15 +168,15 @@ export const GroupingDetailForm = () => {
                         typeMultimediaField={typeMultimediaField}
                     />
 
-                    <ExpandableInputWork
+                    <DescriptionMultimedia
                         id="description"
                         value={descriptionMedia}
                         onChange={(e) => setDescriptionMedia(e.target.value)}
                         label={"Descripción"}
                         labelTextStyle={"text-gray-900 text-sm"}
                         globalStyle={"col-span-1 md:row-span-2"}
+                        multimediaLink={multimediaField.link}
                     />
-
                     <button
                         type="button"
                         onClick={handleAddMultimediaField}

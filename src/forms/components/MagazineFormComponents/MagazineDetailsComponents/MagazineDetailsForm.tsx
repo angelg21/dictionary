@@ -56,9 +56,6 @@ export const MagazineDetailsForm = () => {
 
             const data = await response.json();
             setImageUrl(data.secure_url); // URL segura de la imagen
-
-
-
             setMultimediaField((preMultimediaField) => ({
                 ...preMultimediaField,
                 title: file.name,

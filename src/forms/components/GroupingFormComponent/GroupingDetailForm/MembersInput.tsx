@@ -36,7 +36,9 @@ export const MembersInput = ({ globalStyle }: MembersInputProps) => {
             const updatedMembers = [...members, name];
 
             setMembers(updatedMembers);
-            setFieldValue("members", [...values.members, name]); // Concatenar con los valores existentes
+            setFieldValue("members", Array.isArray(values.members) 
+            ? [...values.members, name] 
+            : [name]); // Concatenar con los valores existentes
         }
 
         // Reseteamos los campos de entrada

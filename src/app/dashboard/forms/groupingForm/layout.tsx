@@ -80,7 +80,6 @@ export default function GroupingFormLayout({ children }: { children: React.React
             .nullable(),
 
         generalCharacteristics: Yup.string()
-            .max(500, 'Las características generales no pueden superar los 500 caracteres')
             .nullable(),
 
         members: Yup.array()
@@ -95,16 +94,13 @@ export default function GroupingFormLayout({ children }: { children: React.React
                 year: Yup.number()
                     .nullable(),
                 authors: Yup.string()
-                    .max(200, 'Los autores no pueden superar los 200 caracteres')
                     .nullable(),
                 summary: Yup.string()
-                    .max(500, 'El resumen no puede superar los 500 caracteres')
                     .nullable(),
             })
         ).nullable(),
 
         groupActivities: Yup.string()
-            .max(500, 'Las actividades del grupo no pueden superar los 500 caracteres')
             .nullable(),
 
         multimedia: Yup.array().of(
@@ -178,6 +174,7 @@ export default function GroupingFormLayout({ children }: { children: React.React
                     {/* Texto de carga */}
                     <p className="text-lg font-semibold text-gray-700 tracking-wide">
                         Cargando...
+                        
                     </p>
                 </div>
             </div>
