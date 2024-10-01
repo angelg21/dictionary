@@ -203,6 +203,7 @@ export const GroupingDetailForm = () => {
                     </Link>
                 </div>
             </div>
+            <DebugFormikValues />
         </div>
     )
 }

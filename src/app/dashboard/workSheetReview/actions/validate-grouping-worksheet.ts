@@ -19,13 +19,13 @@ export const ValidateGroupingWorkSheet = async (payload: GroupingTextValues, gro
 
     try {
         console.log(payload)
-        // const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${groupingId}`, {
-        //     method: 'POST',
-        //     headers: { 
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ ...payload}),
-        // });
+        const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${groupingId}`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...payload}),
+        });
 
         const responseNeo4j = await fetch(process.env.API_URL + `/cards/upload/grouping/${groupingId}`, {
             method: 'PUT',
@@ -34,7 +34,7 @@ export const ValidateGroupingWorkSheet = async (payload: GroupingTextValues, gro
             },
         });
 
-        // const responseAuthor = await responseValidate.json();
+        const responseAuthor = await responseValidate.json();
         const responseAuthorNeo4j = await responseNeo4j.json();
 
         if ( !responseAuthorNeo4j) {

@@ -1,21 +1,15 @@
 'use client'
-
-import { MagazineCardData } from '../../interfaces/MagazineWorkSheetReview'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { useParams, useRouter } from "next/navigation";
 import { useAlert } from '@/src/users/context/AlertContext';
-import { AuthorCardData } from '../../interfaces/AuthorWorkSheetReview';
 import { GroupingCardData } from '../../interfaces/GroupingWorkSheetReview';
 import { ValidateGroupingWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-grouping-worksheet';
 import { RejectWorksheet } from '@/src/app/dashboard/workSheetReview/actions/reject-worksheet';
 import { SendEditorWorksheet } from '@/src/app/dashboard/workSheetReview/actions/send-editor-worksheet';
 
-
-
 export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ data }) => {
-
     const [isLoadingValidate, setIsLoadingValidate] = useState(false);
     const [isLoadingRejected, setIsLoadingRejected] = useState(false);
     const [observation, setObservation] = useState(data.observation);
@@ -32,7 +26,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
         setIsLoadingValidate(true)
         const validatedData = {
             text: groupingText,
-            criticism: criticismText
+            criticism: data.criticism.map((cri, index) => ({ ...cri, text: criticismText[index] })),
         };
 
         const response = await ValidateGroupingWorkSheet(validatedData, id);
@@ -163,7 +157,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
                                                 <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
-                                                    {criticismText[index].split('\n').map((line, index) => (
+                                                    {criticismText[index]?.split('\n').map((line, index) => (
                                                         <span key={index}>
                                                             {line}
                                                             <br />
