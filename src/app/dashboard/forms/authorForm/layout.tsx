@@ -2,9 +2,8 @@
 
 import { Formik, Form, useFormikContext } from 'formik'
 import * as Yup from 'yup';
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from 'react';
-import { useSession } from "next-auth/react";
 import { AuthorFormValues } from '@/src/forms/components/AuthorFormComponents/interfaces/AuthorForm';
 import { AlertProvider } from '@/src/users/context/AlertContext';
 import { getAuthorForm } from './actions/get-author-form';
@@ -45,9 +44,9 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
         fetchAuthorData();
     }, [id]);
 
-    
-    
-    const initialValues = JSON.parse( JSON.stringify({
+
+
+    const initialValues = JSON.parse(JSON.stringify({
         fullName: '',
         pseudonym: '',
         dateOfBirth: '',
@@ -98,7 +97,7 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
                 name: Yup.string()
                     .max(300, 'La descripción no puede superar los 300 caracteres')
                     .nullable(),
-                    relationship: Yup.string()
+                relationship: Yup.string()
                     .max(300, 'La descripción no puede superar los 300 caracteres')
                     .nullable()
             })
@@ -109,15 +108,12 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
             .nullable(),
 
         mainTheme: Yup.string()
-            .max(300, 'El tema principal no puede superar los 300 caracteres')
             .nullable(),
 
         mainGenre: Yup.string()
-            .max(100, 'El género principal no puede superar los 100 caracteres')
             .nullable(),
 
         context: Yup.string()
-            .max(500, 'El contexto no puede superar los 500 caracteres')
             .nullable(),
 
         multimedia: Yup.array().of(
@@ -149,13 +145,12 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
                 publicationDate: Yup.string()
                     .nullable(),
                 description: Yup.string()
-                    .max(500, 'La descripción no puede superar los 500 caracteres')
                     .nullable(),
                 publicationPlace: Yup.object({
                     city: Yup.string()
                         .max(100, 'La ciudad no puede superar los 100 caracteres')
                         .nullable(),
-                        printingHouse: Yup.string()
+                    printingHouse: Yup.string()
                         .max(100, 'La impresión no puede superar los 100 caracteres')
                         .nullable(),
                     publisher: Yup.string()
@@ -200,7 +195,6 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
                     .max(500, 'La referencia bibliográfica no puede superar los 500 caracteres')
                     .nullable(),
                 description: Yup.string()
-                    .max(500, 'La descripción no puede superar los 500 caracteres')
                     .nullable(),
                 multimedia: Yup.array().of(
                     Yup.object({
@@ -226,7 +220,19 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
     };
 
     if (isLoading) {
-        return <div>Loading...</div>; // Puedes reemplazar esto con un componente de carga más elaborado
+        return (
+            <div className="flex items-center justify-center h-screen bg-d-fondo">
+                <div className="flex flex-col items-center space-y-2">
+                    {/* Spinner */}
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-d-blue"></div>
+
+                    {/* Texto de carga */}
+                    <p className="text-lg font-semibold text-gray-700 tracking-wide">
+                        Cargando...
+                    </p>
+                </div>
+            </div>
+        );
     }
     console.log(authorInitialValue)
 
@@ -236,16 +242,15 @@ export default function AuthorFormLayout({ children }: { children: React.ReactNo
             validationSchema={validationSchema}
             onSubmit={(values) => handleSubmitAuthorForm(values)}
         >
-            {formik => {               
-
+            {formik => {
                 return (
                     <Form>
                         <SaveFormValues />
                         <div className=''>
                             <div className='flex flex-col mx-5 lg:mx-9 xl:mx-20'>
-                            <AlertProvider>
-                                {children}
-                            </AlertProvider>
+                                <AlertProvider>
+                                    {children}
+                                </AlertProvider>
                             </div>
                         </div>
                     </Form>

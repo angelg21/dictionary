@@ -1,5 +1,6 @@
-import { useField } from "formik"
+import { useField, useFormikContext } from "formik"
 import React from 'react'
+import { AuthorFormValues } from "../interfaces/AuthorForm";
 
 interface GenderProps {
     name: string;
@@ -14,6 +15,8 @@ const AuthorGender = [
 export const CheckTypeGender = ({globalStyle, name}: GenderProps) => {
 
     const [field] = useField(name);
+    const { values } = useFormikContext<AuthorFormValues>();
+    const gender = values[name as keyof AuthorFormValues];
 
     return (
         <fieldset className={`${globalStyle}`}>
@@ -27,6 +30,7 @@ export const CheckTypeGender = ({globalStyle, name}: GenderProps) => {
                             className="h-4 w-4 border-gray-400 bg-gray-100 text-d-blue focus:ring-d-blue hover:ring-d-blue"
                             {...field}
                             value={gender.value}
+                            checked={field.value === gender.value}
                             // checked={field.value === gender.value} // Asegura que el valor correcto esté seleccionado
                         />
                         <label htmlFor={gender.id} className="ml-2 block text-sm font-medium text-gray-900 leading-6">

@@ -9,11 +9,6 @@ import { useSession } from "next-auth/react";
 
 const workSheetsMenu = [
     {
-        path: '/dashboard/worksheets/validatedSheets',
-        name: 'Fichas Validadas',
-        current: true
-    },
-    {
         path: '/dashboard/worksheets/sheetsToComplete',
         name: 'Fichas por Completar',
         current: false
@@ -22,6 +17,11 @@ const workSheetsMenu = [
         path: '/dashboard/worksheets/sheetsToReview',
         name: 'Fichas por Revisar',
         current: false
+    },
+    {
+        path: '/dashboard/worksheets/validatedSheets',
+        name: 'Fichas Validadas',
+        current: true
     },
     {
         path: '/dashboard/worksheets/rejectedSheets',

@@ -16,6 +16,7 @@ import { MultimediaCharged } from "../../MultimediaCharged/MultimediaCharged"
 import { PlusIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import Link from "next/link"
 import { MagazineNumbers } from "./MagazineNumbers"
+import { DescriptionMultimedia } from "../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia"
 
 
 export const MagazineDetailsForm = () => {
@@ -86,7 +87,10 @@ export const MagazineDetailsForm = () => {
     useEffect(() => {
         if (multimediaField.description) {
             setFieldValue("multimedia", [...values.multimedia, multimediaField]);
-            setDescriptionMedia(''); // Resetea la descripción
+            setDescriptionMedia('');
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
 
@@ -118,13 +122,28 @@ export const MagazineDetailsForm = () => {
                     globalStyle={"col-span-1"}
                 />
 
-                <div className="col-span-full grid grid-cols-1 gap-y-8 md:gap-x-4 md:grid-cols-3  ">
+                <SelectDate
+                    name={"firstIssueDate"}
+                    title="Fecha de nacimiento"
+                    globalStyle={"col-span-1"}
+                />
 
-                    <MagazineNumbers
-                        globalStyle={"col-span-1 md:col-span-3"}
-                    />
+                <SelectDate
+                    name={"lastIssueDate"}
+                    title="Fecha de nacimiento"
+                    globalStyle={"col-span-1"}
+                />
 
-                </div>
+                <SimpleInputWithLabel
+                    id="issuesPublished"
+                    name={"issuesPublished"}
+                    type={"text"}
+                    label={"Números publicados"}
+                    labelTextStyle={"text-gray-900 text-sm"}
+                    inputWidth={"w-full "}
+                    focusBorderColor={"focus:ring-[#003366]"}
+                    globalStyle={"col-span-1"}
+                />
 
                 <CreatorsMagazine
                     globalStyle={"col-span-1 md:col-span-3"}
@@ -140,6 +159,30 @@ export const MagazineDetailsForm = () => {
                     focusBorderColor={"focus:ring-[#003366]"}
                     globalStyle={"col-span-1 md:col-span-3"}
                 />
+
+                <div className="col-span-full grid grid-cols-1 gap-y-8 md:grid-cols-2 md:gap-x-7 xl:gap-x-14">
+
+                    <SimpleInputWithLabel
+                        id="bibliographicReference-magazine"
+                        name={"bibliographicReference"}
+                        type={"text"}
+                        label={"Referencia bibliográfica"}
+                        labelTextStyle={"text-gray-900 text-sm"}
+                        inputWidth={"w-full "}
+                        focusBorderColor={"focus:ring-[#003366]"}
+                        globalStyle={"col-span-1"}
+                    />
+                    <SimpleInputWithLabel
+                        id="link-magazine"
+                        name={"link"}
+                        type={"text"}
+                        label={"Link"}
+                        labelTextStyle={"text-gray-900 text-sm"}
+                        inputWidth={"w-full"}
+                        focusBorderColor={"focus:ring-[#003366]"}
+                        globalStyle={"col-span-1"}
+                    />
+                </div>
 
                 <ExpandableInput
                     id="description"
@@ -163,13 +206,14 @@ export const MagazineDetailsForm = () => {
                         typeMultimediaField={typeMultimediaField}
                     />
 
-                    <ExpandableInputWork
+                    <DescriptionMultimedia
                         id="description"
                         value={descriptionMedia}
                         onChange={(e) => setDescriptionMedia(e.target.value)}
                         label={"Descripción"}
                         labelTextStyle={"text-gray-900 text-sm"}
                         globalStyle={"col-span-1 md:row-span-2"}
+                        multimediaLink={multimediaField.link}
                     />
 
                     <button

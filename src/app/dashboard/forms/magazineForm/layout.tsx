@@ -42,11 +42,15 @@ export default function MagazineFormLayout({ children }: { children: React.React
         fetchMagazineData();
     }, [id]);
 
-    const initialValues = JSON.parse( JSON.stringify({
+    const initialValues = JSON.parse(JSON.stringify({
         magazineTitle: '',
         originalLanguage: '',
         sections: '',
-        numbers: [],
+        firstIssueDate: '',
+        lastIssueDate: '',
+        issuesPublished: '',
+        link: '',
+        bibliographicReference: '',
         description: '',
         multimedia: [],
         creators: [],
@@ -65,11 +69,9 @@ export default function MagazineFormLayout({ children }: { children: React.React
             .nullable(),
         lastIssueDate: Yup.string()
             .nullable(),
-        issuesPublished: Yup.number()
-            .min(0, 'La cantidad de números publicados no puede ser negativa')
+        issuesPublished: Yup.string()
             .nullable(),
         sections: Yup.string()
-            .max(300, 'Las secciones no pueden superar los 300 caracteres')
             .nullable(),
         publicationPlace: Yup.object({
             city: Yup.string()
@@ -83,7 +85,6 @@ export default function MagazineFormLayout({ children }: { children: React.React
                 .nullable()
         }),
         description: Yup.string()
-            .max(500, 'La descripción no puede superar los 500 caracteres')
             .nullable(),
         multimedia: Yup.array().of(
             Yup.object({
@@ -158,7 +159,19 @@ export default function MagazineFormLayout({ children }: { children: React.React
     };
 
     if (isLoading) {
-        return <div>Loading...</div>; // Puedes reemplazar esto con un componente de carga más elaborado
+        return (
+            <div className="flex items-center justify-center h-screen bg-d-fondo">
+                <div className="flex flex-col items-center space-y-2">
+                    {/* Spinner */}
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-d-blue"></div>
+
+                    {/* Texto de carga */}
+                    <p className="text-lg font-semibold text-gray-700 tracking-wide">
+                        Cargando...
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     return (

@@ -7,17 +7,19 @@ import { ExpandableInputWork } from "../WorksFormComponents/EpandableInputWork/E
 import { MultimediaInput } from "../MultimediaInput/MultimediaInput";
 import { PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { useFormikContext } from "formik";
-import { AuthorFormValues } from "../AuthorFormComponents/interfaces/AuthorForm";
+import { AuthorFormValues, Criticism } from "../AuthorFormComponents/interfaces/AuthorForm";
 import { ButtonWithIconLeft } from "@/src/components/ButtonWithIconLeft/ButtonWithIconLeft";
-import { WorksTable } from "../WorksFormComponents/WorksTable/WorksTable";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 import { DebugFormikValues } from "../DebugFormikValues/DebugFormikValues";
 import { CrtiticismsTable } from "./CrtiticismsTable";
 import { MultimediaChargedWorks } from "../WorksFormComponents/MultimediaChargedWorks/MultimediaChargedWorks";
-
+import { ExpandableDescriptionMultimedia } from "../WorksFormComponents/ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia";
 
 
 export const CriticismsForm = () => {
+
+    const { id } = useParams();
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'authorCriticismsPreset';
@@ -25,7 +27,7 @@ export const CriticismsForm = () => {
 
     const [multimediaField, setMultimediaField] = useState(
         { title: '', link: '', type: '', description: '' }
-    ); 
+    );
     const [descriptionMedia, setDescriptionMedia] = useState('');
     const [loading, setLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -35,7 +37,9 @@ export const CriticismsForm = () => {
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
-    const [criticisms, setCriticisms] = useState({
+
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [criticisms, setCriticisms] = useState<Criticism>({
         title: '',
         type: '',
         author: '',
@@ -43,14 +47,8 @@ export const CriticismsForm = () => {
         link: '',
         bibliographicReference: '',
         description: '',
-        multimedia: [
-            {
-                title: '',
-                link: '',
-                type: '',
-                description: ''
-            }
-        ]
+        multimedia: [],
+        text: ''
     });
 
 
@@ -107,15 +105,32 @@ export const CriticismsForm = () => {
     };
 
     const handleAddCriticisms = () => {
-        const cleanedMultimedia = criticisms.multimedia.filter(media =>
-            media.title || media.link || media.type || media.description
-        );
-        // Agregar la obra al array de works en Formik
-        if (criticisms.title) {
-            const updatedCriticis = { ...criticisms, multimedia: cleanedMultimedia };
-            const updatedCriticisms = [...values.criticism, updatedCriticis];
+        // const cleanedMultimedia = criticisms.multimedia.filter(media =>
+        //     media.title || media.link || media.type || media.description
+        // );
+
+        if (!criticisms.title) return;
+
+        if (editingIndex !== null) {
+            // Si estamos editando una obra, actualizamos la existente
+            const updatedCriticism = values.criticism.map((existingCriticism, index) =>
+                index === editingIndex ? criticisms : existingCriticism
+            );
+            setFieldValue('criticism', updatedCriticism);
+            setEditingIndex(null); // Resetear el índice de edición
+        } else {
+            // Agregar una nueva obra
+            const updatedCriticisms = [...values.criticism, criticisms];
             setFieldValue('criticism', updatedCriticisms);
         }
+
+        // Agregar la obra al array de works en Formik
+        // if (criticisms.title) {
+        //     const updatedCriticis = { ...criticisms, multimedia: cleanedMultimedia };
+        //     const updatedCriticisms = [...values.criticism, updatedCriticis];
+        //     setFieldValue('criticism', updatedCriticisms);
+        // }
+
         setIsFormVisible(false)
         // Limpiar los campos del input
         setCriticisms({
@@ -126,14 +141,8 @@ export const CriticismsForm = () => {
             link: '',
             bibliographicReference: '',
             description: '',
-            multimedia: [
-                {
-                    title: '',
-                    link: '',
-                    type: '',
-                    description: ''
-                }
-            ]
+            multimedia: [{ title: '', link: '', type: '', description: '' }],
+            text: ''
         });
         setSelectedDay(null)
         setSelectedMonth(null)
@@ -143,6 +152,22 @@ export const CriticismsForm = () => {
 
     const handleFormVisible = () => {
         setIsFormVisible(true); // Al presionar el botón, mostrar el formulario
+        setCriticisms({
+            title: '',
+            type: '',
+            author: '',
+            publicationDate: '',
+            link: '',
+            bibliographicReference: '',
+            description: '',
+            multimedia: [],
+            text: ''
+        });
+
+        setSelectedDay(null);
+        setSelectedMonth(null);
+        setSelectedYear(null);
+        // Al presionar el botón, mostrar el formulario
     };
 
     const handleFormNotVisible = () => {
@@ -153,8 +178,19 @@ export const CriticismsForm = () => {
         if (multimediaField.link && multimediaField.title && multimediaField.type && multimediaField.description) {
             setCriticisms({ ...criticisms, multimedia: [...criticisms.multimedia, multimediaField] });
             setDescriptionMedia('')
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
+
+    const handleEditCriticism = (index: number) => {
+        const workToEdit = values.criticism[index];
+        setCriticisms(workToEdit); // Carga la obra seleccionada en el estado del formulario
+        setEditingIndex(index);
+        setIsFormVisible(true); // Muestra el formulario para editar
+    };
+
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div>
@@ -215,14 +251,26 @@ export const CriticismsForm = () => {
 
                                 <SimpleInputWithoutFormik
                                     id="criticisms-link"
-                                    value={criticisms.link}
-                                    onChange={(e) => setCriticisms({ ...criticisms, link: e.target.value })}
+                                    value={criticisms.bibliographicReference}
+                                    onChange={(e) => setCriticisms({ ...criticisms, bibliographicReference: e.target.value })}
                                     type="text"
                                     label="Referencia bibliográfica"
                                     labelTextStyle="text-gray-900 text-sm"
                                     inputWidth="w-full h-9"
                                     focusBorderColor="focus:ring-[#003366]"
                                     globalStyle="col-span-1 md:col-span-1"
+                                />
+
+                                <SimpleInputWithoutFormik
+                                    id="criticisms-link"
+                                    value={criticisms.link}
+                                    onChange={(e) => setCriticisms({ ...criticisms, link: e.target.value })}
+                                    type="text"
+                                    label="Link"
+                                    labelTextStyle="text-gray-900 text-sm"
+                                    inputWidth="w-full h-9"
+                                    focusBorderColor="focus:ring-[#003366]"
+                                    globalStyle="col-span-1 md:col-span-3"
                                 />
 
                                 <ExpandableInputWork
@@ -245,13 +293,14 @@ export const CriticismsForm = () => {
                                         typeMultimediaField={typeMultimediaField}
                                     />
 
-                                    <ExpandableInputWork
-                                        id="media-description"
+                                    <ExpandableDescriptionMultimedia
+                                        id="description"
                                         value={descriptionMedia}
                                         onChange={(e) => setDescriptionMedia(e.target.value)}
                                         label={"Descripción"}
                                         labelTextStyle={"text-gray-900 text-sm"}
                                         globalStyle={"col-span-1 md:row-span-2"}
+                                        multimediaLink={multimediaField.link}
                                     />
 
 
@@ -288,7 +337,7 @@ export const CriticismsForm = () => {
                                         onClick={handleAddCriticisms}
                                         className="bg-d-blue text-white text-sm font-medium leading-6 md:w-[162px] py-2 rounded-full"
                                     >
-                                        Cargar Obra
+                                        Cargar Crítica
                                     </button>
                                 </div>
 
@@ -312,29 +361,27 @@ export const CriticismsForm = () => {
                                 </div>
                                 <CrtiticismsTable
                                     criticisms={values.criticism}
+                                    handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
-                                    <Link href={'/dashboard/forms/authorForm/authorDetails'}>
+                                    <Link href={`/dashboard/forms/authorForm/${id}/works`}>
                                         <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                                             <ArrowLeftIcon className="w-6 h-6 text-white mr-4" />
                                             <span className="text-[15px] font-medium">Anterior</span>
                                         </button>
                                     </Link>
-                                    <Link href={'/dashboard/forms/authorForm/criticisms'}>
+                                    <Link href={`/dashboard/forms/authorForm/${id}/authorFormReview`}>
                                         <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                                             <span className="text-[15px] font-medium mr-4">Siguiente</span>
                                             <ArrowRightIcon className="w-6 h-6 text-white" />
                                         </button>
                                     </Link>
-
-
                                 </div>
                             </div>
                         )
                 }
 
             </div>
-            <DebugFormikValues/>
         </div>
     )
 }

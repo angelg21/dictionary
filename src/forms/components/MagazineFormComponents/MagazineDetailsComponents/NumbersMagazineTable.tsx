@@ -1,12 +1,12 @@
 
 interface MagazineTableProps {
-    numbers: { number: string, issueDate: string, publicationPlace: { city: string, printingHouse: string, publisher: string }, lenguage: string, translator: string }[];
+    editions: { editiontitle: string, publicationDate: string, publicationPlace: { city: string, printingHouse: string, publisher: string }, language: string, translator: string }[];
     onDelete: (index: number) => void;
     onEdit: (index: number) => void;
 }
 
 
-export const NumbersMagazineTable = ({numbers, onDelete, onEdit}: MagazineTableProps) => {
+export const NumbersMagazineTable = ({ editions, onDelete, onEdit }: MagazineTableProps) => {
     return (
         <div className="max-lg:flex max-lg:justify-center mt-6 md:mt-0 ">
             <div className="overflow-x-auto w-full">
@@ -52,42 +52,44 @@ export const NumbersMagazineTable = ({numbers, onDelete, onEdit}: MagazineTableP
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 bg-white">
-                            {numbers.map((number, index) => (
-                                (number.number != '') &&
+                            {editions.map((edition, index) => (
+                                (edition.editiontitle != '') &&
                                 <tr key={index}>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm">
-                                        <div className="font-medium text-gray-900">{number.number}</div>
+                                        <div className="font-medium text-gray-900">{edition.editiontitle}</div>
                                     </td>
 
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm">
-                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             <span>
-                                                <span className="text-sm font-semibold">Ciudad: </span>{number.publicationPlace.city}<br />
+                                                <span className="text-sm font-semibold">Ciudad: </span>{edition.publicationPlace.city}<br />
                                             </span>
                                             <span>
-                                                <span className="text-sm font-semibold">Imprenta: </span>{number.publicationPlace.printingHouse}<br />
+                                                <span className="text-sm font-semibold">Imprenta: </span>{edition.publicationPlace.printingHouse}<br />
                                             </span>
                                             <span>
-                                                <span className="text-sm font-semibold">Editorial: </span>{number.publicationPlace.publisher}<br />
+                                                <span className="text-sm font-semibold">Editorial: </span>{edition.publicationPlace.publisher}<br />
                                             </span>
                                         </dd>
                                     </td>
 
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm">
-                                        <div className="font-medium text-gray-900">{number.issueDate}</div>
+                                        <div className="font-medium text-gray-900">{edition.publicationDate}</div>
                                     </td>
 
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm">
-                                        <div className="font-medium text-gray-900">{number.lenguage}</div>
+                                        <div className="font-medium text-gray-900">{edition.language}</div>
                                     </td>
-                                    
+
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm">
-                                        <div className="font-medium text-gray-900">{number.translator}</div>
+                                        <div className="font-medium text-gray-900">{edition.translator}</div>
                                     </td>
 
                                     <td className="whitespace-nowrap  pl-8 pr-2 py-4 text-sm text-gray-500">
                                         <div className="flex flex-row gap-6 lg:gap-4">
                                             <button
+                                                type="button"
+                                                key={index}
                                                 className=" text-d-blue hover:text-blue-700 flex items-center font-medium group transition-transform transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
                                                 onClick={() => onEdit(index)}
                                             >

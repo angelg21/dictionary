@@ -1,5 +1,6 @@
 'use client'
 
+import { useParams } from "next/navigation";
 import { CheckTypeGender } from "../CheckTypeGender/CheckTypeGender"
 import { DebugFormikValues } from "../../DebugFormikValues/DebugFormikValues"
 import { ExpandableInput } from "../../ExandableInput/ExpandableInput"
@@ -14,13 +15,12 @@ import { ExpandableInputWork } from "../../WorksFormComponents/EpandableInputWor
 import { useEffect, useState } from "react"
 import { useFormikContext } from "formik"
 import { AuthorFormValues } from "../interfaces/AuthorForm"
-
-
-
-
+import { DescriptionMultimedia } from "../DescriptionMultimedia/DescriptionMultimedia";
 
 
 export const AuthorDetailsForm = () => {
+
+    const { id } = useParams();
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'authorsPreset';
@@ -82,7 +82,6 @@ export const AuthorDetailsForm = () => {
             ...prev,
             description: descriptionMedia, // Añade la descripción ingresada por el usuario
         }));
-        setDescriptionMedia(''); // Limpia el campo de la descripción después de agregar
     }
 
     const handleDeleteMultimedia = (index: number) => {
@@ -96,10 +95,12 @@ export const AuthorDetailsForm = () => {
         // Solo añade a mediaFields cuando tanto el link como la descripción están presentes
         if (multimediaField.link && multimediaField.description) {
             const updatedMediaFields = [...values.multimedia, multimediaField];
-
-
             // setMediaFields(updatedMediaFields);
             setFieldValue("multimedia", updatedMediaFields); // Actualiza el valor en Formik
+            setDescriptionMedia('');
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
 
@@ -196,7 +197,7 @@ export const AuthorDetailsForm = () => {
                         labelTextStyle={"text-gray-900 text-sm"}
                         inputWidth={"w-full "}
                         focusBorderColor={"focus:ring-[#003366]"}
-                        globalStyle={"col-span-1"}
+                        globalStyle={"col-span-1 md:col-span-2"}
                     />
 
                     <SimpleInputWithLabel
@@ -207,7 +208,7 @@ export const AuthorDetailsForm = () => {
                         labelTextStyle={"text-gray-900 text-sm"}
                         inputWidth={"w-full "}
                         focusBorderColor={"focus:ring-[#003366]"}
-                        globalStyle={"col-span-1"}
+                        globalStyle={"col-span-1 md:col-span-2"}
                     />
                 </div>
 
@@ -236,13 +237,14 @@ export const AuthorDetailsForm = () => {
                         typeMultimediaField={typeMultimediaField}
                     />
 
-                    <ExpandableInputWork
+                    <DescriptionMultimedia
                         id="description"
                         value={descriptionMedia}
                         onChange={(e) => setDescriptionMedia(e.target.value)}
                         label={"Descripción"}
                         labelTextStyle={"text-gray-900 text-sm"}
                         globalStyle={"col-span-1 md:row-span-2"}
+                        multimediaLink={multimediaField.link}
                     />
 
                     <button
@@ -263,7 +265,7 @@ export const AuthorDetailsForm = () => {
 
                 <div className='flex col-span-full max-md:w-full justify-end md:col-span-3 mt-6'>
 
-                    <Link href={'/dashboard/forms/authorForm/works'}>
+                    <Link href={`/dashboard/forms/authorForm/${id}/works`}>
                         <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                             <span className="text-[15px] font-medium mr-4">Siguiente</span>
                             <ArrowRightIcon className="w-6 h-6 text-white" />
@@ -271,7 +273,6 @@ export const AuthorDetailsForm = () => {
                     </Link>
 
                 </div>
-                <DebugFormikValues />
             </div>
         </div>
     )

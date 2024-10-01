@@ -36,7 +36,26 @@ export const MagazineCriticismForm = () => {
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
-    const [criticisms, setCriticisms] = useState({
+
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    interface Multimedia {
+        title: string;
+        link: string;
+        type: string;
+        description: string;
+    }
+    
+    const [criticisms, setCriticisms] = useState<{
+        title: string;
+        type: string;
+        author: string;
+        publicationDate: string;
+        link: string;
+        bibliographicReference: string;
+        description: string;
+        multimedia: Multimedia[];
+        text: string;
+    }>({
         title: '',
         type: '',
         author: '',
@@ -44,14 +63,8 @@ export const MagazineCriticismForm = () => {
         link: '',
         bibliographicReference: '',
         description: '',
-        multimedia: [
-            {
-                title: '',
-                link: '',
-                type: '',
-                description: ''
-            }
-        ]
+        multimedia: [],
+        text: ''
     });
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,25 +118,52 @@ export const MagazineCriticismForm = () => {
 
     const handleFormVisible = () => {
         setIsFormVisible(true); // Al presionar el botón, mostrar el formulario
+        setCriticisms({
+            title: '',
+            type: '',
+            author: '',
+            publicationDate: '',
+            link: '',
+            bibliographicReference: '',
+            description: '',
+            multimedia: [],
+            text: ''
+        });
+
+        setSelectedDay(null);
+        setSelectedMonth(null);
+        setSelectedYear(null);
+        // Al presionar el botón, mostrar el formulario
     };
 
     const handleFormNotVisible = () => {
-        setIsFormVisible(false); // Al presionar el botón, mostrar el formulario
+        setIsFormVisible(false); 
     };
 
     const handleAddCriticisms = () => {
-        const cleanedMultimedia = criticisms.multimedia.filter(media =>
-            media.title || media.link || media.type || media.description
-        );
-        // Agregar la obra al array de works en Formik
-        if (criticisms.title) {
-            const updatedCriticis = { ...criticisms, multimedia: cleanedMultimedia };
-            const updatedCriticisms = [...values.criticism, updatedCriticis];
+        // const cleanedMultimedia = criticisms.multimedia.filter(media =>
+        //     media.title || media.link || media.type || media.description
+        // );
+
+        if (!criticisms.title) return;
+
+        if (editingIndex !== null) {
+            // Si estamos editando una obra, actualizamos la existente
+            const updatedCriticism = values.criticism.map((existingCriticism, index) =>
+                index === editingIndex ? criticisms : existingCriticism
+            );
+            setFieldValue('criticism', updatedCriticism);
+            setEditingIndex(null); // Resetear el índice de edición
+        } else {
+            // Agregar una nueva obra
+            const updatedCriticisms = [...values.criticism, criticisms];
             setFieldValue('criticism', updatedCriticisms);
         }
+
         setIsFormVisible(false)
         // Limpiar los campos del input
         setCriticisms({
+            text: '',
             title: '',
             type: '',
             author: '',
@@ -152,6 +192,13 @@ export const MagazineCriticismForm = () => {
             setDescriptionMedia('')
         }
     }, [multimediaField.description]);
+
+    const handleEditCriticism = (index: number) => {
+        const workToEdit = values.criticism[index];
+        setCriticisms(workToEdit); // Carga la obra seleccionada en el estado del formulario
+        setEditingIndex(index);
+        setIsFormVisible(true); // Muestra el formulario para editar
+    };
     
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
@@ -322,6 +369,7 @@ export const MagazineCriticismForm = () => {
                                 </div>
                                 <CrtiticismsTable
                                     criticisms={values.criticism}
+                                    handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
                                     <Link href={'dashboard/forms/magazineForm/magazineDetails'}>

@@ -1,13 +1,14 @@
 import { useFormikContext } from "formik";
-import { AuthorFormValues, Work } from "../../AuthorFormComponents/interfaces/AuthorForm";
+import { AuthorFormValues, WorkFormValues } from "../../AuthorFormComponents/interfaces/AuthorForm";
 import { DebugFormikValues } from "../../DebugFormikValues/DebugFormikValues";
 
 
 interface WorksTableProps{
-    works: Work[];
+    works: WorkFormValues[];
+    handleEditWork: (index: number) => void;
 }
 
-export const WorksTable = ( {works}:WorksTableProps ) => {
+export const WorksTable = ( {works, handleEditWork}:WorksTableProps ) => {
 
     const { values, setFieldValue } = useFormikContext<AuthorFormValues>();
 
@@ -83,6 +84,14 @@ export const WorksTable = ( {works}:WorksTableProps ) => {
                                                     <path d="M8 3H3C1.89543 3 1 3.89543 1 5V16C1 17.1046 1.89543 18 3 18H14C15.1046 18 16 17.1046 16 16V11M14.5858 1.58579C15.3668 0.804738 16.6332 0.804738 17.4142 1.58579C18.1953 2.36683 18.1953 3.63316 17.4142 4.41421L8.82842 13H6L6 10.1716L14.5858 1.58579Z" stroke="#003366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="group-hover:stroke-blue-700" />
                                                 </svg>
                                             </button> */}
+                                            <button
+                                                className=" text-d-blue hover:text-blue-700 flex items-center font-medium group transition-transform transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
+                                                onClick={() => handleEditWork(index)}
+                                            >
+                                                <svg className='mr-4' width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M8 3H3C1.89543 3 1 3.89543 1 5V16C1 17.1046 1.89543 18 3 18H14C15.1046 18 16 17.1046 16 16V11M14.5858 1.58579C15.3668 0.804738 16.6332 0.804738 17.4142 1.58579C18.1953 2.36683 18.1953 3.63316 17.4142 4.41421L8.82842 13H6L6 10.1716L14.5858 1.58579Z" stroke="#003366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="group-hover:stroke-blue-700" />
+                                                </svg>
+                                            </button>
 
                                             <button
                                                 className=" text-d-red hover:text-red-500 flex items-center font-medium group transition-transform transform active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"

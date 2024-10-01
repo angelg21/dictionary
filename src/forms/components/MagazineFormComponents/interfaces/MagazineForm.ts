@@ -2,20 +2,11 @@ export interface MagazineFormValues {
     magazineTitle: string,
     originalLanguage: string,
     sections: string,
-    text: string;
-    numbers: [
-        {
-            number: string,
-            issueDate: string,
-            publicationPlace: {
-                city: string,
-                printingHouse: string,
-                publisher: string,
-            },
-            lenguage: string;
-            translator: string;
-        }
-    ],
+    firstIssueDate: string,
+    lastIssueDate: string,
+    issuesPublished: string,
+    link: string;
+    bibliographicReference: string;
     description: string,
     multimedia: [
         {
@@ -31,6 +22,7 @@ export interface MagazineFormValues {
             role: string
         },
     ],
+    text: string,
     criticism: [
         {
             text: string;

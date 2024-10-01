@@ -12,7 +12,6 @@ export interface AuthorFormValues {
     mainTheme: string;
     mainGenre: string;
     context: string;
-    publicationPlace: { city: string; printingHouse: string; publisher: string }[];
     multimedia: {
         title: '',
         link: string;
@@ -25,6 +24,14 @@ export interface AuthorFormValues {
         originalLanguage: string;
         genre: string;
         publicationDate: string;
+        publicationPlace: { city: string; printingHouse: string; publisher: string };
+        editions: {
+            publicationDate: string;
+            editiontitle: string;
+            publicationPlace: { city: string; printingHouse: string; publisher: string };
+            language: string;
+            translator: string;
+        }[];
         description: string;
         multimedia: {
             title: string,
@@ -43,7 +50,7 @@ export interface AuthorFormValues {
         bibliographicReference: string;
         description: string;
         multimedia: {
-            title: '',
+            title: string,
             link: string;
             type: string;
             description: string;
@@ -51,16 +58,15 @@ export interface AuthorFormValues {
     }[];
 }
 
-export interface Work {
-    text: string;
+export interface WorkFormValues {
     title: string;
     originalLanguage: string;
     genre: string;
     publicationDate: string;
     description: string;
-    publicationPlace?: {
+    publicationPlace: {
         city: string;
-        printing: string;
+        printingHouse: string;
         publisher: string;
     };
     multimedia: {
@@ -69,7 +75,20 @@ export interface Work {
         type: string;
         description: string;
     }[];
+    editions: {
+        editiontitle: string;
+        publicationDate: string;
+        publicationPlace: {
+            city: string;
+            printingHouse: string;
+            publisher: string;
+        };
+        language: string;
+        translator: string;
+    }[];
+    text:string
 }
+
 
 export interface Multimedia {
     title: string;
@@ -84,7 +103,7 @@ export interface MultimediaFieldsProps {
 
 export interface Criticism {
     text: string;
-    title: string;  
+    title: string;
     type: string;
     author: string;
     publicationDate: string;
