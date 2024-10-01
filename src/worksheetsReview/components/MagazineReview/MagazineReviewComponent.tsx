@@ -71,11 +71,18 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
             setIsLoadingRejected(false)
         }
     }
-    
+
     return (
         <div className='flex flex-col space-y-9 mb-12'>
+            <div className="flex items-center justify-center mb-8">
+                <span className='text-3xl font-extrabold text-d-blue tracking-wider border-b-4 border-d-blue py-2 px-4 rounded-lg'>
+                    Revista
+                </span>
+            </div>
             <div>
-                <span className='flex text-d-blue text-2xl font-bold mb-6'>{data.magazine.title}</span>
+                <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                    {data.magazine.title}
+                </span>
                 <form action="#">
                     <TabGroup defaultIndex={1}>
                         <TabList className="group flex items-center">
@@ -104,8 +111,8 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
                             </TabPanel>
                             <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                 <div className="border-b">
-                                    <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
-                                        {magazineText.split('\n').map((line, index) => (
+                                    <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
+                                        {magazineText.split('\n\n').map((line, index) => (
                                             <span key={index}>
                                                 {line}
                                                 <br />
@@ -120,7 +127,11 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
             </div>
 
             <div className=''>
-                <span className='flex text-d-blue text-2xl font-bold mb-6'>Críticas</span>
+                <div className="flex items-center justify-center mb-8">
+                    <span className='text-3xl font-extrabold text-d-blue tracking-wider border-b-4 border-d-blue py-2 px-4 rounded-lg'>
+                        Críticas
+                    </span>
+                </div>
                 {
                     data.criticism.map((criticism, index) => (
                         <div key={index} className='my-4'>
@@ -157,11 +168,10 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
                                         </TabPanel>
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
-                                                <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
-                                                    {criticismText[index].split('\n').map((line, index) => (
-                                                        <span key={index}>
+                                                <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
+                                                    {criticismText[index]?.split('\n').map((line, index) => (
+                                                        <span key={index} className="block mb-4">
                                                             {line}
-                                                            <br />
                                                         </span>
                                                     ))}
                                                 </div>
@@ -197,7 +207,9 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
                     {
                         showObservation && (
                             <div className='mt-4'>
-                                <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
+                                <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                                    Observaciones
+                                </span>
                                 <textarea
                                     id="observation"
                                     value={observation}
@@ -249,7 +261,9 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
             {(text === 'Rejected' || text === 'Validated') && (
                 <div>
                     <div className='mt-4'>
-                        <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
+                        <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                            Observaciones
+                        </span>
                         <textarea
                             id="observation"
                             value={observation}
@@ -261,18 +275,18 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
                     </div>
 
                     <div className='flex flex-col max-sm:space-y-2 sm:flex-row sm:space-x-5 w-full justify-end'>
-                            <button
-                                type="button"
-                                className="flex justify-center items-center bg-d-blue hover:bg-d-blue h-[45px] w-full sm:max-w-44 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
-                                onClick={() => handleSendEditorWorksheet()}
-                            >
-                                <span className="text-sm font-medium text-white">Enviar a editor</span>
-                                {isLoadingRejected ?
-                                    <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
-                                    :
-                                    <XMarkIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
-                                }
-                            </button>
+                        <button
+                            type="button"
+                            className="flex justify-center items-center bg-d-blue hover:bg-d-blue h-[45px] w-full sm:max-w-44 text-white px-4 py-2 rounded-full mt-8 md:mt-14 mb-8"
+                            onClick={() => handleSendEditorWorksheet()}
+                        >
+                            <span className="text-sm font-medium text-white">Enviar a editor</span>
+                            {isLoadingRejected ?
+                                <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
+                                :
+                                <XMarkIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
+                            }
+                        </button>
 
                         <button
                             type="button"
