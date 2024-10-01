@@ -1,21 +1,15 @@
 'use client'
-
-import { MagazineCardData } from '../../interfaces/MagazineWorkSheetReview'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { useParams, useRouter } from "next/navigation";
 import { useAlert } from '@/src/users/context/AlertContext';
-import { AuthorCardData } from '../../interfaces/AuthorWorkSheetReview';
 import { GroupingCardData } from '../../interfaces/GroupingWorkSheetReview';
 import { ValidateGroupingWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-grouping-worksheet';
 import { RejectWorksheet } from '@/src/app/dashboard/workSheetReview/actions/reject-worksheet';
 import { SendEditorWorksheet } from '@/src/app/dashboard/workSheetReview/actions/send-editor-worksheet';
 
-
-
 export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ data }) => {
-
     const [isLoadingValidate, setIsLoadingValidate] = useState(false);
     const [isLoadingRejected, setIsLoadingRejected] = useState(false);
     const [observation, setObservation] = useState(data.observation);
