@@ -1,5 +1,4 @@
 'use client'
-
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
@@ -9,8 +8,6 @@ import { AnthologyCardData } from '../../interfaces/AnthologyWorkSheetReview';
 import { ValidateAnthologyWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-anthology-worksheet';
 import { RejectWorksheet } from '@/src/app/dashboard/workSheetReview/actions/reject-worksheet';
 import { SendEditorWorksheet } from '@/src/app/dashboard/workSheetReview/actions/send-editor-worksheet';
-
-
 
 export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = ({ data }) => {
 
@@ -30,7 +27,7 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
         setIsLoadingValidate(true)
         const validatedData = {
             text: anthologyText,
-            criticism: criticismText
+            criticism: data.criticism.map((cri, index) => ({...cri, text: criticismText[index]})),
         };
 
         const response = await ValidateAnthologyWorkSheet(validatedData, id);
@@ -161,7 +158,7 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
                                                 <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
-                                                    {criticismText[index].split('\n').map((line, index) => (
+                                                    {criticismText[index]?.split('\n').map((line, index) => (
                                                         <span key={index}>
                                                             {line}
                                                             <br />

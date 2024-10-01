@@ -1,14 +1,11 @@
 'use server'
-
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { AnthologyTextValues } from "@/src/worksheetsReview/interfaces/AnthologyWorkSheetReview";
 import { getServerSession } from "next-auth";
-
-
+import { revalidatePath } from "next/cache";
 
 export const ValidateAnthologyWorkSheet = async (payload: AnthologyTextValues, anthologyId: string | string[]) => {
     const session = await getServerSession(authOptions);
-
     if (!session?.user.roles.includes('admin' || 'reviewer')) {
         return {
             ok: false,
@@ -18,13 +15,13 @@ export const ValidateAnthologyWorkSheet = async (payload: AnthologyTextValues, a
 
     try {
         console.log(payload)
-        // const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${anthologyId}`, {
-        //     method: 'POST',
-        //     headers: { 
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ ...payload}),
-        // });
+        const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${anthologyId}`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...payload}),
+        });
 
         const responseNeo4j = await fetch(process.env.API_URL + `/cards/upload/anthology/${anthologyId}`, {
             method: 'PUT',
@@ -33,16 +30,16 @@ export const ValidateAnthologyWorkSheet = async (payload: AnthologyTextValues, a
             },
         });
 
-        // const responseAuthor = await responseValidate.json();
+        const responseAuthor = await responseValidate.json();
         const responseAuthorNeo4j = await responseNeo4j.json();
 
-        // if (!responseAuthor || !responseAuthorNeo4j) {
-        //     console.error('Error al validar la ficha:', responseAuthor);
-        //     return {
-        //         ok: false,
-        //         message: responseAuthor.message || 'No se pudo validar la ficha',
-        //     };
-        // }
+        if (!responseAuthor || !responseAuthorNeo4j) {
+            console.error('Error al validar la ficha:', responseAuthor);
+            return {
+                ok: false,
+                message: responseAuthor.message || 'No se pudo validar la ficha',
+            };
+        }
 
         if ( !responseAuthorNeo4j) {
             console.error('Error al validar la ficha:', responseAuthorNeo4j);
@@ -51,6 +48,8 @@ export const ValidateAnthologyWorkSheet = async (payload: AnthologyTextValues, a
                 message: responseAuthorNeo4j.message || 'No se pudo validar la ficha',
             };
         }
+
+        revalidatePath('/dashboard/worksheets/validatedSheets');
 
         return {
             ok: true,

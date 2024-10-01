@@ -4,6 +4,7 @@ import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { AuthorTextValues } from "@/src/worksheetsReview/interfaces/AuthorWorkSheetReview";
 import { MagazineTextValues } from "@/src/worksheetsReview/interfaces/MagazineWorkSheetReview";
 import { getServerSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 
 
@@ -52,6 +53,8 @@ export const ValidateMagazineWorkSheet = async (payload: MagazineTextValues, mag
                 message: responseAuthorNeo4j.message || 'No se pudo validar la ficha',
             };
         }
+
+        revalidatePath('/dashboard/worksheets/validatedSheets');
 
         return {
             ok: true,

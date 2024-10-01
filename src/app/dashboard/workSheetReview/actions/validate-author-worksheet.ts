@@ -1,10 +1,8 @@
 'use server'
-
 import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { AuthorTextValues } from "@/src/worksheetsReview/interfaces/AuthorWorkSheetReview";
 import { getServerSession } from "next-auth";
-
-
+import { revalidatePath } from "next/cache";
 
 export const ValidateAuthorWorkSheet = async (payload: AuthorTextValues, authorId: string | string[]) => {
     const session = await getServerSession(authOptions);
@@ -17,14 +15,14 @@ export const ValidateAuthorWorkSheet = async (payload: AuthorTextValues, authorI
     }
 
     try {
-        console.log(payload)
-        // const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/${authorId}`, {
-        //     method: 'POST',
-        //     headers: { 
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify({ ...payload}),
-        // });
+        console.log("Payload: ", payload)
+        const responseValidate = await fetch(process.env.API_URL + `/cards/save-texts/author/${authorId}`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...payload}),
+        });
 
         const responseNeo4j = await fetch(process.env.API_URL + `/cards/upload/author/${authorId}`, {
             method: 'PUT',
@@ -33,16 +31,16 @@ export const ValidateAuthorWorkSheet = async (payload: AuthorTextValues, authorI
             },
         });
 
-        // const responseAuthor = await responseValidate.json();
+        const responseAuthor = await responseValidate.json();
         const responseAuthorNeo4j = await responseNeo4j.json();
 
-        // if (!responseAuthor || !responseAuthorNeo4j) {
-        //     console.error('Error al validar la ficha:', responseAuthor);
-        //     return {
-        //         ok: false,
-        //         message: responseAuthor.message || 'No se pudo validar la ficha',
-        //     };
-        // }
+        if (!responseAuthor || !responseAuthorNeo4j) {
+            console.error('Error al validar la ficha:', responseAuthor);
+            return {
+                ok: false,
+                message: responseAuthor.message || 'No se pudo validar la ficha',
+            };
+        }
 
         if ( !responseAuthorNeo4j) {
             console.error('Error al validar la ficha:', responseAuthorNeo4j);
@@ -51,6 +49,8 @@ export const ValidateAuthorWorkSheet = async (payload: AuthorTextValues, authorI
                 message: responseAuthorNeo4j.message || 'No se pudo validar la ficha',
             };
         }
+
+        revalidatePath('/dashboard/worksheets/validatedSheets');
 
         return {
             ok: true,

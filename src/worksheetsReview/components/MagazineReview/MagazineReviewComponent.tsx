@@ -6,10 +6,8 @@ import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { useParams, useRouter } from "next/navigation";
 import { useAlert } from '@/src/users/context/AlertContext';
-import { AuthorCardData } from '../../interfaces/AuthorWorkSheetReview';
 import { ValidateMagazineWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-magazine-worksheet';
 import { RejectWorksheet } from '@/src/app/dashboard/workSheetReview/actions/reject-worksheet';
-import { div } from 'framer-motion/client';
 import { SendEditorWorksheet } from '@/src/app/dashboard/workSheetReview/actions/send-editor-worksheet';
 
 export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ data }) => {

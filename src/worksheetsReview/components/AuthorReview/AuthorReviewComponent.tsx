@@ -1,5 +1,4 @@
 'use client'
-
 import { ValidateAuthorWorkSheet } from '@/src/app/dashboard/workSheetReview/actions/validate-author-worksheet';
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import { ArrowUpTrayIcon, XMarkIcon } from '@heroicons/react/24/outline';
@@ -12,7 +11,6 @@ import { SendEditorWorksheet } from '@/src/app/dashboard/workSheetReview/actions
 
 
 export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data }) => {
-
     const [isLoadingValidate, setIsLoadingValidate] = useState(false);
     const [isLoadingRejected, setIsLoadingRejected] = useState(false);
     const [observation, setObservation] = useState(data.observation);
@@ -28,10 +26,11 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
 
     const handleValidateAuthor = async () => {
         setIsLoadingValidate(true)
+
         const validatedData = {
             text: authorText,
-            works: worksText,
-            criticism: criticismText
+            works: data.works.map((work, index) => ({...work, text: worksText[index]})),
+            criticism: data.criticism.map((cri, index) => ({...cri, text: criticismText[index]})),
         };
 
         const response = await ValidateAuthorWorkSheet(validatedData, id);
@@ -174,8 +173,9 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                                         </TabPanel>
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
+                                                    {worksText[index]?.split('\n').map((line, index) => (
                                                 <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
-                                                    {worksText[index].split('\n').map((line, index) => (
+                                                    {worksText[index]?.split('\n').map((line, index) => (
                                                         <span key={index} className="block mb-4">
                                                             {line}
                                                         </span>
@@ -236,7 +236,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
                                                 <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
-                                                    {criticismText[index].split('\n').map((line, index) => (
+                                                    {criticismText[index]?.split('\n').map((line, index) => (
                                                         <span key={index} className="block mb-4">
                                                             {line}
                                                         </span>

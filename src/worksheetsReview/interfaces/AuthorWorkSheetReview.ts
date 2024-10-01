@@ -1,24 +1,47 @@
-
-
-
 export interface AuthorTextValues {
-    text: string;               // Texto principal del autor
-    works: string[];            // Arreglo de textos de las obras
-    criticism: string[];        // Arreglo de textos de las críticas
+    text: string;             
+    works: Work[];            
+    criticism: Criticism[];      
 }
 
 // Interfaz para una obra (Work)
 export interface Work {
-    title: string;
-    text: string;
+    title?: string;
+    originalLanguage?: string;
+    genre?: string;
+    publicationDate?: string;
+    publicationPlace?: Publication;
+    description?: string;
+    multimedia?: Multimedia[];
+    text?: string;
 }
-
+  
 // Interfaz para una crítica (Criticism)
 export interface Criticism {
-    title: string;
-    text: string;
+    title?: string;
+    type?: string;
+    author?: string;
+    publicationDate?: string;
+    link?: string;
+    bibliographicReference?: string;
+    description?: string;
+    multimedia?: Multimedia[];
+    text?: string;
 }
 
+export interface Multimedia {
+    link?: string;
+    title?: string;
+    type?: string;
+    description?: string;
+}
+  
+export interface Publication {
+    city?: string;
+    printingHouse?: string;
+    publisher?: string;
+}
+  
 // Interfaz para el autor
 export interface Author {
     title: string;
