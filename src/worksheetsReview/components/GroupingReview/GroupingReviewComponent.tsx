@@ -26,7 +26,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
         setIsLoadingValidate(true)
         const validatedData = {
             text: groupingText,
-            criticism: criticismText
+            criticism: data.criticism.map((cri, index) => ({ ...cri, text: criticismText[index] })),
         };
 
         const response = await ValidateGroupingWorkSheet(validatedData, id);
@@ -157,7 +157,7 @@ export const GroupingReviewComponent: React.FC<{ data: GroupingCardData }> = ({ 
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
                                                 <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
-                                                    {criticismText[index].split('\n').map((line, index) => (
+                                                    {criticismText[index]?.split('\n').map((line, index) => (
                                                         <span key={index}>
                                                             {line}
                                                             <br />
