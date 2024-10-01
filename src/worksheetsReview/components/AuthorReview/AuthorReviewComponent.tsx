@@ -15,7 +15,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
     const [isLoadingRejected, setIsLoadingRejected] = useState(false);
     const [observation, setObservation] = useState(data.observation);
     const [authorText, setAuthorText] = useState(data.author.text);
-    const [worksText, setWorksText] = useState(data.works.map(work => work.text));
+    const [worksText, setWorksText] = useState(data.works.map(work => work.text || ''));
     const [criticismText, setCriticismText] = useState(data.criticism.map(criticism => criticism.text));
     const { showAlert } = useAlert();
     const { id, text } = useParams();
@@ -23,14 +23,14 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
 
     const [showObservation, setShowObservation] = useState(false); // Controla la visibilidad del campo de observación
     const [showRejectButton, setShowRejectButton] = useState(false); // Controla la visibilidad del botón de rechazar
-
+    console.log(data)
     const handleValidateAuthor = async () => {
         setIsLoadingValidate(true)
 
         const validatedData = {
             text: authorText,
-            works: data.works.map((work, index) => ({...work, text: worksText[index]})),
-            criticism: data.criticism.map((cri, index) => ({...cri, text: criticismText[index]})),
+            works: data.works.map((work, index) => ({ ...work, text: worksText[index] })),
+            criticism: data.criticism.map((cri, index) => ({ ...cri, text: criticismText[index] })),
         };
 
         const response = await ValidateAuthorWorkSheet(validatedData, id);
@@ -82,6 +82,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                     <span className='text-3xl font-extrabold text-d-blue tracking-wider border-b-4 border-d-blue py-2 px-4 rounded-lg'>
                         Autor
                     </span>
+
                 </div>
                 <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
                     {data.author.title}
@@ -152,6 +153,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                                         </Tab>
                                     </TabList>
                                     <TabPanels className="mt-2">
+                                        {/* Panel de edición */}
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <label htmlFor="comment" className="sr-only">
                                                 Comment
@@ -171,16 +173,17 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                                                 />
                                             </div>
                                         </TabPanel>
+
+                                        {/* Panel de vista previa */}
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
-                                                    {worksText[index]?.split('\n').map((line, index) => (
-                                                <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
-                                                    {worksText[index]?.split('\n').map((line, index) => (
-                                                        <span key={index} className="block mb-4">
+                                                {worksText[index]?.split('\n').map((line, idx) => (
+                                                    <div key={idx} className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
+                                                        <span className="block mb-4">
                                                             {line}
                                                         </span>
-                                                    ))}
-                                                </div>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </TabPanel>
                                     </TabPanels>
@@ -189,6 +192,7 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                         </div>
                     ))
                 }
+
             </div>
 
             <div className=''>
