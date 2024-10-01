@@ -79,37 +79,14 @@ export const MagazineReview = () => {
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Idioma original</dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{values.originalLanguage}</dd>
                                     </div>
-                                    <div className="px-4 py-6 sm:grid sm:grid-cols-5 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-gray-900">Números</dt>
-                                        <div className='sm:col-span-4'>
-
-                                            {values.numbers.map((number, index) =>
-                                                <div key={index} className='sm:col-span-4 sm:grid space-y-4 sm:gap-y-4 sm:items-center sm:grid-cols-4'>
-                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0">
-                                                        <div className="flex flex-col max-sm:space-y-4 sm:flex-row sm:items-center sm:space-x-8">
-                                                            <span className="text-sm font-semibold"> </span>{number.number}<br />
-                                                            <div>
-
-                                                                <span>
-                                                                    <span className="text-sm font-semibold"> </span>{number.publicationPlace.city}<br />
-                                                                </span>
-                                                                <span>
-                                                                    <span className="text-sm font-semibold"></span>{number.publicationPlace.printingHouse}<br />
-                                                                </span>
-                                                                <span>
-                                                                    <span className="text-sm font-semibold"></span>{number.publicationPlace.publisher}<br />
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </dd>
-                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{number.issueDate}</dd>
-                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{number.lenguage}</dd>
-                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{number.translator}</dd>
-                                                </div>
-                                            )}
-                                        </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Fecha de primer número</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{values.firstIssueDate}</dd>
                                     </div>
-
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Fecha de último número</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{values.lastIssueDate}</dd>
+                                    </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Creadores</dt>
                                         <div className='sm:col-span-2'>
@@ -125,6 +102,14 @@ export const MagazineReview = () => {
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Secciones de la revista</dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{values.sections}</dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Referencia bibliográfica</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{values.bibliographicReference}</dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-gray-900">Link</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{values.link}</dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Descripcion</dt>

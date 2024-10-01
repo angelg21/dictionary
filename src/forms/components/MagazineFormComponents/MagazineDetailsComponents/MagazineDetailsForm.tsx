@@ -124,13 +124,13 @@ export const MagazineDetailsForm = () => {
 
                 <SelectDate
                     name={"firstIssueDate"}
-                    title="Fecha de nacimiento"
+                    title="Fecha de primer número"
                     globalStyle={"col-span-1"}
                 />
 
                 <SelectDate
                     name={"lastIssueDate"}
-                    title="Fecha de nacimiento"
+                    title="Fecha de ultimo número"
                     globalStyle={"col-span-1"}
                 />
 

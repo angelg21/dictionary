@@ -130,7 +130,7 @@ export const GroupPublicationsInput = ({globalStyle}: PublicationInputProps) => 
                 {/* Tabla */}
 
                 <div className="flex">
-                    {values.groupPublications.length > 0 &&
+                    {values.groupPublications?.length > 0 &&
                         <GroupingPublicationTable
                             publications={values.groupPublications}
                             onDelete={handleDeletePublications}

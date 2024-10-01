@@ -90,7 +90,7 @@ export const MembersInput = ({ globalStyle }: MembersInputProps) => {
                     {/* Tabla */}
 
                     <div className="flex">
-                        {values.members.length > 0 &&
+                        {values.members?.length > 0 &&
                             <MembersTable
                                 members={values.members}
                                 onDelete={handleDeleteMembers}

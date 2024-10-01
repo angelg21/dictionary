@@ -82,7 +82,6 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                     <span className='text-3xl font-extrabold text-d-blue tracking-wider border-b-4 border-d-blue py-2 px-4 rounded-lg'>
                         Autor
                     </span>
-
                 </div>
                 <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
                     {data.author.title}
@@ -177,13 +176,13 @@ export const AuthorReviewComponent: React.FC<{ data: AuthorCardData }> = ({ data
                                         {/* Panel de vista previa */}
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
-                                                {worksText[index]?.split('\n').map((line, idx) => (
-                                                    <div key={idx} className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
-                                                        <span className="block mb-4">
+                                                <div  className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
+                                                {worksText[index]?.split('\n\n').map((line, idx) => (
+                                                        <span key={idx} className="block mb-4">
                                                             {line}
                                                         </span>
-                                                    </div>
                                                 ))}
+                                                </div>
                                             </div>
                                         </TabPanel>
                                     </TabPanels>
