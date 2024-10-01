@@ -124,13 +124,6 @@ export const CriticismsForm = () => {
             setFieldValue('criticism', updatedCriticisms);
         }
 
-        // Agregar la obra al array de works en Formik
-        // if (criticisms.title) {
-        //     const updatedCriticis = { ...criticisms, multimedia: cleanedMultimedia };
-        //     const updatedCriticisms = [...values.criticism, updatedCriticis];
-        //     setFieldValue('criticism', updatedCriticisms);
-        // }
-
         setIsFormVisible(false)
         // Limpiar los campos del input
         setCriticisms({
@@ -167,11 +160,13 @@ export const CriticismsForm = () => {
         setSelectedDay(null);
         setSelectedMonth(null);
         setSelectedYear(null);
+        setEditingIndex(null);
         // Al presionar el botón, mostrar el formulario
     };
 
     const handleFormNotVisible = () => {
         setIsFormVisible(false); // Al presionar el botón, mostrar el formulario
+        setEditingIndex(null);
     };
 
     useEffect(() => {

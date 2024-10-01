@@ -27,7 +27,7 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
         setIsLoadingValidate(true)
         const validatedData = {
             text: anthologyText,
-            criticism: data.criticism.map((cri, index) => ({...cri, text: criticismText[index]})),
+            criticism: data.criticism.map((cri, index) => ({ ...cri, text: criticismText[index] })),
         };
 
         const response = await ValidateAnthologyWorkSheet(validatedData, id);
@@ -71,11 +71,18 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
             setIsLoadingRejected(false)
         }
     }
-    
+
     return (
         <div className='flex flex-col space-y-9 mb-12'>
             <div>
-                <span className='flex text-d-blue text-2xl font-bold mb-6'>{data.anthology.title}</span>
+                <div className="flex items-center justify-center mb-8">
+                    <span className='text-3xl font-extrabold text-d-blue tracking-wider border-b-4 border-d-blue py-2 px-4 rounded-lg'>
+                        Antología
+                    </span>
+                </div>
+                <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                    {data.anthology.title}
+                </span>
                 <form action="#">
                     <TabGroup defaultIndex={1}>
                         <TabList className="group flex items-center">
@@ -104,11 +111,10 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
                             </TabPanel>
                             <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                 <div className="border-b">
-                                    <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
+                                    <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
                                         {anthologyText.split('\n').map((line, index) => (
-                                            <span key={index}>
+                                            <span key={index} className="block mb-4">
                                                 {line}
-                                                <br />
                                             </span>
                                         ))}
                                     </div>
@@ -120,11 +126,17 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
             </div>
 
             <div className=''>
-                <span className='flex text-d-blue text-2xl font-bold mb-6'>Críticas</span>
+                <div className="flex items-center justify-center mb-8">
+                    <span className='text-3xl font-extrabold text-d-green tracking-wider border-b-4 border-d-green py-2 px-4 rounded-lg'>
+                        Críticas
+                    </span>
+                </div>
                 {
                     data.criticism.map((criticism, index) => (
                         <div key={index} className='my-4'>
-                            <span className='flex text-d-blue text-2xl font-bold mb-6'>{criticism.title}</span>
+                            <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                                {criticism.title}
+                            </span>
                             <form action="#">
                                 <TabGroup defaultIndex={1}>
                                     <TabList className="group flex items-center">
@@ -157,11 +169,10 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
                                         </TabPanel>
                                         <TabPanel className="-m-0.5 rounded-lg p-0.5">
                                             <div className="border-b">
-                                                <div className="mx-px mt-px px-3 pb-12 pt-2 text-sm leading-5 text-gray-800">
-                                                    {criticismText[index]?.split('\n').map((line, index) => (
-                                                        <span key={index}>
+                                                <div className="mx-4 my-4 px-5 pb-10 pt-4 text-lg font-serif italic leading-relaxed tracking-wide text-gray-900 bg-gray-100 shadow-lg rounded-lg">
+                                                    {criticismText[index]?.split('\n\n').map((line, idx) => (
+                                                        <span key={idx} className="block mb-4">
                                                             {line}
-                                                            <br />
                                                         </span>
                                                     ))}
                                                 </div>
@@ -181,15 +192,17 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
 
                     {/* Checkbox para agregar observación */}
                     <div className='mt-4'>
-                        <label className='flex items-center'>
+                        <label className='flex items-center cursor-pointer'>
                             <input
                                 type="checkbox"
                                 name="observationCheckbox"
-                                className='text-d-blue focus:ring-d-blue hover:ring-d-blue mr-2'
+                                className='h-5 w-5 text-d-blue border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-d-blue focus:ring-offset-1 transition duration-150 ease-in-out hover:ring-d-blue hover:ring-2 hover:ring-offset-2 mr-3'
                                 checked={showObservation}
                                 onChange={handleRejectToggle}
                             />
-                            <span className='text-sm font-medium'>¿Desea agregar una observación para rechazar la ficha?</span>
+                            <span className='text-base font-semibold text-gray-800 select-none transition duration-150 ease-in-out hover:text-d-blue'>
+                                ¿Desea agregar una observación para rechazar la ficha?
+                            </span>
                         </label>
                     </div>
 
@@ -197,7 +210,9 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
                     {
                         showObservation && (
                             <div className='mt-4'>
-                                <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
+                                <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                                    Observaciones
+                                </span>
                                 <textarea
                                     id="observation"
                                     value={observation}
@@ -249,7 +264,9 @@ export const AnthologyReviewComponent: React.FC<{ data: AnthologyCardData }> = (
             {(text === 'Rejected' || text === 'Validated') && (
                 <div>
                     <div className='mt-4'>
-                        <span className='flex text-d-blue text-2xl font-bold mb-6'>Observaciones</span>
+                        <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                            Observaciones
+                        </span>
                         <textarea
                             id="observation"
                             value={observation}

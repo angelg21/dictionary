@@ -33,13 +33,6 @@ export const AuthorDetailsForm = () => {
         { title: '', link: '', type: '', description: '' }
     );
     const [typeMultimediaField, setTypeMultimediaField] = useState<File | undefined>(undefined)
-    // const [mediaFields, setMediaFields] = useState(
-    //     [{ title: '', link: '', type: '', description: '' }]
-    // );
-
-    // const isMultimediaFieldEmpty = (multimediaField: { title: any; link: any; type: any; description: any }) => {
-    //     return !multimediaField.title && !multimediaField.link && !multimediaField.type && !multimediaField.description;
-    // };
     
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];

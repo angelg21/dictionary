@@ -2,7 +2,7 @@
 
 import { useFormikContext } from "formik";
 import { GroupingFormValues } from "../interfaces/GroupingForm";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SimpleInputWithoutFormik } from "../../SimpleInputWithoutFormik/SimpleInputWithoutFormik";
 import { SelectDateWithProps } from "../../SelectDateWithProps/SelectDateWithProps";
 import { ExpandableInputWork } from "../../WorksFormComponents/EpandableInputWork/ExpandableInputWork";
@@ -13,6 +13,8 @@ import { ButtonWithIconLeft } from "@/src/components/ButtonWithIconLeft/ButtonWi
 import { CrtiticismsTable } from "../../CriticismsFormComponents/CrtiticismsTable";
 import Link from "next/link";
 import { DebugFormikValues } from "../../DebugFormikValues/DebugFormikValues";
+import { Criticism } from "../../AuthorFormComponents/interfaces/AuthorForm";
+import { ExpandableDescriptionMultimedia } from "../../WorksFormComponents/ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia";
 
 
 export const GroupingCriticismsForm = () => {
@@ -33,7 +35,9 @@ export const GroupingCriticismsForm = () => {
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
-    const [criticisms, setCriticisms] = useState({
+
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [criticisms, setCriticisms] = useState<Criticism>({
         title: '',
         type: '',
         author: '',
@@ -41,14 +45,8 @@ export const GroupingCriticismsForm = () => {
         link: '',
         bibliographicReference: '',
         description: '',
-        multimedia: [
-            {
-                title: '',
-                link: '',
-                type: '',
-                description: ''
-            }
-        ]
+        multimedia: [],
+        text: ''
     });
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -92,8 +90,6 @@ export const GroupingCriticismsForm = () => {
             ...multimediaField,
             description: descriptionMedia,
         });
-        setCriticisms({ ...criticisms, multimedia: [...criticisms.multimedia, multimediaField] });
-        setDescriptionMedia('')
     }
 
     const handleDeleteMultimedia = (index: number) => {
@@ -103,21 +99,49 @@ export const GroupingCriticismsForm = () => {
 
     const handleFormVisible = () => {
         setIsFormVisible(true); // Al presionar el botón, mostrar el formulario
+        setCriticisms({
+            title: '',
+            type: '',
+            author: '',
+            publicationDate: '',
+            link: '',
+            bibliographicReference: '',
+            description: '',
+            multimedia: [],
+            text: ''
+        });
+
+        setSelectedDay(null);
+        setSelectedMonth(null);
+        setSelectedYear(null);
+        setEditingIndex(null);
+        // Al presionar el botón, mostrar el formulario
     };
 
     const handleFormNotVisible = () => {
         setIsFormVisible(false); // Al presionar el botón, mostrar el formulario
+        setEditingIndex(null);
     };
 
     const handleAddCriticisms = () => {
-        // Agregar la obra al array de works en Formik
-        if (criticisms.title) {
+        if (!criticisms.title) return;
+
+        if (editingIndex !== null) {
+            // Si estamos editando una critica, actualizamos la existente
+            const updatedCriticism = values.criticism.map((existingCriticism, index) =>
+                index === editingIndex ? criticisms : existingCriticism
+            );
+            setFieldValue('criticism', updatedCriticism);
+            setEditingIndex(null); // Resetear el índice de edición
+        } else {
+            // Agregar una nueva critica
             const updatedCriticisms = [...values.criticism, criticisms];
             setFieldValue('criticism', updatedCriticisms);
         }
         setIsFormVisible(false)
         // Limpiar los campos del input
         setCriticisms({
+            text: '',
             title: '',
             type: '',
             author: '',
@@ -137,7 +161,23 @@ export const GroupingCriticismsForm = () => {
         setSelectedDay(null)
         setSelectedMonth(null)
         setSelectedYear(null)
+    };
 
+    useEffect(() => {
+        if (multimediaField.link && multimediaField.title && multimediaField.type && multimediaField.description) {
+            setCriticisms({ ...criticisms, multimedia: [...criticisms.multimedia, multimediaField] });
+            setDescriptionMedia('')
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
+        }
+    }, [multimediaField.description]);
+
+    const handleEditCriticism = (index: number) => {
+        const workToEdit = values.criticism[index];
+        setCriticisms(workToEdit); // Carga la obra seleccionada en el estado del formulario
+        setEditingIndex(index);
+        setIsFormVisible(true); // Muestra el formulario para editar
     };
 
     return (
@@ -242,16 +282,15 @@ export const GroupingCriticismsForm = () => {
                                         typeMultimediaField={typeMultimediaField}
                                     />
 
-                                    <ExpandableInputWork
-                                        id="media-description"
+                                    <ExpandableDescriptionMultimedia
+                                        id="description"
                                         value={descriptionMedia}
                                         onChange={(e) => setDescriptionMedia(e.target.value)}
                                         label={"Descripción"}
                                         labelTextStyle={"text-gray-900 text-sm"}
                                         globalStyle={"col-span-1 md:row-span-2"}
+                                        multimediaLink={multimediaField.link}
                                     />
-
-
 
                                     <button
                                         type="button"
@@ -309,6 +348,7 @@ export const GroupingCriticismsForm = () => {
                                 </div>
                                 <CrtiticismsTable
                                     criticisms={values.criticism}
+                                    handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
                                     <Link href={'/dashboard/forms/groupingForm/groupingDetails'}>
@@ -331,6 +371,7 @@ export const GroupingCriticismsForm = () => {
                 }
 
             </div>
+            <DebugFormikValues/>
         </div>
     )
 }

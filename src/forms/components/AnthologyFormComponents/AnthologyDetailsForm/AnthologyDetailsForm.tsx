@@ -14,6 +14,7 @@ import { MultimediaCharged } from '../../MultimediaCharged/MultimediaCharged'
 import { PlusIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { PlacePublicationAnthologyForm } from './PlacePublicationAnthologyForm'
+import { DescriptionMultimedia } from '../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia'
 
 export const AnthologyDetailsForm = () => {
 
@@ -78,13 +79,16 @@ export const AnthologyDetailsForm = () => {
 
     const handleDeleteMultimedia = (index: number) => {
         const updatedMultimedias = values.multimedia.filter((_, i) => i !== index);
-        setFieldValue( "multimedia",  updatedMultimedias );
+        setFieldValue("multimedia", updatedMultimedias);
     };
 
     useEffect(() => {
         if (multimediaField.description) {
             setFieldValue("multimedia", [...values.multimedia, multimediaField]);
-            setDescriptionMedia(''); // Resetea la descripción
+            setDescriptionMedia('');
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
 
@@ -160,9 +164,9 @@ export const AnthologyDetailsForm = () => {
                     inputWidth={"w-full "}
                     focusBorderColor={"focus:ring-[#003366]"}
                     globalStyle={"col-span-1 md:col-span-3"}
-                />               
+                />
 
-                
+
                 <div className="col-span-full grid grid-cols-1 gap-y-8 md:gap-y-5 md:grid-rows-3 md:grid-cols-2 md:gap-x-7 xl:gap-x-14">
                     <MultimediaInput
                         title={"Archivos multimedia"}
@@ -173,13 +177,14 @@ export const AnthologyDetailsForm = () => {
                         typeMultimediaField={typeMultimediaField}
                     />
 
-                    <ExpandableInputWork
+                    <DescriptionMultimedia
                         id="description"
                         value={descriptionMedia}
                         onChange={(e) => setDescriptionMedia(e.target.value)}
                         label={"Descripción"}
                         labelTextStyle={"text-gray-900 text-sm"}
                         globalStyle={"col-span-1 md:row-span-2"}
+                        multimediaLink={multimediaField.link}
                     />
 
                     <button
@@ -205,9 +210,9 @@ export const AnthologyDetailsForm = () => {
                             <span className="text-[15px] font-medium mr-4">Siguiente</span>
                             <ArrowRightIcon className="w-6 h-6 text-white" />
                         </button>
-                    </Link> 
+                    </Link>
 
-                </div> 
+                </div>
                 <DebugFormikValues />
             </div>
         </div>

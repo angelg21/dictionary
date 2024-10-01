@@ -308,22 +308,6 @@ export const AuthorFormReviews = () => {
                     }
                 </div>
 
-                {/* <div className='flex justify-end w-full'>
-
-                    <button
-                        type="button"
-                        className="flex justify-center items-center bg-d-green-light hover:bg-d-green-dark h-[45px] w-full sm:max-w-40 text-white px-4 py-2 rounded-full mt-8 md:mt-12 mb-8"
-                        onClick={() => handleLoadForm()}
-                    >
-                        <span className="text-sm font-medium text-white">Subir ficha</span>
-                        {isLoading ?
-                            <img src="/assets/loading (1).png" alt="show-password-icon" className='animate-spin ml-4' />
-                            :
-                            <ArrowUpTrayIcon aria-hidden="true" className="h-6 w-6  text-white ml-4" />
-                        }
-                    </button>
-
-                </div> */}
                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between md:items-center md:mt-12'>
                     <Link href={`/dashboard/forms/authorForm/${id}/works`}>
                         <button className={`flex max-md:w-full md:max-w-40 h-[45px] max-md:justify-center items-center rounded-full px-5 py-3 text-white bg-d-blue`}>

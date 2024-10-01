@@ -11,8 +11,10 @@ import { SimpleInputWithoutFormik } from "../../SimpleInputWithoutFormik/SimpleI
 import { SelectDateWithProps } from "../../SelectDateWithProps/SelectDateWithProps"
 import { useFormikContext } from "formik"
 import { AnthologyFormValues } from "../interfaces/AnthologyForm"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import { Criticism } from "../../AuthorFormComponents/interfaces/AuthorForm"
+import { ExpandableDescriptionMultimedia } from "../../WorksFormComponents/ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia"
 
 export const AnthologysCriticism = () => {
 
@@ -32,7 +34,10 @@ export const AnthologysCriticism = () => {
     const [selectedDay, setSelectedDay] = useState<number | null>(null);
     const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
     const [selectedYear, setSelectedYear] = useState<number | null>(null);
-    const [criticisms, setCriticisms] = useState({
+
+    const [editingIndex, setEditingIndex] = useState<number | null>(null);
+    const [criticisms, setCriticisms] = useState<Criticism>({
+        text: '',
         title: '',
         type: '',
         author: '',
@@ -40,14 +45,7 @@ export const AnthologysCriticism = () => {
         link: '',
         bibliographicReference: '',
         description: '',
-        multimedia: [
-            {
-                title: '',
-                link: '',
-                type: '',
-                description: ''
-            }
-        ]
+        multimedia: []
     });
 
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,8 +91,6 @@ export const AnthologysCriticism = () => {
             ...multimediaField,
             description: descriptionMedia,
         });
-        setCriticisms({ ...criticisms, multimedia: [...criticisms.multimedia, multimediaField] });
-        setDescriptionMedia('')
     }
 
     const handleDeleteMultimedia = (index: number) => {
@@ -104,18 +100,47 @@ export const AnthologysCriticism = () => {
 
     const handleFormVisible = () => {
         setIsFormVisible(true); // Al presionar el botón, mostrar el formulario
+        setCriticisms({
+            title: '',
+            type: '',
+            author: '',
+            publicationDate: '',
+            link: '',
+            bibliographicReference: '',
+            description: '',
+            multimedia: [],
+            text: ''
+        });
+
+        setSelectedDay(null);
+        setSelectedMonth(null);
+        setSelectedYear(null);
+        setEditingIndex(null);
+        // Al presionar el botón, mostrar el formulario
     };
 
     const handleFormNotVisible = () => {
         setIsFormVisible(false); // Al presionar el botón, mostrar el formulario
+        setEditingIndex(null);
     };
 
     const handleAddCriticisms = () => {
         // Agregar la obra al array de works en Formik
-        if (criticisms.title) {
+        if (!criticisms.title) return;
+
+        if (editingIndex !== null) {
+            // Si estamos editando una obra, actualizamos la existente
+            const updatedCriticism = values.criticism.map((existingCriticism, index) =>
+                index === editingIndex ? criticisms : existingCriticism
+            );
+            setFieldValue('criticism', updatedCriticism);
+            setEditingIndex(null); // Resetear el índice de edición
+        } else {
+            // Agregar una nueva obra
             const updatedCriticisms = [...values.criticism, criticisms];
             setFieldValue('criticism', updatedCriticisms);
         }
+
         setIsFormVisible(false)
         // Limpiar los campos del input
         setCriticisms({
@@ -126,20 +151,30 @@ export const AnthologysCriticism = () => {
             link: '',
             bibliographicReference: '',
             description: '',
-            multimedia: [
-                {
-                    title: '',
-                    link: '',
-                    type: '',
-                    description: ''
-                }
-            ]
+            multimedia: [],
+            text: ''
         });
         setSelectedDay(null)
         setSelectedMonth(null)
         setSelectedYear(null)
-
     };
+
+    const handleEditCriticism = (index: number) => {
+        const workToEdit = values.criticism[index];
+        setCriticisms(workToEdit); // Carga la obra seleccionada en el estado del formulario
+        setEditingIndex(index);
+        setIsFormVisible(true); // Muestra el formulario para editar
+    };
+
+    useEffect(() => {
+        if (multimediaField.link && multimediaField.title && multimediaField.type && multimediaField.description) {
+            setCriticisms({ ...criticisms, multimedia: [...criticisms.multimedia, multimediaField] });
+            setDescriptionMedia('')
+            setMultimediaField({ title: '', link: '', type: '', description: '' })
+            setImageUrl('')
+            setTypeMultimediaField(undefined)
+        }
+    }, [multimediaField.description]);
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div>
@@ -242,13 +277,14 @@ export const AnthologysCriticism = () => {
                                         typeMultimediaField={typeMultimediaField}
                                     />
 
-                                    <ExpandableInputWork
-                                        id="media-description"
+                                    <ExpandableDescriptionMultimedia
+                                        id="description"
                                         value={descriptionMedia}
                                         onChange={(e) => setDescriptionMedia(e.target.value)}
                                         label={"Descripción"}
                                         labelTextStyle={"text-gray-900 text-sm"}
                                         globalStyle={"col-span-1 md:row-span-2"}
+                                        multimediaLink={multimediaField.link}
                                     />
 
 
@@ -309,6 +345,7 @@ export const AnthologysCriticism = () => {
                                 </div>
                                 <CrtiticismsTable
                                     criticisms={values.criticism}
+                                    handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
                                     <Link href={'dashboard/forms/magazineForm/magazineDetails'}>
