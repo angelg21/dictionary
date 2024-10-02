@@ -17,6 +17,7 @@ import { PlusIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import Link from "next/link"
 import { MagazineNumbers } from "./MagazineNumbers"
 import { DescriptionMultimedia } from "../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia"
+import { PlacePublicationForm } from "./PlacePublicationForm"
 
 
 export const MagazineDetailsForm = () => {
@@ -92,7 +93,6 @@ export const MagazineDetailsForm = () => {
     }, [multimediaField.description]);
 
 
-
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div className="grid grid-cols-1 gap-y-8 md:grid-cols-3 xl:gap-x-14 md:gap-y-7 md:gap-x-7 xl:gap-y-8">
@@ -140,6 +140,15 @@ export const MagazineDetailsForm = () => {
                     inputWidth={"w-full "}
                     focusBorderColor={"focus:ring-[#003366]"}
                     globalStyle={"col-span-1"}
+                />
+
+                <PlacePublicationForm
+                    type="text"
+                    label="Lugar"
+                    labelTextStyle="text-gray-900 text-sm"
+                    inputWidth="w-full"
+                    focusBorderColor="focus:ring-[#003366]"
+                    globalStyle="col-span-3"
                 />
 
                 <CreatorsMagazine

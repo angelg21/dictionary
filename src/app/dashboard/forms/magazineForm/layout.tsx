@@ -49,6 +49,11 @@ export default function MagazineFormLayout({ children }: { children: React.React
         firstIssueDate: '',
         lastIssueDate: '',
         issuesPublished: '',
+        publicationPlace: {
+            city: '',
+            printingHouse: '',
+            publisher: '',
+        },
         link: '',
         bibliographicReference: '',
         description: '',

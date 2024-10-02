@@ -5,6 +5,7 @@ export interface MagazineFormValues {
     firstIssueDate: string,
     lastIssueDate: string,
     issuesPublished: string,
+    publicationPlace: { city: string; printingHouse: string; publisher: string };
     link: string;
     bibliographicReference: string;
     description: string,
