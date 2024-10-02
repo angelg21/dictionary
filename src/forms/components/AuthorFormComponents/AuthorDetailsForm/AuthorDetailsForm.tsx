@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { CheckTypeGender } from "../CheckTypeGender/CheckTypeGender"
 import { DebugFormikValues } from "../../DebugFormikValues/DebugFormikValues"
 import { ExpandableInput } from "../../ExandableInput/ExpandableInput"
@@ -16,16 +16,20 @@ import { useEffect, useState } from "react"
 import { useFormikContext } from "formik"
 import { AuthorFormValues } from "../interfaces/AuthorForm"
 import { DescriptionMultimedia } from "../DescriptionMultimedia/DescriptionMultimedia";
+import { useAlert } from "@/src/users/context/AlertContext";
+import { saveAuthorForm } from "@/src/app/dashboard/forms/authorForm/actions/save-author-form";
 
 
 export const AuthorDetailsForm = () => {
 
+    const router = useRouter();
     const { id } = useParams();
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'authorsPreset';
     const { values, setFieldValue } = useFormikContext<AuthorFormValues>();
-
+    const { showAlert } = useAlert();
+    
     const [descriptionMedia, setDescriptionMedia] = useState('');
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -33,7 +37,7 @@ export const AuthorDetailsForm = () => {
         { title: '', link: '', type: '', description: '' }
     );
     const [typeMultimediaField, setTypeMultimediaField] = useState<File | undefined>(undefined)
-    
+
     const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -96,6 +100,16 @@ export const AuthorDetailsForm = () => {
             setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
+
+    const handleSafeForm = async () => {
+        const response = await saveAuthorForm(values, id);
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/authorForm/${id}/works`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
 
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
@@ -257,14 +271,13 @@ export const AuthorDetailsForm = () => {
                 />
 
                 <div className='flex col-span-full max-md:w-full justify-end md:col-span-3 mt-6'>
-
-                    <Link href={`/dashboard/forms/authorForm/${id}/works`}>
-                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                        </button>
-                    </Link>
-
+                    <button
+                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                        onClick={() => handleSafeForm()}
+                    >
+                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                    </button>
                 </div>
             </div>
         </div>

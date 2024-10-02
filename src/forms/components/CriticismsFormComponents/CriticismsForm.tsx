@@ -9,12 +9,14 @@ import { PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/out
 import { useFormikContext } from "formik";
 import { AuthorFormValues, Criticism } from "../AuthorFormComponents/interfaces/AuthorForm";
 import { ButtonWithIconLeft } from "@/src/components/ButtonWithIconLeft/ButtonWithIconLeft";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { DebugFormikValues } from "../DebugFormikValues/DebugFormikValues";
 import { CrtiticismsTable } from "./CrtiticismsTable";
 import { MultimediaChargedWorks } from "../WorksFormComponents/MultimediaChargedWorks/MultimediaChargedWorks";
 import { ExpandableDescriptionMultimedia } from "../WorksFormComponents/ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia";
+import { useAlert } from "@/src/users/context/AlertContext";
+import { saveAuthorForm } from "@/src/app/dashboard/forms/authorForm/actions/save-author-form";
 
 
 export const CriticismsForm = () => {
@@ -24,6 +26,8 @@ export const CriticismsForm = () => {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'authorCriticismsPreset';
     const { values, setFieldValue } = useFormikContext<AuthorFormValues>();
+    const { showAlert } = useAlert();
+    const router = useRouter();
 
     const [multimediaField, setMultimediaField] = useState(
         { title: '', link: '', type: '', description: '' }
@@ -185,6 +189,16 @@ export const CriticismsForm = () => {
         setEditingIndex(index);
         setIsFormVisible(true); // Muestra el formulario para editar
     };
+
+    const handleSafeForm = async () => {
+        const response = await saveAuthorForm(values, id);
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/authorForm/${id}/authorFormReview`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
 
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
@@ -365,12 +379,13 @@ export const CriticismsForm = () => {
                                             <span className="text-[15px] font-medium">Anterior</span>
                                         </button>
                                     </Link>
-                                    <Link href={`/dashboard/forms/authorForm/${id}/authorFormReview`}>
-                                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                                        </button>
-                                    </Link>
+                                    <button
+                                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                                        onClick={() => handleSafeForm()}
+                                    >
+                                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                                    </button>
                                 </div>
                             </div>
                         )

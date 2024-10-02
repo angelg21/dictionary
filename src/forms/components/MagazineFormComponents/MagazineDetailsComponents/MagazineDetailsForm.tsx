@@ -15,9 +15,11 @@ import { ExpandableInputWork } from "../../WorksFormComponents/EpandableInputWor
 import { MultimediaCharged } from "../../MultimediaCharged/MultimediaCharged"
 import { PlusIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import Link from "next/link"
-import { MagazineNumbers } from "./MagazineNumbers"
 import { DescriptionMultimedia } from "../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia"
 import { PlacePublicationForm } from "./PlacePublicationForm"
+import { useAlert } from "@/src/users/context/AlertContext"
+import { useParams, useRouter } from "next/navigation"
+import { saveMagazineForm } from "@/src/app/dashboard/forms/magazineForm/actions/save-magazine-form"
 
 
 export const MagazineDetailsForm = () => {
@@ -25,6 +27,9 @@ export const MagazineDetailsForm = () => {
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'magazinesPreset';
+    const { showAlert } = useAlert();
+    const router = useRouter();
+    const { id } = useParams();
 
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -93,6 +98,14 @@ export const MagazineDetailsForm = () => {
     }, [multimediaField.description]);
 
 
+    const handleSafeForm = async () => {
+        const response = await saveMagazineForm(values, id);
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+        } else {
+            showAlert("Error", "error");
+        }
+    }
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div className="grid grid-cols-1 gap-y-8 md:grid-cols-3 xl:gap-x-14 md:gap-y-7 md:gap-x-7 xl:gap-y-8">
@@ -240,12 +253,13 @@ export const MagazineDetailsForm = () => {
 
                 <div className='flex col-span-full max-md:w-full justify-end md:col-span-3 mt-6'>
 
-                    <Link href={'/dashboard/forms/magazineForm/magazineCriticisms'}>
-                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                        </button>
-                    </Link>
+                    <button
+                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                        onClick={() => handleSafeForm()}
+                    >
+                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                    </button>
 
                 </div>
                 <DebugFormikValues />

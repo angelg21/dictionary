@@ -309,7 +309,7 @@ export const AuthorFormReviews = () => {
                 </div>
 
                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between md:items-center md:mt-12'>
-                    <Link href={`/dashboard/forms/authorForm/${id}/works`}>
+                    <Link href={`/dashboard/forms/authorForm/${id}/criticisms`}>
                         <button className={`flex max-md:w-full md:max-w-40 h-[45px] max-md:justify-center items-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                             <ArrowLeftIcon className="w-6 h-6 text-white mr-4" />
                             <span className="text-[15px] font-medium">Anterior</span>

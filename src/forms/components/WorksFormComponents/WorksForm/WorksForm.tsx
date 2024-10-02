@@ -3,7 +3,7 @@ import { PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/out
 import { useEffect, useState } from "react"
 import { AuthorFormValues, WorkFormValues } from "../../AuthorFormComponents/interfaces/AuthorForm"
 import { SimpleInputWithoutFormik } from "../../SimpleInputWithoutFormik/SimpleInputWithoutFormik"
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useFormikContext } from 'formik'
 import { SelectDateWithProps } from "../../SelectDateWithProps/SelectDateWithProps"
 import { PlacePublicationWorkForm } from "../PlacePublicationWorkForm/PlacePublicationWorkForm"
@@ -16,6 +16,8 @@ import { MultimediaChargedWorks } from '../MultimediaChargedWorks/MultimediaChar
 import { WorkEditions } from '../WorkEditions/WorkEditions'
 import { DebugFormikValues } from '../../DebugFormikValues/DebugFormikValues'
 import { ExpandableDescriptionMultimedia } from '../ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia'
+import { useAlert } from '@/src/users/context/AlertContext'
+import { saveAuthorForm } from '@/src/app/dashboard/forms/authorForm/actions/save-author-form'
 
 
 
@@ -28,7 +30,9 @@ export const WorksForm = () => {
     const uploadPreset = 'worksPreset';
 
     const { values, setFieldValue } = useFormikContext<AuthorFormValues>();
-
+    const { showAlert } = useAlert();
+    const router = useRouter();
+    
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -111,7 +115,7 @@ export const WorksForm = () => {
 
     const handleAddWork = () => {
         if (!work.title) return;
-    
+
         if (editingIndex !== null) {
             // Si estamos editando una obra, actualizamos la existente
             const updatedWorks = values.works.map((existingWork, index) =>
@@ -124,9 +128,9 @@ export const WorksForm = () => {
             const updatedWorks = [...values.works, work];
             setFieldValue('works', updatedWorks);
         }
-    
+
         setIsFormVisible(false);
-    
+
         // Limpiar los campos del formulario
         setWork({
             title: '',
@@ -139,7 +143,7 @@ export const WorksForm = () => {
             editions: [{ editiontitle: '', publicationDate: '', publicationPlace: { city: '', printingHouse: '', publisher: '' }, language: '', translator: '' }],
             text: ''
         });
-    
+
         setSelectedDay(null);
         setSelectedMonth(null);
         setSelectedYear(null);
@@ -163,11 +167,11 @@ export const WorksForm = () => {
             editions: [],
             text: ''
         });
-    
+
         setSelectedDay(null);
         setSelectedMonth(null);
         setSelectedYear(null);
-        
+
     };
 
     const handleFormNotVisible = () => {
@@ -190,7 +194,17 @@ export const WorksForm = () => {
         setEditingIndex(index);
         setIsFormVisible(true); // Muestra el formulario para editar
     };
-    
+
+    const handleSafeForm = async () => {
+        const response = await saveAuthorForm(values, id);
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/authorForm/${id}/criticisms`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
+
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div>
@@ -383,14 +397,13 @@ export const WorksForm = () => {
                                             <span className="text-[15px] font-medium">Anterior</span>
                                         </button>
                                     </Link>
-                                    <Link href={`/dashboard/forms/authorForm/${id}/criticisms`}>
-                                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                                        </button>
-                                    </Link>
-
-
+                                    <button
+                                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                                        onClick={() => handleSafeForm()}
+                                    >
+                                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                                    </button>
                                 </div>
                             </div>
                         )

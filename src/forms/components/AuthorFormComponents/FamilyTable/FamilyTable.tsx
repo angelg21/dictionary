@@ -37,7 +37,7 @@ export const FamilyTable = ({ relatives, onDelete, onEdit }: FamilyTableProps) =
                             {relatives.map((relative, index) => (
                                 (relative.name != '') &&
                                 <tr key={index}>
-                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm  ">
+                                    <td className="py-4 pl-4 pr-3 text-sm max-w-xs break-words whitespace-normal">
                                         <div className="font-medium text-gray-900">{relative.name}</div>
                                     </td>
 
