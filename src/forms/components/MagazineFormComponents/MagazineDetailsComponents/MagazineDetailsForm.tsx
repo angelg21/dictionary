@@ -102,10 +102,12 @@ export const MagazineDetailsForm = () => {
         const response = await saveMagazineForm(values, id);
         if (response.ok) {
             showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/magazineForm/${id}/magazineCriticisms`);
         } else {
             showAlert("Error", "error");
         }
     }
+    
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div className="grid grid-cols-1 gap-y-8 md:grid-cols-3 xl:gap-x-14 md:gap-y-7 md:gap-x-7 xl:gap-y-8">

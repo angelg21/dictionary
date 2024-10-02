@@ -27,7 +27,7 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
         setIsLoadingValidate(true)
         const validatedData = {
             text: magazineText,
-            criticism: criticismText
+            criticism: data.criticism.map((cri, index) => ({ ...cri, text: criticismText[index] }))
         };
 
         const response = await ValidateMagazineWorkSheet(validatedData, id);
@@ -135,7 +135,9 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
                 {
                     data.criticism.map((criticism, index) => (
                         <div key={index} className='my-4'>
-                            <span className='flex text-d-blue text-2xl font-bold mb-6'>{criticism.title}</span>
+                            <span className="flex text-gray-900 text-xl font-semibold font-serif tracking-wide mb-4">
+                                {criticism.title}
+                            </span>
                             <form action="#">
                                 <TabGroup defaultIndex={1}>
                                     <TabList className="group flex items-center">
@@ -191,15 +193,17 @@ export const MagazineReviewComponent: React.FC<{ data: MagazineCardData }> = ({ 
 
                     {/* Checkbox para agregar observación */}
                     <div className='mt-4'>
-                        <label className='flex items-center'>
+                        <label className='flex items-center cursor-pointer'>
                             <input
                                 type="checkbox"
                                 name="observationCheckbox"
-                                className='text-d-blue focus:ring-d-blue hover:ring-d-blue mr-2'
+                                className='h-5 w-5 text-d-blue border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-d-blue focus:ring-offset-1 transition duration-150 ease-in-out hover:ring-d-blue hover:ring-2 hover:ring-offset-2 mr-3'
                                 checked={showObservation}
                                 onChange={handleRejectToggle}
                             />
-                            <span className='text-sm font-medium'>¿Desea agregar una observación para rechazar la ficha?</span>
+                            <span className='text-base font-semibold text-gray-800 select-none transition duration-150 ease-in-out hover:text-d-blue'>
+                                ¿Desea agregar una observación para rechazar la ficha?
+                            </span>
                         </label>
                     </div>
 

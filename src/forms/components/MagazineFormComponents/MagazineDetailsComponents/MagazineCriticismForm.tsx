@@ -14,11 +14,18 @@ import { CrtiticismsTable } from "../../CriticismsFormComponents/CrtiticismsTabl
 import Link from "next/link";
 import { ButtonWithIconLeft } from "@/src/components/ButtonWithIconLeft/ButtonWithIconLeft";
 import { MultimediaChargedWorks } from "../../WorksFormComponents/MultimediaChargedWorks/MultimediaChargedWorks";
+import { useParams, useRouter } from "next/navigation";
+import { saveMagazineForm } from "@/src/app/dashboard/forms/magazineForm/actions/save-magazine-form";
+import { useAlert } from "@/src/users/context/AlertContext";
 
 
 
 
 export const MagazineCriticismForm = () => {
+
+    const { id } = useParams();
+    const router = useRouter();
+    const { showAlert } = useAlert();
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'magazineCriticismsPreset';
@@ -44,7 +51,7 @@ export const MagazineCriticismForm = () => {
         type: string;
         description: string;
     }
-    
+
     const [criticisms, setCriticisms] = useState<{
         title: string;
         type: string;
@@ -137,7 +144,7 @@ export const MagazineCriticismForm = () => {
     };
 
     const handleFormNotVisible = () => {
-        setIsFormVisible(false); 
+        setIsFormVisible(false);
     };
 
     const handleAddCriticisms = () => {
@@ -199,7 +206,16 @@ export const MagazineCriticismForm = () => {
         setEditingIndex(index);
         setIsFormVisible(true); // Muestra el formulario para editar
     };
-    
+
+    const handleSafeForm = async () => {
+        const response = await saveMagazineForm(values, id);
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/magazineForm/${id}/magazineFormReview`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div>
@@ -372,20 +388,19 @@ export const MagazineCriticismForm = () => {
                                     handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
-                                    <Link href={'dashboard/forms/magazineForm/magazineDetails'}>
+                                    <Link href={`/dashboard/forms/magazineForm/${id}/magazineDetails`}>
                                         <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                                             <ArrowLeftIcon className="w-6 h-6 text-white mr-4" />
                                             <span className="text-[15px] font-medium">Anterior</span>
                                         </button>
                                     </Link>
-                                    <Link href={'/dashboard/forms/magazineForm/magazineFormReview'}>
-                                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                                        </button>
-                                    </Link>
-
-
+                                    <button
+                                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                                        onClick={() => handleSafeForm()}
+                                    >
+                                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                                    </button>
                                 </div>
                             </div>
                         )
