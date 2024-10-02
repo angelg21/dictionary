@@ -7,7 +7,6 @@ export interface MagazineFormValues {
     issuesPublished: string,
     publicationPlace: { city: string; printingHouse: string; publisher: string };
     link: string;
-    publicationPlace: { city: string; printingHouse: string; publisher: string };
     bibliographicReference: string;
     description: string,
     multimedia: [
