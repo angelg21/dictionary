@@ -2,6 +2,7 @@ import type { Config } from "tailwindcss";
 import formsPlugin from '@tailwindcss/forms';
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
