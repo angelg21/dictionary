@@ -17,7 +17,7 @@ interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
     videos: { link: '', description: '' }[]; // Array de URLs de videos
     audios: { link: '', description: '' }[];
-    documents: string[] // Array de URLs de audios
+    documents: { link: '', description: '' }[] // Array de URLs de audios
 }
 
 interface Biography {
