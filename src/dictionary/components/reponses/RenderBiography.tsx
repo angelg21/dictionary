@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState, useRef, useEffect } from "react";
-import { BookText, BookOpen, Play, Pause } from 'lucide-react';
+import { BookText, BookOpen, Play, Pause, ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
 
 // Importar los estilos de Swiper
 import 'swiper/css';
@@ -10,9 +10,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
-import { Keyboard, Pagination, Navigation } from 'swiper/modules';
+import { Pagination, Navigation } from 'swiper/modules';
 import '../css/swiper-custom.css'; // Importa el archivo con los estilos personalizados
-
 
 interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
@@ -35,7 +34,6 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
     const [showDescription, setShowDescription] = useState(false); // Mostrar descripción del video
 
     //Audio
-    const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(null); // El audio actualmente en reproducción
     const audioRefs = useRef<HTMLAudioElement[]>([]); // Refs para múltiples reproductores de audio
     const [audioStates, setAudioStates] = useState<boolean[]>([]);
 
@@ -93,11 +91,47 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
         }
     }, [showMultimedia, multimedia.audios.length]);
 
+    const [showNavigation, setShowNavigation] = useState(true);
+
+    // Hook para manejar el tamaño de la ventana
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setShowNavigation(false);
+            } else {
+                setShowNavigation(true);
+            }
+        };
+
+        // Ejecutar al cargar por primera vez
+        handleResize();
+
+        // Listener para cambios en el tamaño de la ventana
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup del listener cuando el componente se desmonta
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    const handleSpeech = (text: string) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'es-ES'; // Cambia el idioma si es necesario
+        window.speechSynthesis.speak(utterance);
+    };
+
+    useEffect(() => {
+        // Detener cualquier voz en curso cuando se desmonte el componente
+        return () => {
+            window.speechSynthesis.cancel();
+        };
+    }, []);
     return (
         <div className="bg-white dark:bg-[#2D2D2D]">
             <h2 className="text-xl font-bold mb-5">{title}</h2>
-            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-8">{text}</p>
-            {/* Botón para mostrar/ocultar multimedia */}
+            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-8 break-words whitespace-normal">{text}</p>
+
             <button
                 onClick={toggleMultimedia}
                 className="text-sm font-semibold text-d-blue dark:text-blue-400 hover:underline dark:hover:hover:underline transition-all flex items-center gap-2"
@@ -117,15 +151,12 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
 
             {/* Renderizar multimedia si está activa */}
             {showMultimedia && (
-                <div className="mt-2">
+                <div className="flex flex-col w-auto mt-7">
+
                     {multimedia.images.length > 0 && (
-                        <div className="my-8">
+                        // <SwiperComponent multimedia = {multimedia} />
                         <Swiper
-                            slidesPerView={1}
-                            spaceBetween={30}
-                            keyboard={{
-                                enabled: true,
-                            }}
+                            spaceBetween={10} // Espacio entre imágenes por defecto
                             pagination={{
                                 clickable: true,
                             }}
@@ -133,9 +164,26 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
                                 nextEl: '.swiper-button-next',
                                 prevEl: '.swiper-button-prev',
                             }}
-                            modules={[Keyboard, Pagination, Navigation]}
-                            className="mySwiper"
-                            style={{ paddingBottom: '15px' }}
+                            breakpoints={{
+                                1024: { // Pantallas grandes
+                                    slidesPerView: 1,
+                                    spaceBetween: 20,
+                                },
+                                768: { // Pantallas medianas
+                                    slidesPerView: 1,
+                                    spaceBetween: 8,
+                                },
+                                640: { // Pantallas más pequeñas
+                                    slidesPerView: 1,
+                                    spaceBetween: 5,
+                                },
+                                320: { // Pantallas muy pequeñas
+                                    slidesPerView: 1,
+                                    spaceBetween: 5,
+                                },
+                            }}
+                            modules={[Pagination, Navigation]}
+                            className="mySwiper max-w-[300px] xs:max-w-[340px] sm:max-w-[415px] md:max-w-[450px] lg:max-w-[500px]"
                         >
                             {multimedia.images.map((img, index) => (
                                 <SwiperSlide key={index}>
@@ -143,33 +191,44 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
                                         <img
                                             src={img.link}
                                             alt={`Imagen ${index + 1}`}
-                                            className="max-w-full max-h-[300px] rounded-lg shadow transition-all duration-300 ease-in-out"
+                                            className="object-contain w-full max-w-[290px] md:max-w-[320px] lg:max-w-[370px] max-h-[300px] rounded-lg shadow transition-all duration-300 ease-in-out"
                                         />
-                                        <span className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+                                        <p className="my-6 text-center text-sm text-gray-700 dark:text-gray-300">
                                             {img.description}
-                                        </span>
+                                        </p>
                                     </div>
                                 </SwiperSlide>
                             ))}
-                    
-                            {/* Custom navigation buttons */}
-                            <div className="swiper-button-next hidden sm:flex text-blue-600 dark:text-blue-400" />
-                            <div className="swiper-button-prev hidden sm:flex text-blue-600 dark:text-blue-400" />
-                        </Swiper>
-                    
-                        <style jsx>{`
-                            @media (max-width: 640px) {
-                                .swiper-button-next, .swiper-button-prev {
-                                    display: none !important;
+                            {/* Botones personalizados de navegación */}
+                            <div className="swiper-button-next absolute top-1/2 right-2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400" />
+                            <div className="swiper-button-prev absolute top-1/2 left-2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400" />
+
+                            <style jsx>{`
+                                .swiper-button-next {
+                                    top: 50%;
+                                    right: 0.5rem; /* Espaciado a la derecha */
+                                    transform: translateY(-100%);
+                                    display: flex; /* Asegúrate de que se muestre correctamente */
                                 }
-                            }
-                        `}</style>
-                    </div>
-                    
+                                .swiper-button-prev {
+                                    top: 50%;
+                                    left: 0.5rem; /* Espaciado a la izquierda */
+                                    transform: translateY(-100%);
+                                    display: flex; /* Asegúrate de que se muestre correctamente */
+                                    }
+                                @media (max-width: 640px) {
+                                    .swiper-button-next,
+                                    .swiper-button-prev {
+                                    display: none !important; /* Oculta en pantallas pequeñas */
+                                    }
+                                }
+                                `}
+                            </style>
+                        </Swiper>
                     )}
 
                     {multimedia.videos.length > 0 && (
-                        <div className="mb-8">
+                        <div className="my-8">
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {multimedia.videos.map((video, index) => (
                                     <div key={index} className="relative">
@@ -228,7 +287,7 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
                             {multimedia.audios.map((audio, index) => (
                                 <div key={index} className=" my-6 p-4 rounded-lg shadow-lg bg-white dark:bg-gray-800 relative">
                                     <div className="flex items-center justify-center mb-4 relative">
-                                    <audio
+                                        <audio
                                             ref={(el) => { audioRefs.current[index] = el!; }} // Asegura que el elemento ref no es null
                                             src={audio.link}
                                             className="hidden"
@@ -303,8 +362,32 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
                             </div>
                         </div>
                     )}
+
                 </div>
             )}
+
+            <div className="flex items-center mt-3 space-x-1">
+                <button 
+                    onClick={() =>handleSpeech(text)} 
+                    className="p-1 text-gray-400 dark:text-gray-500"
+                >
+                    <Volume2 className="w-5 h-5" />
+                </button>
+                <button
+                    //onClick={() => handleRating(index, 'up')}
+                    //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                    className='p-1 text-gray-400 dark:text-gray-500'
+                >
+                    <ThumbsUp className="h-4 w-4" />
+                </button>
+                <button
+                    //onClick={() => handleRating(index, 'down')}
+                    //className={`p-1 ${message.rating === 'down' ? 'text-red-500' : 'text-gray-500'}`}
+                    className='p-1  text-gray-400 dark:text-gray-500'
+                >
+                    <ThumbsDown className="h-4 w-4" />
+                </button>
+            </div>
         </div>
     )
 }

@@ -11,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'xs': '400px',
+      },
       colors: {
         'd-blue': '#003366',
         'd-blue-light-button': '#6699CC',

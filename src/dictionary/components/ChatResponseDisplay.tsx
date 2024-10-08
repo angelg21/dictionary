@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Keyboard, Pagination, Navigation } from 'swiper/modules';
 import './css/swiper-custom.css'; // Importa el archivo con los estilos personalizados
 import { RenderBiography } from './reponses/RenderBiography';
+import { RenderList } from './reponses/RenderList';
 
 interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
@@ -349,8 +350,8 @@ const ChatResponseDisplay: React.FC<ChatResponse> = ({ data }) => {
     return (
         <div>
             {type === 'biography' && RenderBiography(result as Biography)}
+            {type === 'list' && RenderList(result as List)}
             {/* {type === 'comparison' && renderComparison(result as Comparison)}
-            {type === 'list' && renderList(result as List)}
             {type === 'similarity' && renderSimilarity(result as Similarity)}
             {type === 'multimedia' && renderMultimedia(result as MultimediaQA)} */}
             {/* Puedes agregar más tipos si es necesario */}
