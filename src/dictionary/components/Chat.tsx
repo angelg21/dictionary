@@ -338,26 +338,30 @@ export default function Chat() {
     return (
         <AlertProvider>
             <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
-                <div className="flex justify-between items-center p-3">
-                    <h1 className="text-2xl font-mono">Chronicle</h1>
-                    <button
-                        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                        className="text-gray-500 dark:text-gray-400"
-                    >
-                        {theme === 'light' ? (
-                            <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
-                        ) : (
-                            <Sun className="h-[1.2rem] w-[1.2rem] text-d-yellow" />
-                        )}
-                        <span className="sr-only">Cambiar tema</span>
-                    </button>
+                <div className="relative flex justify-between items-center p-3 bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/bg-dark-header.png')]">
+                    <div className="flex items-center justify-center text-center space-x-0">
+                        <span className="text-gray-900 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
+                        <span className="text-gray-900 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
+                    </div>
+                    <img src="/assets/libros.png" alt="Libros" className="absolute bottom-0 right-1 h-16 w-auto translate-y-[4px]" />
                 </div>
-                <div className='w-full h-7 bg-d-blue flex items-center justify-center'>
+                <div className='w-full h-[26px] bg-d-blue flex items-center justify-center'>
                     <ShieldCheckIcon className='h-4 w-4 text-white mr-1' />
                     <p className='font-mono text-xs text-gray-100'>
-                        Chronicle-preview
+                        LetraScopio-preview
                     </p>
                 </div>
+                <button
+                    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                    className="m-6 text-gray-500 dark:text-gray-400"
+                >
+                    {theme === 'light' ? (
+                        <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
+                    ) : (
+                        <Sun className="h-[1.2rem] w-[1.2rem] text-d-yellow" />
+                    )}
+                    <span className="sr-only">Cambiar tema</span>
+                </button>
                 <div className="flex-1 overflow-y-auto p-4">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
