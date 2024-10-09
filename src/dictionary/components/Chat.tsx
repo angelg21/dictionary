@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Send, PenSquare, Leaf, Brain, Lightbulb, Moon, Sun } from 'lucide-react';
 import { useTheme } from "next-themes";
 import Loader from './Loader';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import ChatResponseDisplay from './ChatResponseDisplay';
 import { SendMessage } from '@/src/app/dictionary/actions/send-message';
+import { AlertProvider } from '@/src/users/context/AlertContext';
 
 // Define el tipo para cada mensaje
 interface Message {
@@ -24,6 +25,7 @@ export default function Chat() {
 
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState('');
+    const messagesContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -246,13 +248,17 @@ export default function Chat() {
         setMounted(true);
     }, []);
 
+    // Función para hacer scroll hasta el final
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    }
+        if (messagesContainerRef.current) {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
+    // Forzar el scroll al final cuando cambian los mensajes o el estado de carga
     useEffect(() => {
-        scrollToBottom()
-    }, [messages, loading])
+        scrollToBottom();
+    }, [messages, loading]);
 
     const handleSend = async (content: string) => {
         if (content.trim()) {
@@ -260,32 +266,29 @@ export default function Chat() {
             setMessages(prev => [...prev, newMessage]);
             setInput('');
             setLoading(true); // Inicia el estado de carga
-
-            // Simulación de respuesta del servidor
-            const response = await SendMessage(content)
-            if (response) {
-                const formattedResponse = response.parsedResponse;
-                const assistantMessage: Message = {
-                    role: 'assistant',
-                    query: formattedResponse.query,
-                    data: {
-                        type: formattedResponse.type,
+            // Respuesta del servidor
+            try {
+                const response = await SendMessage(content);
+                if (response) {
+                    const formattedResponse = response.parsedResponse;
+                    const assistantMessage: Message = {
+                        role: 'assistant',
                         query: formattedResponse.query,
-                        result: formattedResponse.result // Aquí estamos almacenando el resultado completo
-                    }
-                };
-
-                setMessages(prev => [
-                    ...prev,
-                    assistantMessage // Agrega el mensaje del asistente
-                ]);
-            } else {
-                console.error("Response is undefined");
+                        data: {
+                            type: formattedResponse.type,
+                            query: formattedResponse.query,
+                            result: formattedResponse.result,
+                        },
+                    };
+                    setMessages((prev) => [...prev, assistantMessage]);
+                } else {
+                    console.error("Response is undefined");
+                }
+            } catch (error) {
+                console.error("Error fetching response:", error);
+            } finally {
+                setLoading(false);
             }
-
-
-
-            setLoading(false);
         }
     };
 
@@ -298,39 +301,30 @@ export default function Chat() {
             setLoading(true); // Inicia el estado de carga
 
             // Simulación de respuesta del servidor
-            const response = await SendMessage(content)
+            //const response = await SendMessage(content)
             if (prueba2) {
-                const formattedResponse = prueba3;
-                const assistantMessage: Message = {
-                    role: 'assistant',
-                    query: formattedResponse.query,
-                    data: {
-                        type: formattedResponse.type,
+                setTimeout(() => {
+                    const formattedResponse = prueba2;
+                    const assistantMessage: Message = {
+                        role: 'assistant',
                         query: formattedResponse.query,
-                        result: formattedResponse.result // Aquí estamos almacenando el resultado completo
-                    }
-                };
-
-                setMessages(prev => [
-                    ...prev,
-                    assistantMessage // Agrega el mensaje del asistente
-                ]);
+                        data: {
+                            type: formattedResponse.type,
+                            query: formattedResponse.query,
+                            result: formattedResponse.result // Aquí estamos almacenando el resultado completo
+                        }
+                    };
+                    setMessages(prev => [
+                        ...prev,
+                        assistantMessage // Agrega el mensaje del asistente
+                    ]);
+                }, 2000);
             } else {
                 console.error("Response is undefined");
             }
-
-
-
             setLoading(false);
         }
     };
-
-    interface ApiResponse {
-        type: 'biography' | 'comparison' | 'list' | 'similarity' | 'multimedia' | 'model';
-        query: string;
-        result: any
-    }
-
 
     const suggestions = [
         { text: "Consejos para una carta de presentación", icon: PenSquare },
@@ -339,133 +333,111 @@ export default function Chat() {
         { text: "Cómo funciona algo", icon: Lightbulb },
     ];
 
-    const handleApiResponse = (responseString: string): ApiResponse => {
-        // Primero, separamos la cadena "json\n" del JSON real
-        const jsonString = responseString.split("json\n")[1].trim();
-
-        // Parseamos la cadena JSON
-        const apiData = JSON.parse(jsonString);
-
-        // Creamos el objeto de respuesta con el formato deseado
-        return {
-            type: 'biography', // Asigna el tipo según sea necesario
-            query: "¿Quién es Teresa Coraspe?", // Puedes ajustar esto según la consulta original
-            result: {
-                title: apiData.title,
-                text: apiData.text,
-                multimedia: {
-                    images: apiData.multimedia.images,
-                    videos: apiData.multimedia.videos,
-                    audios: apiData.multimedia.audios,
-                    documents: apiData.multimedia.documents
-                }
-            }
-        };
-    };
-
     if (!mounted) return null;
 
     return (
-        <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
-            <div className="flex justify-between items-center p-3">
-                <h1 className="text-2xl font-mono">Chronicle</h1>
-                <button
-                    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                    className="text-gray-500 dark:text-gray-400"
-                >
-                    {theme === 'light' ? (
-                        <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
-                    ) : (
-                        <Sun className="h-[1.2rem] w-[1.2rem] text-d-yellow" />
-                    )}
-                    <span className="sr-only">Cambiar tema</span>
-                </button>
-            </div>
-            <div className='w-full h-7 bg-d-blue flex items-center justify-center'>
-                <ShieldCheckIcon className='h-4 w-4 text-white mr-1' />
-                <p className='font-mono text-xs text-gray-100'>
-                    Chronicle-preview
-                </p>
-            </div>
-            <div className="flex-1 overflow-y-auto p-4">
-                <div className="max-w-[800px] mx-auto w-full h-full">
-                    {messages.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full">
-                            <h1 className="text-4xl font-bold mb-4">
-                                <h1 className="text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
-                                    Hola, Angel
+        <AlertProvider>
+            <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
+                <div className="flex justify-between items-center p-3">
+                    <h1 className="text-2xl font-mono">Chronicle</h1>
+                    <button
+                        onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+                        className="text-gray-500 dark:text-gray-400"
+                    >
+                        {theme === 'light' ? (
+                            <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
+                        ) : (
+                            <Sun className="h-[1.2rem] w-[1.2rem] text-d-yellow" />
+                        )}
+                        <span className="sr-only">Cambiar tema</span>
+                    </button>
+                </div>
+                <div className='w-full h-7 bg-d-blue flex items-center justify-center'>
+                    <ShieldCheckIcon className='h-4 w-4 text-white mr-1' />
+                    <p className='font-mono text-xs text-gray-100'>
+                        Chronicle-preview
+                    </p>
+                </div>
+                <div className="flex-1 overflow-y-auto p-4">
+                    <div className="max-w-[800px] mx-auto w-full h-full">
+                        {messages.length === 0 ? (
+                            <div className="flex flex-col items-center justify-center h-full">
+                                <h1 className="text-4xl font-bold mb-4">
+                                    <h1 className="text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
+                                        Hola, Angel
+                                    </h1>
+                                    <p className="text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
+                                        ¿En qué puedo ayudarte?
+                                    </p>
                                 </h1>
-                                <p className="text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
-                                    ¿En qué puedo ayudarte?
-                                </p>
-                            </h1>
 
-                            <div className="grid grid-cols-2 gap-4">
-                                {suggestions.map((suggestion, index) => (
-                                    <button
-                                        key={index}
-                                        className="h-24 flex flex-col items-center justify-center text-center border-gray-300 dark:border-gray-700"
-                                        onClick={() => handleSend(suggestion.text)}
-                                    >
-                                        <suggestion.icon className="h-6 w-6 mb-2" />
-                                        {suggestion.text}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-
-                        <>
-                            {messages.map((message, index) => (
-                                <div key={index} className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'items-start'}`}>
-                                    {/* {message.role === 'assistant' && (
-                                        <div className="w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 flex items-center justify-center">
-                                            <span className="text-white text-sm font-bold">AI</span>
-                                        </div>
-                                    )} */}
-                                    <div className={`my-4 max-w-[800px] inline-block px-4 ${message.role === 'user'
-                                        ? 'rounded-tl-2xl rounded-bl-2xl rounded-br-2xl py-3 bg-[#f4f4f4] text-gray-900 dark:bg-[#4A4A4A] dark:text-gray-100'
-                                        : 'mt-1 bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100'
-                                        }`}>
-                                        {message.role === 'user' ? (
-                                            <span className='break-words'>{message.content}</span> // Muestra el contenido del mensaje del usuario
-                                        ) : (
-                                            message.data && <ChatResponseDisplay data={message.data} /> // Para la respuesta del asistente
-                                        )}
-                                    </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {suggestions.map((suggestion, index) => (
+                                        <button
+                                            key={index}
+                                            className="h-24 flex flex-col items-center justify-center text-center border-gray-300 dark:border-gray-700"
+                                            onClick={() => handleSend(suggestion.text)}
+                                        >
+                                            <suggestion.icon className="h-6 w-6 mb-2" />
+                                            {suggestion.text}
+                                        </button>
+                                    ))}
                                 </div>
-                            ))}
+                            </div>
+                        ) : (
 
-                            {loading && (
-                                <Loader />
-                            )}
-                        </>
-                    )}
+                            <div ref={messagesContainerRef}>
+                                {messages.map((message, index) => (
+                                    <div key={index} className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'items-start'}`}>
+                                        {message.role === 'assistant' && (
+                                            <div className="hidden sm:flex  w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 items-center justify-center">
+                                                <span className="text-white text-sm font-bold">AI</span>
+                                            </div>
+                                        )}
+                                        <div className={`my-4 max-w-[800px] inline-block px-4 ${message.role === 'user'
+                                            ? 'rounded-tl-2xl rounded-bl-2xl rounded-br-2xl py-3 bg-[#f4f4f4] text-gray-900 dark:bg-[#4A4A4A] dark:text-gray-100'
+                                            : 'mt-1 bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100'
+                                            }`}>
+                                            {message.role === 'user' ? (
+                                                <span className='break-words'>{message.content}</span> // Muestra el contenido del mensaje del usuario
+                                            ) : (
+                                                message.data && <ChatResponseDisplay data={message.data} /> // Para la respuesta del asistente
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+
+                                {loading && (
+                                    <Loader />
+                                )}
+                            </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
                 </div>
-                <div ref={messagesEndRef} />
-            </div>
-            <div className="p-4 mb-3 dark:border-gray-700 bg-white dark:bg-[#2D2D2D]">
-                <div className="mb-5 max-w-[800px] mx-auto w-full ">
-                    <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="relative">
-                        <input
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            placeholder="Escribe tu mensaje aquí..."
-                            className="w-full h-14 pl-6 pr-12 rounded-full bg-white dark:bg-[#333333]  dark:placeholder:text-[#B3B3B3] text-gray-900 dark:text-[#EAEAEA] border-0 dark:ring-[#4A4A4A] ring-1 ring-inset ring-gray-300"
-                        />
-                        <button
-                            type="submit"
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-transparent p-2"
-                        >
-                            <Send className="h-5 w-5 text-gray-600 hover:text-gray-800 dark:text-[#B3B3B3] dark:hover:text-[#EAEAEA]" />
-                            <span className="sr-only">Enviar</span>
-                        </button>
-                    </form>
+                <div className="p-4 mb-3 dark:border-gray-700 bg-white dark:bg-[#2D2D2D]">
+                    <div className="mb-5 max-w-[800px] mx-auto w-full ">
+                        <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="relative">
+                            <input
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="Escribe tu mensaje aquí..."
+                                className="w-full h-14 pl-6 pr-12 rounded-full bg-white dark:bg-[#333333]  dark:placeholder:text-[#B3B3B3] text-gray-900 dark:text-[#EAEAEA] border-0 dark:ring-[#4A4A4A] ring-1 ring-inset ring-gray-300"
+                            />
+                            <button
+                                type="submit"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 bg-transparent hover:bg-transparent p-2"
+                            >
+                                <Send className="h-5 w-5 text-gray-600 hover:text-gray-800 dark:text-[#B3B3B3] dark:hover:text-[#EAEAEA]" />
+                                <span className="sr-only">Enviar</span>
+                            </button>
+                        </form>
+                    </div>
+                    <p className='flex items-center justify-center text-xs text-gray-500 dark:text-gray-400'>
+                        Powered by&nbsp;<span className="font-semibold"> UCAB Guayana</span>
+                    </p>
                 </div>
-                <p className='flex items-center justify-center text-xs text-gray-500 dark:text-gray-400'>
-                    Powered by&nbsp;<span className="font-semibold"> UCAB Guayana</span>
-                </p>
             </div>
-        </div>
+        </AlertProvider>
     );
 }

@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState, useRef, useEffect } from "react";
-import { BookText, BookOpen, Play, Pause, ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
+import { BookText, BookOpen, Play, Pause, ThumbsUp, ThumbsDown, Volume2, Copy } from 'lucide-react';
 
 // Importar los estilos de Swiper
 import 'swiper/css';
@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 import '../css/swiper-custom.css'; // Importa el archivo con los estilos personalizados
+import { useAlert } from '@/src/users/context/AlertContext';
 
 interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
@@ -32,6 +33,7 @@ interface List {
 
 export const RenderList = ({ title, items }: List) => {
 
+    const { showAlert } = useAlert();
     const [showMultimedia, setShowMultimedia] = useState<{ [key: number]: boolean }>({}); // Estado para mostrar/ocultar multimedia
     //Video
     const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Para manejar el modo cine
@@ -106,7 +108,7 @@ export const RenderList = ({ title, items }: List) => {
 
     useEffect(() => {
         if (showMultimedia) {
-            setAudioStates(items.map(item => new Array(item.multimedia.audios.length).fill(false))); // Inicializar el estado de cada audio para cada item
+            items && setAudioStates(items.map(item => new Array(item.multimedia.audios.length).fill(false))); // Inicializar el estado de cada audio para cada item
         }
     }, [showMultimedia, items]);
 
@@ -143,10 +145,16 @@ export const RenderList = ({ title, items }: List) => {
         };
     }, []);
 
+    const handleCopy = (textToCopy: string) => {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showAlert("Texto copiado en el portapapeles", "success");
+        });
+    };
+
     return (
         <div className="bg-white dark:bg-[#2D2D2D]">
             <h2 className="text-xl font-bold mb-5">{title}</h2>
-            {items.length > 0 &&
+            {items &&
                 items.map((item, index) => (
                     <div key={index} className='flex my-12'>
                         <div className="bg-white dark:bg-[#2D2D2D]">
@@ -154,11 +162,17 @@ export const RenderList = ({ title, items }: List) => {
                             <p className="mt-2 text-gray-700 dark:text-gray-300 mb-4 break-words whitespace-normal">{item.text}</p>
                             <button
                                 onClick={() => handleSpeech(item.text)}
-                                className="p-1 text-gray-400 dark:text-gray-500 mb-8"
+                                className="p-1 text-gray-400 dark:text-gray-500"
                             >
-                                <Volume2 className="w-5 h-5" />
+                                <Volume2 className="w-4 h-4" />
                             </button>
-
+                            <button
+                                onClick={() => handleCopy(item.text)}
+                                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                                className='p-1 text-gray-400 dark:text-gray-500 mb-8'
+                            >
+                                <Copy className="h-4 w-4" />
+                            </button>
                             <button
                                 onClick={() => toggleMultimedia(index)}
                                 className="text-sm font-semibold text-d-blue dark:text-blue-400 hover:underline dark:hover:hover:underline transition-all flex items-center gap-2"

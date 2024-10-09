@@ -1,3 +1,4 @@
+
 import Chat from "@/src/dictionary/components/Chat";
 import { ThemeProvider } from "next-themes";
 

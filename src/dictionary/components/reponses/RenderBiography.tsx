@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { useState, useRef, useEffect } from "react";
-import { BookText, BookOpen, Play, Pause, ThumbsUp, ThumbsDown, Volume2 } from 'lucide-react';
+import { BookText, BookOpen, Play, Pause, ThumbsUp, ThumbsDown, Volume2, Copy } from 'lucide-react';
 
 // Importar los estilos de Swiper
 import 'swiper/css';
@@ -12,6 +12,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // import required modules
 import { Pagination, Navigation } from 'swiper/modules';
 import '../css/swiper-custom.css'; // Importa el archivo con los estilos personalizados
+import { useAlert } from '@/src/users/context/AlertContext';
 
 interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
@@ -28,6 +29,8 @@ interface Biography {
 
 export const RenderBiography = ({ title, text, multimedia }: Biography) => {
 
+    const [copySuccess, setCopySuccess] = useState(false);
+
     const [showMultimedia, setShowMultimedia] = useState(false); // Estado para mostrar/ocultar multimedia
     //Video
     const [selectedVideo, setSelectedVideo] = useState<string | null>(null); // Para manejar el modo cine
@@ -36,6 +39,8 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
     //Audio
     const audioRefs = useRef<HTMLAudioElement[]>([]); // Refs para múltiples reproductores de audio
     const [audioStates, setAudioStates] = useState<boolean[]>([]);
+
+    const { showAlert } = useAlert();
 
     const handleVideoClick = (videoLink: string) => {
         setSelectedVideo(videoLink);
@@ -116,9 +121,29 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
     }, []);
 
     const handleSpeech = (text: string) => {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'es-ES'; // Cambia el idioma si es necesario
-        window.speechSynthesis.speak(utterance);
+        // Dividir el texto en fragmentos por múltiples delimitadores
+        const sentences = text.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!|\n|,|;)/).filter(sentence => sentence.trim() !== '');
+
+        let currentIndex = 0;
+
+        const speakSentence = () => {
+            if (currentIndex < sentences.length) {
+                const utterance = new SpeechSynthesisUtterance(sentences[currentIndex].trim());
+                utterance.lang = 'es-ES'; // Cambia el idioma si es necesario
+
+                // Cuando termina una oración, pasar a la siguiente
+                utterance.onend = () => {
+                    currentIndex++;
+                    speakSentence(); // Reproducir la siguiente oración
+                };
+
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+
+        // Asegurarse de que no haya otra narración en curso
+        window.speechSynthesis.cancel();
+        speakSentence(); // Comenzar la narración
     };
 
     useEffect(() => {
@@ -127,6 +152,13 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
             window.speechSynthesis.cancel();
         };
     }, []);
+
+    const handleCopy = (textToCopy: string) => {
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            showAlert("Texto copiado en el portapapeles", "success");
+        });
+    };
+
     return (
         <div className="bg-white dark:bg-[#2D2D2D]">
             <h2 className="text-xl font-bold mb-5">{title}</h2>
@@ -367,11 +399,18 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
             )}
 
             <div className="flex items-center mt-3 space-x-1">
-                <button 
-                    onClick={() =>handleSpeech(text)} 
+                <button
+                    onClick={() => handleSpeech(text)}
                     className="p-1 text-gray-400 dark:text-gray-500"
                 >
-                    <Volume2 className="w-5 h-5" />
+                    <Volume2 className="w-4 h-4" />
+                </button>
+                <button
+                    onClick={() => handleCopy(text)}
+                    //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                    className='p-1 text-gray-400 dark:text-gray-500'
+                >
+                    <Copy className="h-4 w-4" />
                 </button>
                 <button
                     //onClick={() => handleRating(index, 'up')}
