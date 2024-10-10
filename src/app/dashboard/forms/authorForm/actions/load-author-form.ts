@@ -1,7 +1,7 @@
 'use server'
 
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { AuthorFormValues } from "@/src/forms/components/AuthorFormComponents/interfaces/AuthorForm";
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
 
 
@@ -9,12 +9,12 @@ import { getServerSession } from "next-auth";
 export const loadAuthorForm = async (payload: AuthorFormValues, authorId: string | string[]) => {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user.roles.includes('admin' || 'editor')) {
-        return {
-            ok: false,
-            message: 'No tienes permisos para realizar esta acción',
-        };
-    }
+    // if (!session?.user.roles.includes('admin' || 'editor')) {
+    //     return {
+    //         ok: false,
+    //         message: 'No tienes permisos para realizar esta acción',
+    //     };
+    // }
 
     try {
         console.log('autor', authorId)

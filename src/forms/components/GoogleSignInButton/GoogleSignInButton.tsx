@@ -5,7 +5,7 @@
  * with different callback URLs.
  */
 
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+
 import { getServerSession } from "next-auth";
 import { signIn } from "next-auth/react";
 

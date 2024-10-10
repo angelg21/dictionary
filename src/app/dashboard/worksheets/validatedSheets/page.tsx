@@ -1,8 +1,8 @@
 import { WorkSheetFile } from "@/src/worksheets/componentes/WorkSheetFile/WorkSheetFile";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { getAllValidated } from "../actions/get-all-validated";
 import FilteredWorksheets from "@/src/worksheets/componentes/FilteredWorksheets/FilteredWorksheets";
+import { authOptions } from "@/utils/config/authOptions";
 
 export const revalidate = 0;
 

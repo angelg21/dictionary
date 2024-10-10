@@ -1,6 +1,7 @@
 'use server'
 
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
 
 
@@ -8,12 +9,12 @@ import { getServerSession } from "next-auth";
 export const RejectWorksheet = async (payload: string, id: string | string[]) => {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user.roles.includes('admin' || 'reviewer')) {
-        return {
-            ok: false,
-            message: 'No tienes permisos para realizar esta acción',
-        };
-    }
+    // if (!session?.user.roles.includes('admin' || 'reviewer')) {
+    //     return {
+    //         ok: false,
+    //         message: 'No tienes permisos para realizar esta acción',
+    //     };
+    // }
 
     try {
         const response = await fetch(process.env.API_URL + `/cards/reject/${id}`, {

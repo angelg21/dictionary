@@ -1,6 +1,6 @@
 import LoginForm from "@/src/forms/components/LoginForm/LoginForm";
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
 const LoginPage: React.FC = async () => {
