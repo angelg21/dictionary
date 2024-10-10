@@ -1,7 +1,7 @@
 'use server'
 
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import { GroupingTextValues } from "@/src/worksheetsReview/interfaces/GroupingWorkSheetReview";
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
 
@@ -10,12 +10,12 @@ import { revalidatePath } from "next/cache";
 export const ValidateGroupingWorkSheet = async (payload: GroupingTextValues, groupingId: string | string[]) => {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user.roles.includes('admin' || 'reviewer')) {
-        return {
-            ok: false,
-            message: 'No tienes permisos para realizar esta acción',
-        };
-    }
+    // if (!session?.user.roles.includes('admin' || 'reviewer')) {
+    //     return {
+    //         ok: false,
+    //         message: 'No tienes permisos para realizar esta acción',
+    //     };
+    // }
 
     try {
         console.log(payload)

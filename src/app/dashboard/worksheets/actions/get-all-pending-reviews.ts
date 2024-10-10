@@ -1,6 +1,6 @@
 'use server'
 
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
 
 export const getAllPendingReviews = async (userId?: string) => {

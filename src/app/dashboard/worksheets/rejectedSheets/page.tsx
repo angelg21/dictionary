@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
 import FilteredWorksheets from "@/src/worksheets/componentes/FilteredWorksheets/FilteredWorksheets";
 import { getAllRejectedSheets } from "../actions/get-all-rejected";
+import { authOptions } from "@/utils/config/authOptions";
 
 export const revalidate = 0;
 

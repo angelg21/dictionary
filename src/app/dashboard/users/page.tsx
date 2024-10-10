@@ -1,9 +1,9 @@
 import FilteredUserTable from "@/src/users/components/FilteredUserTable/FilteredUserTable";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { getUsers } from "@/src/users/actions/get-paginated-users";
 import { redirect } from "next/navigation";
 import { AlertProvider } from "@/src/users/context/AlertContext";
+import { authOptions } from "@/utils/config/authOptions";
 
 export const revalidate = 0;
 

@@ -1,24 +1,25 @@
 'use server'
-import { authOptions } from "@/src/app/api/auth/[...nextauth]/route";
+
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
 
 interface GetUsersByRoleProps {
-  type: string;
-  excludeIds: string[];
+    type: string;
+    excludeIds: string[];
 }
 
-export const getUsersByRole = async( {type, excludeIds = []}: GetUsersByRoleProps) => {
+export const getUsersByRole = async ({ type, excludeIds = [] }: GetUsersByRoleProps) => {
 
     const session = await getServerSession(authOptions);
 
-    if ( !session?.user.roles.includes('admin') ) {
+    if (!session?.user.roles.includes('admin')) {
         return {
             ok: false,
             message: 'No tienes permisos para realizar esta acción',
         };
     }
 
-    try{
+    try {
         const response = await fetch(process.env.API_URL + `/users/find-by-role?type=${type}&excludeIds=${excludeIds.join(', ')}`, {
             method: 'GET',
             headers: {

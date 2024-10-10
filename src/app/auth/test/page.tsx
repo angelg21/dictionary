@@ -3,7 +3,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-export const FormComponent: React.FC = () => {
+const FormComponent: React.FC = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string().email("Correo electrónico inválido").required('Requerido'),
     password: Yup.string().required('Requerido'),

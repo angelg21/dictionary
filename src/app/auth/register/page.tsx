@@ -1,6 +1,6 @@
 import RegisterForm from "@/src/forms/components/RegisterForm/RegisterForm";
+import { authOptions } from "@/utils/config/authOptions";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 
 const RegisterPage: React.FC = async () => {
