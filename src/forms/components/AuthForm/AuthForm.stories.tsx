@@ -24,8 +24,14 @@ export const LoginForm: Story = {
     args: {
         formTitle: 'Iniciar Sesión',
         inputs: [
-            { id: 'email', name: 'email', type: 'email', labelText: 'Correo electrónico' },
-            { id: 'password', name: 'password', type: 'password', labelText: 'Contraseña' }
+            {
+                id: 'email', name: 'email', type: 'email', labelText: 'Correo electrónico',
+                placeholder: ''
+            },
+            {
+                id: 'password', name: 'password', type: 'password', labelText: 'Contraseña',
+                placeholder: ''
+            }
         ],
         buttonText: 'Ingresar',
         linkQuestion: '¿No tienes una cuenta?',
@@ -42,9 +48,18 @@ export const RegisterForm: Story = {
     args: {
         formTitle: 'Registrarse',
         inputs: [
-            { id: 'fullName', name: 'fullName', type: 'text', labelText: 'Nombre Completo' },
-            { id: 'email', name: 'email', type: 'email', labelText: 'Correo electrónico' },
-            { id: 'password', name: 'password', type: 'password', labelText: 'Contraseña' },
+            {
+                id: 'fullName', name: 'fullName', type: 'text', labelText: 'Nombre Completo',
+                placeholder: ''
+            },
+            {
+                id: 'email', name: 'email', type: 'email', labelText: 'Correo electrónico',
+                placeholder: ''
+            },
+            {
+                id: 'password', name: 'password', type: 'password', labelText: 'Contraseña',
+                placeholder: ''
+            },
         ],
         buttonText: 'Registrarse',
         linkQuestion: '¿Ya tienes una cuenta?',
