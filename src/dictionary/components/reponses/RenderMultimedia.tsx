@@ -1,3 +1,4 @@
+
 'use client'
 
 import Image from 'next/image'
@@ -20,14 +21,12 @@ interface Multimedia {
     audios: { link: '', description: '' }[];
     documents: { link: '', description: '' }[]; // Array de URLs de audios
 }
-
-interface Biography {
+interface MultimediaQA {
     title: string;
-    text: string;
     multimedia: Multimedia;
 }
 
-export const RenderBiography = ({ title, text, multimedia }: Biography) => {
+export const RenderMultimedia = ({title, multimedia}: MultimediaQA) => {
 
     const [copySuccess, setCopySuccess] = useState(false);
 
@@ -162,7 +161,6 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
     return (
         <div className="bg-white dark:bg-[#2D2D2D]">
             <h2 className="text-xl font-bold mb-5">{title}</h2>
-            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-8 break-words whitespace-normal">{text}</p>
 
             <button
                 onClick={toggleMultimedia}
@@ -400,13 +398,13 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
 
             <div className="flex items-center mt-3 space-x-1">
                 <button
-                    onClick={() => handleSpeech(text)}
+                    onClick={() => handleSpeech(title)}
                     className="p-1 text-gray-400 dark:text-gray-500"
                 >
                     <Volume2 className="w-4 h-4" />
                 </button>
                 <button
-                    onClick={() => handleCopy(text)}
+                    onClick={() => handleCopy(title)}
                     //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
                     className='p-1 text-gray-400 dark:text-gray-500'
                 >

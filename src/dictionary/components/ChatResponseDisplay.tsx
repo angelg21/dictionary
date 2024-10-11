@@ -7,6 +7,8 @@ import 'swiper/css/pagination';
 import './css/swiper-custom.css'; // Importa el archivo con los estilos personalizados
 import { RenderBiography } from './reponses/RenderBiography';
 import { RenderList } from './reponses/RenderList';
+import { RenderComparison } from './reponses/RenderComparison';
+import { RenderMultimedia } from './reponses/RenderMultimedia';
 
 interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
@@ -28,6 +30,7 @@ interface ComparisonItem {
 
 interface Comparison {
     items: ComparisonItem[];
+    text: string;
 }
 
 interface ListItem {
@@ -51,6 +54,10 @@ interface Model {
     text: string
 }
 
+interface MultimediaQA {
+    title: string;
+    multimedia: Multimedia;
+}
 // Definición del tipo ChatResponse
 interface ChatResponse {
     data: {
@@ -64,50 +71,12 @@ interface ChatResponse {
 const ChatResponseDisplay: React.FC<ChatResponse> = ({ data }) => {
 
     const { type, result } = data;
-
-    // const renderComparison = (comp: Comparison) => (
-    //     <div>
-    //         {comp.items.map((item, index) => (
-    //             <div key={index}>
-    //                 <h2 className="text-lg font-semibold">{item.title}</h2>
-    //                 <p>{item.title}</p>
-    //                 {/* Renderizar multimedia */}
-    //                 {item.multimedia.images.length > 0 && (
-    //                     <div>
-    //                         {item.multimedia.images.map((img, imgIndex) => (
-    //                             <img key={imgIndex} src={img} alt={`Imagen ${imgIndex + 1}`} />
-    //                         ))}
-    //                     </div>
-    //                 )}
-    //                 {/* Similar para videos y audios */}
-    //             </div>
-    //         ))}
-    //     </div>
-    // );
-
-
-    // const renderMultimedia = (media: MultimediaQA) => (
-    //     <div className="p-4">
-    //         <h2 className="text-lg font-bold">{media.title}</h2>
-    //         {/* Renderizar multimedia */}
-    //         {media.multimedia.images.length > 0 && (
-    //             <div>
-    //                 {media.multimedia.images.map((img, imgIndex) => (
-    //                     <img key={imgIndex} src={img} alt={`Imagen ${imgIndex + 1}`} />
-    //                 ))}
-    //             </div>
-    //         )}
-    //         {/* Similar para videos y audios */}
-    //     </div>
-    // );
-
     return (
         <div>
             {type === 'biography' && RenderBiography(result as Biography)}
             {(type === 'list' || type === 'similarity') && RenderList(result as List)}
-            {/* {type === 'comparison' && renderComparison(result as Comparison)}
-            {type === 'similarity' && renderSimilarity(result as Similarity)}
-            {type === 'multimedia' && renderMultimedia(result as MultimediaQA)} */}
+            {type === 'comparison' && RenderComparison(result as Comparison)}
+            {type === 'multimedia' && RenderMultimedia(result as MultimediaQA)} 
             {/* Puedes agregar más tipos si es necesario */}
         </div>
     );
