@@ -116,7 +116,7 @@ export default function Chat() {
         }
     };
 
-    const prueba3: { type: ResponseType; query: string; result: any } = {
+    const pruebaList: { type: ResponseType; query: string; result: any } = {
         type: 'list', // Tipo de respuesta, puedes ajustarlo según sea necesario
         query: 'Información de Teresa Coraspe',
         result: {
@@ -240,6 +240,91 @@ export default function Chat() {
         }
     }
 
+    const pruebaComparison: { type: ResponseType; query: string; result: any } = {
+        type: 'comparison', // Tipo de respuesta
+        query: 'Comparación entre elementos literarios',
+        result: {
+            items: [
+                {
+                    title: 'Las fieras se dan golpes de pecho',
+                    multimedia: {
+                        images: [
+                            {
+                                link: 'https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg',
+                                description: 'Portada de Las fieras se dan golpes de pecho',
+                            },
+                        ],
+                        videos: [
+                            {
+                                link: 'https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4',
+                                description: 'Entrevista sobre la obra "Las fieras se dan golpes de pecho"',
+                            },
+                        ],
+                        audios: [
+                            {
+                                link: 'https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/ysuegjov5yxq8nik2yh1.ogg',
+                                description: 'Lectura de un poema de "Las fieras se dan golpes de pecho"',
+                            },
+                        ],
+                    },
+                },
+                {
+                    title: 'Vuelvo con mis huesos',
+                    multimedia: {
+                        images: [
+                            {
+                                link: 'https://res.cloudinary.com/dlhvylz4p/image/upload/v1727808932/Coraspe_Vuelvo_con_mis_huesos_portada_srtgl4.jpg',
+                                description: 'Portada de Vuelvo con mis huesos',
+                            },
+                        ],
+                        videos: [
+                            {
+                                link: 'https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4',
+                                description: 'Conferencia de Teresa Coraspe sobre "Vuelvo con mis huesos"',
+                            },
+                        ],
+                        audios: [
+                            {
+                                link: 'https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/e0cfvuttkknxcqitp2js.ogg',
+                                description: 'Entrevista sobre la temática de "Vuelvo con mis huesos"',
+                            },
+                        ],
+                    },
+                },
+            ],
+            text: 'Análisis comparativo entre las obras "Las fieras se dan golpes de pecho" y "Vuelvo con mis huesos", donde ambas exploran temáticas de dolor, soledad y la batalla interna de los personajes frente a su entorno. La primera obra se enfoca en la cotidianidad mientras que la segunda profundiza en el dolor del desarraigo.',
+        },
+    };
+
+    const pruebaMultimedia: { type: ResponseType; query: string; result: any } = {
+        type: 'multimedia', // Tipo de respuesta
+        query: 'Dame la multimedia de teresa coraspe',
+        result: {
+            title: 'Las fieras se dan golpes de pecho',
+            multimedia: {
+                images: [
+                    {
+                        link: 'https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg',
+                        description: 'Portada de Las fieras se dan golpes de pecho',
+                    },
+                ],
+                videos: [
+                    {
+                        link: 'https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4',
+                        description: 'Entrevista sobre la obra "Las fieras se dan golpes de pecho"',
+                    },
+                ],
+                audios: [
+                    {
+                        link: 'https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/ysuegjov5yxq8nik2yh1.ogg',
+                        description: 'Lectura de un poema de "Las fieras se dan golpes de pecho"',
+                    },
+                ],
+            },
+
+        },
+    };
+
     // Acceso al tema actual y a la función para cambiarlo
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
@@ -302,9 +387,9 @@ export default function Chat() {
 
             // Simulación de respuesta del servidor
             //const response = await SendMessage(content)
-            if (prueba2) {
+            if (pruebaMultimedia) {
                 setTimeout(() => {
-                    const formattedResponse = prueba2;
+                    const formattedResponse = pruebaMultimedia;
                     const assistantMessage: Message = {
                         role: 'assistant',
                         query: formattedResponse.query,
@@ -338,12 +423,12 @@ export default function Chat() {
     return (
         <AlertProvider>
             <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
-                <div className="relative flex justify-between items-center p-3 bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/bg-dark-header.png')]">
-                    <div className="flex items-center justify-center text-center space-x-0">
+                <div className="relative flex flex-col pl-2 py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/bg-dark-header.png')]">
+                    <div className="flex items-center  text-center space-x-0">
                         <span className="text-gray-900 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
                         <span className="text-gray-900 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
                     </div>
-                    <img src="/assets/libros.png" alt="Libros" className="absolute bottom-0 right-1 h-16 w-auto translate-y-[4px]" />
+                    <span className="text-gray-900 dark:text-gray-100 text-xs font-normal leading-tight align-middle">Diccionario de Literatura del Estado Bolívar</span>
                 </div>
                 <div className='w-full h-[26px] bg-d-blue flex items-center justify-center'>
                     <ShieldCheckIcon className='h-4 w-4 text-white mr-1' />
@@ -353,7 +438,7 @@ export default function Chat() {
                 </div>
                 <button
                     onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                    className="m-6 text-gray-500 dark:text-gray-400"
+                    className="mx-6 mt-6 text-gray-500 dark:text-gray-400"
                 >
                     {theme === 'light' ? (
                         <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
@@ -362,7 +447,7 @@ export default function Chat() {
                     )}
                     <span className="sr-only">Cambiar tema</span>
                 </button>
-                <div className="flex-1 overflow-y-auto p-4">
+                <div className="flex-1 overflow-y-auto">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full">
@@ -419,7 +504,7 @@ export default function Chat() {
                         <div ref={messagesEndRef} />
                     </div>
                 </div>
-                <div className="p-4 mb-3 dark:border-gray-700 bg-white dark:bg-[#2D2D2D]">
+                <div className="p-4  dark:border-gray-700 bg-white dark:bg-[#2D2D2D]">
                     <div className="mb-5 max-w-[800px] mx-auto w-full ">
                         <form onSubmit={(e) => { e.preventDefault(); handleSend(input); }} className="relative">
                             <input
