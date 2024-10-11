@@ -335,10 +335,18 @@ export default function Chat() {
 
     // Función para hacer scroll hasta el final
     const scrollToBottom = () => {
-        if (messagesContainerRef.current) {
-            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+
+            // Agregar un delay para hacer que el desplazamiento sea más lento
+            setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'end',  // Asegura que se mueva hacia el final
+                });
+            }, 2000); // Ajusta el tiempo aquí para hacerlo más lento
         }
-    };
+    }
 
     // Forzar el scroll al final cuando cambian los mensajes o el estado de carga
     useEffect(() => {
@@ -418,12 +426,18 @@ export default function Chat() {
         { text: "Cómo funciona algo", icon: Lightbulb },
     ];
 
+    const [darkMode, setDarkMode] = useState(false);
+
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light')
+    }
+
     if (!mounted) return null;
 
     return (
         <AlertProvider>
             <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
-                <div className="relative flex flex-col pl-2 py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/bg-dark-header.png')]">
+                <div className="relative flex flex-col pl-2 py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/header-oscuro.png')]">
                     <div className="flex items-center  text-center space-x-0">
                         <span className="text-gray-900 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
                         <span className="text-gray-900 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
@@ -436,26 +450,47 @@ export default function Chat() {
                         LetraScopio-preview
                     </p>
                 </div>
-                <button
-                    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                    className="mx-6 mt-6 text-gray-500 dark:text-gray-400"
-                >
-                    {theme === 'light' ? (
-                        <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
-                    ) : (
-                        <Sun className="h-[1.2rem] w-[1.2rem] text-d-yellow" />
-                    )}
-                    <span className="sr-only">Cambiar tema</span>
-                </button>
+
+                {/* Select Theme */}
+                <div className="flex justify-start items-center pl-6 pt-6">
+                    <button
+                        onClick={toggleTheme}
+                        className={`relative flex items-center w-[154px] h-[40px] rounded-full p-1 transition-colors duration-300 focus:outline-none ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-800'
+                            }`}
+                    >
+                        <span
+                            className={`absolute text-xs font-medium transition-opacity duration-300 ${theme === 'light' ? 'left-12 opacity-100' : 'left-3 opacity-0'
+                                }`}
+                        >
+                            TEMA CLARO
+                        </span>
+                        <span
+                            className={`absolute text-xs font-medium transition-opacity duration-300 ${theme === 'dark' ? 'right-12 opacity-100' : 'right-3 opacity-0'
+                                }`}
+                        >
+                            TEMA OSCURO
+                        </span>
+                        <span
+                            className={`flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white shadow-md transform transition-transform duration-300 ${theme === 'dark' ? 'translate-x-[112px]' : ''
+                                }`}
+                        >
+                            {theme === 'light' ? (
+                                <Sun className="w-5 h-5 text-yellow-500" />
+                            ) : (
+                                <Moon className="w-5 h-5 text-blue-500" />
+                            )}
+                        </span>
+                    </button>
+                </div>
                 <div className="flex-1 overflow-y-auto">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full">
                                 <h1 className="text-4xl font-bold mb-4">
-                                    <h1 className="text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
+                                    <h1 className="max-sm:text-4xl text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
                                         Hola, Angel
                                     </h1>
-                                    <p className="text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
+                                    <p className="max-sm:text-4xl text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
                                         ¿En qué puedo ayudarte?
                                     </p>
                                 </h1>

@@ -154,7 +154,13 @@ export const RenderBiography = ({ title, text, multimedia }: Biography) => {
     }, []);
 
     const handleCopy = (textToCopy: string) => {
-        navigator.clipboard.writeText(textToCopy).then(() => {
+        const currentYear = new Date().getFullYear(); // Obtiene el año actual
+        const additionalText = `\n\nTomado de: LetraScopio. Diccionario de literatura del estado Bolívar. Ciudad Guayana: Universidad Católica Andres Bello, ${currentYear}. https://letrascopio.vercel.app/`;
+    
+        // El texto final que se copiará, incluyendo el enlace clickeable
+        const finalText = `${textToCopy}${additionalText}`;
+    
+        navigator.clipboard.writeText(finalText).then(() => {
             showAlert("Texto copiado en el portapapeles", "success");
         });
     };

@@ -9,9 +9,9 @@ const Loader: React.FC = () => {
             </div>
             <div className="bg-gray-200 dark:bg-[#4A4A4A] p-3 rounded-2xl">
                 <div className="flex space-x-2">
-                    <div className="w-2 h-2 bg-gray-500 dark:bg-[#6E6E6E] rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-500 dark:bg-[#6E6E6E] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                    <div className="w-2 h-2 bg-gray-500 dark:bg-[#6E6E6E] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    <div className="w-[6px] h-[6px] bg-gray-500 dark:bg-[#6E6E6E] rounded-full animate-bounce-slow"></div>
+                    <div className="w-[6px] h-[6px] bg-gray-500 dark:bg-[#6E6E6E] rounded-full animate-bounce-slow" style={{ animationDelay: '0.2s' }}></div>
+                    <div className="w-[6px] h-[6px] bg-gray-500 dark:bg-[#6E6E6E] rounded-full animate-bounce-slow" style={{ animationDelay: '0.4s' }}></div>
                 </div>
             </div>
         </div>
