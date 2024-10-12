@@ -485,7 +485,7 @@ export default function Chat() {
                 <div className="flex-1 overflow-y-auto">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full">
+                            <div className="flex flex-col items-center justify-center h-full max-sm:mx-3">
                                 <h1 className="text-4xl font-bold mb-4">
                                     <h1 className="max-sm:text-4xl text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
                                         Hola, Angel
