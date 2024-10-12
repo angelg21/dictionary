@@ -70,7 +70,7 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
             icon: <BookOpenIcon />,
         },
         {
-            path: '/dashboard/searcher',
+            path: '/dictionary/chat',
             title: 'Buscador',
             icon: <DocumentMagnifyingGlassIcon />,
         },

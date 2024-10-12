@@ -198,6 +198,42 @@ export const AuthorFormReviews = () => {
                                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{work.originalLanguage}</dd>
                                                 </div>
                                                 <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                                    <dt className="text-sm font-medium leading-6 text-gray-900">Ediciones</dt>
+                                                    <div className='sm:col-span-2'>
+                                                        <div
+                                                            className={`hidden sm:col-span-5 sm:grid sm:grid-cols-5 ${index !== 0 ? 'border-t border-gray-300' : ''} py-3`}
+                                                        >
+                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">Edición</dd>
+                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">Fecha</dd>
+                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">Idioma</dd>
+                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">Traductor</dd>
+                                                            <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">Lugar</dd>
+                                                        </div>
+                                                        {work.editions.map((edition, index) => (
+                                                            <div
+                                                                key={index}
+                                                                className={`sm:col-span-5 sm:grid sm:grid-cols-5 ${index !== 0 ? 'border-t border-gray-300' : ''} py-3`}
+                                                            >
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.editiontitle}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.publicationDate}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.language}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.translator}</dd>
+                                                                <div className="col-span-1">
+                                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Ciudad: </span>{work.publicationPlace.city}
+                                                                    </dd>
+                                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Imprenta: </span>{work.publicationPlace.printingHouse}
+                                                                    </dd>
+                                                                    <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
+                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Editorial: </span>{work.publicationPlace.publisher}
+                                                                    </dd>
+                                                                </div>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                                     <dt className="text-sm font-medium leading-6 text-gray-900">Descripción o resumen</dt>
                                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">{work.description}</dd>
                                                 </div>
