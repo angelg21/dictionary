@@ -510,7 +510,7 @@ export default function Chat() {
                             </div>
                         ) : (
 
-                            <div ref={messagesContainerRef}>
+                            <div ref={messagesContainerRef} className='max-sm:mx-2'>
                                 {messages.map((message, index) => (
                                     <div key={index} className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'items-start'}`}>
                                         {message.role === 'assistant' && (
