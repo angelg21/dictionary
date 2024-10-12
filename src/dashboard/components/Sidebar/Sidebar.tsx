@@ -43,7 +43,6 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
     const isReviewer = session?.user?.roles.includes('reviewer');
     const [fichasPath, setFichasPath] = useState('');
 
-
     useEffect(() => {
         // Si session es null o undefined, evita la actualización del estado
         if (!session) return;

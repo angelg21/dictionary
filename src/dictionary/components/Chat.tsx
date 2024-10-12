@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
-import { Send, PenSquare, Leaf, Brain, Lightbulb, Moon, Sun, ArrowLeft } from 'lucide-react';
+import { Send, PenSquare, Leaf, Brain, Lightbulb, Moon, Sun, ArrowLeft, UserPen, Bot, FileText, Pencil, Image } from 'lucide-react';
 import { useTheme } from "next-themes";
 import Loader from './Loader';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
@@ -298,6 +298,7 @@ export default function Chat() {
                 },
             ],
             text: 'Análisis comparativo entre las obras "Las fieras se dan golpes de pecho" y "Vuelvo con mis huesos", donde ambas exploran temáticas de dolor, soledad y la batalla interna de los personajes frente a su entorno. La primera obra se enfoca en la cotidianidad mientras que la segunda profundiza en el dolor del desarraigo.',
+            title: 'Comparracion entre las obras vuelvo con mis huesos y vertice del circulo'
         },
     };
 
@@ -425,10 +426,10 @@ export default function Chat() {
     };
 
     const suggestions = [
-        { text: "Consejos para una carta de presentación", icon: PenSquare },
-        { text: "Consejos para el cuidado de plantas", icon: Leaf },
-        { text: "Poner a prueba mis conocimientos", icon: Brain },
-        { text: "Cómo funciona algo", icon: Lightbulb },
+        { text: "¿Quién creó LetraScopio y cuál es su propósito?", icon: Bot, colorIcon: 'text-d-blue' },
+        { text: "¿Quién es Oscar Pirrongeli y cuál es su legado en la literatura?", icon: UserPen, colorIcon: 'text-d-green' },
+        { text: "¿Qué temas aborda la obra Vuelvo con mis huesos de Teresa Coraspe?", icon: FileText, colorIcon: 'text-d-yellow' },
+        { text: "Quiero ver material multimedia (fotos, videos, audios) de Teresa Coraspe", icon: Image, colorIcon: 'text-d-red' },
     ];
 
     const [darkMode, setDarkMode] = useState(false);
@@ -474,9 +475,7 @@ export default function Chat() {
                         LetraScopio-preview
                     </p>
                 </div>
-
                 <div className='flex justify-between mx-6 mt-6'>
-
                     <div className="flex items-center">
                         <button
                             onClick={toggleTheme}
@@ -507,21 +506,16 @@ export default function Chat() {
                             </span>
                         </button>
                     </div>
-
-
                     {session && (
-
                         <Link href={fichasPath}>
-                            <button className="h-[40px] rounded-full bg-d-blue text-white dark:bg-d-fondo dark:text-gray-800 px-6 flex items-center space-x-2 hover:bg-blue-950 dark:hover:bg-d-gray-light transition-colors">
+                            <button className="h-[40px] rounded-full bg-d-blue text-white dark:bg-d-fondo dark:text-gray-800 px-4 flex items-center space-x-2 hover:bg-blue-950 dark:hover:bg-d-gray-light transition-colors">
                                 <ArrowLeft className="w-5 h-5" />
-                                <span>Dashboard</span>
+                                <span className='text-sm font-medium'>Dashboard</span>
                             </button>
                         </Link>
                     )}
                 </div>
                 {/* Select Theme */}
-
-
                 <div className="flex-1 overflow-y-auto">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
@@ -535,15 +529,17 @@ export default function Chat() {
                                     </p>
                                 </h1>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4 max-w-[560px]">
                                     {suggestions.map((suggestion, index) => (
                                         <button
                                             key={index}
-                                            className="h-24 flex flex-col items-center justify-center text-center border-gray-300 dark:border-gray-700"
+                                            className="group relative h-12 w-full flex items-center justify-start rounded-lg shadow-lg bg-white dark:bg-[#2D2D2D] border border-gray-300 dark:border-gray-700 transition-all hover:scale-105 hover:shadow-2xl dark:hover:bg-gray-800 hover:bg-gray-100"
                                             onClick={() => handleSend(suggestion.text)}
                                         >
-                                            <suggestion.icon className="h-6 w-6 mb-2" />
-                                            {suggestion.text}
+                                            <div className="flex items-center justify-start w-full mx-4">
+                                                <suggestion.icon className={`max-sm:h-7 max-sm:w-7 h-6 w-6 mr-3 ${suggestion.colorIcon}`} />
+                                                <span className="text-sm font-medium text-gray-900 dark:text-gray-100 whitespace-normal text-left">{suggestion.text}</span>
+                                            </div>
                                         </button>
                                     ))}
                                 </div>

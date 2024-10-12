@@ -20,16 +20,34 @@ interface ListItem {
     multimedia: Multimedia;
 }
 
+interface ComparisonItem {
+    title: string;
+    multimedia: Multimedia;
+}
+
 interface ListResponse {
     title: string;
     items: ListItem[];
 }
 
+// Caso para comparison
+interface ComparisonResponse {
+    title: string;
+    text: string;
+    items: ComparisonItem[];
+}
+
+// Caso para multimedia
+interface MultimediaResponse {
+    title: string;
+    multimedia: Multimedia;
+}
+
 // Definimos la interfaz que puede manejar tanto biography como list
 interface ApiResponse {
-    type: 'biography' | 'list' | 'similarity';
+    type: 'biography' | 'list' | 'similarity' | 'comparison' | 'multimedia';
     query: string;
-    result: BiographyResponse | ListResponse;
+    result: BiographyResponse | ListResponse | ComparisonResponse | MultimediaResponse;
 }
 
 export const SendMessage = async (question: string | string[]) => {
@@ -100,6 +118,40 @@ const handleApiResponse = (responseData: any): ApiResponse => {
                     result: {
                         title: apiData.title,
                         text: apiData.text,
+                        multimedia: {
+                            images: Array.isArray(apiData.multimedia?.images) ? apiData.multimedia.images : [],
+                            videos: Array.isArray(apiData.multimedia?.videos) ? apiData.multimedia.videos : [],
+                            audios: Array.isArray(apiData.multimedia?.audios) ? apiData.multimedia.audios : [],
+                            documents: Array.isArray(apiData.multimedia?.documents) ? apiData.multimedia.documents : [],
+                        },
+                    },
+                };
+            }  else if (responseData.type === 'comparison') {
+                // Procesar el tipo existente "comparison"
+                return {
+                    type: responseData.type,
+                    query: responseData.query,
+                    result: {
+                        title: apiData.title,
+                        text: apiData.text,
+                        items: apiData.items.map((item: any) => ({
+                            title: item.title,
+                            multimedia: {
+                                images: Array.isArray(item.multimedia?.images) ? item.multimedia.images : [],
+                                videos: Array.isArray(item.multimedia?.videos) ? item.multimedia.videos : [],
+                                audios: Array.isArray(item.multimedia?.audios) ? item.multimedia.audios : [],
+                                documents: Array.isArray(item.multimedia?.documents) ? item.multimedia.documents : [],
+                            },
+                        })),
+                    },
+                };
+            }else if (responseData.type === 'multimedia') {
+                // Procesar el tipo existente "multimedia"
+                return {
+                    type: responseData.type,
+                    query: responseData.query,
+                    result: {
+                        title: apiData.title,
                         multimedia: {
                             images: Array.isArray(apiData.multimedia?.images) ? apiData.multimedia.images : [],
                             videos: Array.isArray(apiData.multimedia?.videos) ? apiData.multimedia.videos : [],

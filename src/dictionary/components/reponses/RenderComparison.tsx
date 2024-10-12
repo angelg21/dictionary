@@ -27,11 +27,12 @@ interface Item {
 }
 
 interface Comparison {
-    items: Item[];
+    title: string;
     text: string;
+    items: Item[];
 }
 
-export const RenderComparison = ({ text, items }: Comparison) => {
+export const RenderComparison = ({ title, text, items }: Comparison) => {
 
     const { showAlert } = useAlert();
     const [showMultimedia, setShowMultimedia] = useState<{ [key: number]: boolean }>({}); // Estado para mostrar/ocultar multimedia
@@ -159,11 +160,26 @@ export const RenderComparison = ({ text, items }: Comparison) => {
 
     return (
         <div className="bg-white dark:bg-[#2D2D2D]">
+            <h2 className="text-xl font-bold mb-5">{title}</h2>
+            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-4 break-words whitespace-normal">{text}</p>
+            <button
+                onClick={() => handleSpeech(text)}
+                className="p-1 text-gray-400 dark:text-gray-500"
+            >
+                <Volume2 className="w-4 h-4" />
+            </button>
+            <button
+                onClick={() => handleCopy(text)}
+                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                className='p-1 text-gray-400 dark:text-gray-500 mb-8'
+            >
+                <Copy className="h-4 w-4" />
+            </button>
             {items &&
                 items.map((item, index) => (
                     <div key={index} className='flex mb-9'>
                         <div className="bg-white dark:bg-[#2D2D2D]">
-                            <h2 className="text-xl font-bold mb-5">{item.title}</h2>
+                            <p className="text-lg font-bold mb-4">{item.title}</p>
                             <button
                                 onClick={() => toggleMultimedia(index)}
                                 className="text-sm font-semibold text-d-blue dark:text-blue-400 hover:underline dark:hover:hover:underline transition-all flex items-center gap-2"
@@ -431,20 +447,6 @@ export const RenderComparison = ({ text, items }: Comparison) => {
                     </div>
                 ))
             }
-            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-4 break-words whitespace-normal">{text}</p>
-            <button
-                onClick={() => handleSpeech(text)}
-                className="p-1 text-gray-400 dark:text-gray-500"
-            >
-                <Volume2 className="w-4 h-4" />
-            </button>
-            <button
-                onClick={() => handleCopy(text)}
-                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
-                className='p-1 text-gray-400 dark:text-gray-500 mb-8'
-            >
-                <Copy className="h-4 w-4" />
-            </button>
         </div>
     )
 }
