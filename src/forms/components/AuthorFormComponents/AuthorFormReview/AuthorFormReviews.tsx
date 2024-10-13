@@ -214,19 +214,19 @@ export const AuthorFormReviews = () => {
                                                                 key={index}
                                                                 className={`sm:col-span-5 sm:grid sm:grid-cols-5 ${index !== 0 ? 'border-t border-gray-300' : ''} py-3`}
                                                             >
-                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.editiontitle}</dd>
-                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.publicationDate}</dd>
-                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.language}</dd>
-                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition.translator}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition?.editiontitle}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition?.publicationDate}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition?.language}</dd>
+                                                                <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-3">{edition?.translator}</dd>
                                                                 <div className="col-span-1">
                                                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
-                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Ciudad: </span>{work.publicationPlace.city}
+                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Ciudad: </span>{work.publicationPlace?.city}
                                                                     </dd>
                                                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
-                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Imprenta: </span>{work.publicationPlace.printingHouse}
+                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Imprenta: </span>{work.publicationPlace?.printingHouse}
                                                                     </dd>
                                                                     <dd className="mt-1 text-sm leading-6 text-gray-700 sm:mt-0">
-                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Editorial: </span>{work.publicationPlace.publisher}
+                                                                        <span className="text-sm leading-6 font-semibold text-gray-900">Editorial: </span>{work.publicationPlace?.publisher}
                                                                     </dd>
                                                                 </div>
                                                             </div>

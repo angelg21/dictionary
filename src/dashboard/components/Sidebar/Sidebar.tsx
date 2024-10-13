@@ -60,7 +60,7 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
         } else {
             setFichasPath(''); // Opcional: Maneja el caso por defecto si es necesario
         }
-    }, [session]); 
+    }, [session]);
 
     const menuItems = [
         {
@@ -73,21 +73,21 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
             title: 'Buscador',
             icon: <DocumentMagnifyingGlassIcon />,
         },
-        {
-            path: '/dashboard/notes',
-            title: 'Bloc de notas',
-            icon: <ClipboardDocumentListIcon />,
-        },
+        // {
+        //     path: '/dashboard/notes',
+        //     title: 'Bloc de notas',
+        //     icon: <ClipboardDocumentListIcon />,
+        // },
         {
             path: '/dashboard/users',
             title: 'Usuarios',
             icon: <UserGroupIcon />,
         },
-        {
-            path: '/dashboard/downloads',
-            title: 'Descargas',
-            icon: <ArrowDownTrayIcon />,
-        },
+        // {
+        //     path: '/dashboard/downloads',
+        //     title: 'Descargas',
+        //     icon: <ArrowDownTrayIcon />,
+        // },
         {
             path: '/dashboard/profile',
             title: 'Perfil',
@@ -156,16 +156,16 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                                         {...menuItems[3]}
                                                     />
                                                     ) : null}
-                                                <SidebarMenuItems
+                                                {/* <SidebarMenuItems
                                                     key={menuItems[4].path}
                                                     onClick={() => sendStatusSidebar(false)}
                                                     {...menuItems[4]}
-                                                />
-                                                <SidebarMenuItems
+                                                /> */}
+                                                {/* <SidebarMenuItems
                                                     key={menuItems[5].path}
                                                     onClick={() => sendStatusSidebar(false)}
                                                     {...menuItems[5]}
-                                                />
+                                                /> */}
                                             </ul>
                                         </li>
                                         <li className='mt-auto mb-3 px-5'>
@@ -194,14 +194,13 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                 {/* Static sidebar for desktop */}
                 <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
                     {/* Sidebar component */}
-                    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-d-blue  pb-4">
-                        <div className="flex h-16 shrink-0 items-center pl-[14px]">
-                            <img
-                                alt="Your Company"
-                                src="https://tailwindui.com/img/logos/mark.svg?color=white"
-                                className="h-8 w-auto"
-                            />
-                            <span className='ml-3 text-white'>Diccionario</span>
+                    <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-d-blue py-3">
+                        <div className="flex flex-col h-16 shrink-0 items-start pl-[7px]">
+                            <div className="flex items-center  text-center space-x-0">
+                                <span className="text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
+                                <span className="text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
+                            </div>
+                            <span className="text-gray-100 text-xs font-normal leading-tight align-middle">Diccionario de Literatura del Estado Bolívar</span>
                         </div>
                         <nav className="flex flex-1 flex-col">
                             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -231,7 +230,7 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                                 {...menuItems[3]}
                                             />
                                             ) : null}
-                                        <SidebarMenuItems
+                                        {/* <SidebarMenuItems
                                             key={menuItems[4].path}
                                             onClick={() => sendStatusSidebar(false)}
                                             {...menuItems[4]}
@@ -240,7 +239,7 @@ export const Sidebar = ({ sendStatusSidebar, statusSidebar }: Props) => {
                                             key={menuItems[5].path}
                                             onClick={() => sendStatusSidebar(false)}
                                             {...menuItems[5]}
-                                        />
+                                        /> */}
                                     </ul>
                                 </li>
                                 <li className="mt-auto pl-[14px]">

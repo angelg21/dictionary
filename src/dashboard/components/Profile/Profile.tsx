@@ -30,10 +30,10 @@ export const Profile = ({ sendStatusSidebar, userName, userImg }: Props) => {
             {/* Icono en el lado derecho */}
             <div className='flex px-3 lg:px-16'>
 
-                <button type="button" className="text-d-fondo lg:text-d-blue hover:text-gray-500">
+                {/* <button type="button" className="text-d-fondo lg:text-d-blue hover:text-gray-500">
                     <span className="sr-only">View notifications</span>
                     <BellIcon aria-hidden="true" className="mr-4 lg:mr-7 h-7 w-7" />
-                </button>
+                </button> */}
 
                 <Menu as="div" className="py-2">
                     <MenuButton className="flex lg:items-center">

@@ -33,7 +33,7 @@ export default function Chat() {
     const [loading, setLoading] = useState(false);
     const { data: session } = useSession();
     const [fichasPath, setFichasPath] = useState('');
-
+    const [name, setName] = useState('Investigador')
     const prueba = "json\n{\n  \"title\": \"Teresa Coraspe\",\n  \"text\": \"Teresa Coraspe vivió en Ciudad Bolívar durante la segunda mitad del siglo XX y la primera del siglo XXI.\",\n  \"multimedia\": {\n    \"images\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa \"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Teresa en su casa\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Teresa en su casa\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Tereszxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz xxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxx xa en su casa\"\n      }\n    ],\n    \"videos\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4\",\n        \"description\": \"Entrevista a Teresa Coraspe sobre su obra literaria\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728052102/WhatsApp_Video_2024-07-29_at_09.07.13_iwwdjo.mp4\",\n        \"description\": \"Documental sobre la vida de Teresa Coraspe\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4\",\n        \"description\": \"Conferencia de Teresa sobre poesía en Ciudad Bolívar\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728052102/WhatsApp_Video_2024-07-29_at_09.07.13_iwwdjo.mp4\",\n        \"description\": \"Evento en el cual Teresa discute sus escritos\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4\",\n        \"description\": \"Teresa hablando sobre los desafíos de ser una autora en su tiempo\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728052102/WhatsApp_Video_2024-07-29_at_09.07.13_iwwdjo.mp4\",\n        \"description\": \"Video homenaje a Teresa y su legado literario\"\n      }\n    ],\n    \"audios\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/ysuegjov5yxq8nik2yh1.ogg\",\n        \"description\": \"Entrevista sobre la vida personal de Teresa Coraspe\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/dmhvuwri2p9fhzlhs1kr.ogg\",\n        \"description\": \"Teresa leyendo un poema de su autoría\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/e0cfvuttkknxcqitp2js.ogg\",\n        \"description\": \"Discurso de Teresa sobre la importancia de la poesía en la sociedad\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/bq9lme77hwablsngrief.ogg\",\n        \"description\": \"Reflexión sobre la vida de los escritores de su época\"\n      }\n    ],\n    \"documents\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1728150241/Dictionary/Authors/fi7lh5jkdgjvwo6vjutu.pdf\",\n        \"description\": \"Biografía de Teresa Coraspe en formato PDF\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728150348/Dictionary/Authors/eyrddmcg9ynjawnzt3qi.docx\",\n        \"description\": \"Manuscrito de Teresa Coraspe en formato Word\"\n      }\n    ]\n  }\n}\n";
 
     type ResponseType = "biography" | "comparison" | "list" | "similarity" | "multimedia" | "model";
@@ -331,11 +331,17 @@ export default function Chat() {
         },
     };
 
+
+
     // Acceso al tema actual y a la función para cambiarlo
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        if (session) {
+            const userName = session?.user.fullName
+            setName(userName)
+        }
         setMounted(true);
     }, []);
 
@@ -426,7 +432,7 @@ export default function Chat() {
     };
 
     const suggestions = [
-        { text: "¿Quién creó LetraScopio y cuál es su propósito?", icon: Bot, colorIcon: 'text-d-blue' },
+        { text: "¿Quién creó LetraScopio y cuál es su propósito?", icon: Bot, colorIcon: 'text-d-blue dark:text-d-fondo' },
         { text: "¿Quién es Oscar Pirrongeli y cuál es su legado en la literatura?", icon: UserPen, colorIcon: 'text-d-green' },
         { text: "¿Qué temas aborda la obra Vuelvo con mis huesos de Teresa Coraspe?", icon: FileText, colorIcon: 'text-d-yellow' },
         { text: "Quiero ver material multimedia (fotos, videos, audios) de Teresa Coraspe", icon: Image, colorIcon: 'text-d-red' },
@@ -495,7 +501,7 @@ export default function Chat() {
                                 TEMA OSCURO
                             </span>
                             <span
-                                className={`flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white shadow-md transform transition-transform duration-300 ${theme === 'dark' ? 'translate-x-[112px]' : ''
+                                className={`flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white dark:bg-d-fondo shadow-md transform transition-transform duration-300 ${theme === 'dark' ? 'translate-x-[112px]' : ''
                                     }`}
                             >
                                 {theme === 'light' ? (
@@ -519,10 +525,10 @@ export default function Chat() {
                 <div className="flex-1 overflow-y-auto">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full max-sm:mx-3">
+                            <div className="flex flex-col items-center justify-start h-full max-sm:mx-3">
                                 <h1 className="text-4xl font-bold mb-4">
                                     <h1 className="max-sm:text-4xl text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
-                                        Hola, Angel
+                                        Hola, {name}
                                     </h1>
                                     <p className="max-sm:text-4xl text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
                                         ¿En qué puedo ayudarte?
@@ -550,8 +556,8 @@ export default function Chat() {
                                 {messages.map((message, index) => (
                                     <div key={index} className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'items-start'}`}>
                                         {message.role === 'assistant' && (
-                                            <div className="hidden sm:flex  w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 items-center justify-center">
-                                                <span className="text-white text-sm font-bold">AI</span>
+                                            <div className="hidden sm:flex  w-8 h-8 rounded-full bg-d-blue dark:bg-d-fondo flex-shrink-0 items-center justify-center">
+                                                <span className="text-white dark:text-gray-800 text-sm font-bold">LS</span>
                                             </div>
                                         )}
                                         <div className={`my-4 max-w-[800px] inline-block px-4 ${message.role === 'user'

@@ -15,6 +15,9 @@ import Link from "next/link";
 import { DebugFormikValues } from "../../DebugFormikValues/DebugFormikValues";
 import { Criticism } from "../../AuthorFormComponents/interfaces/AuthorForm";
 import { ExpandableDescriptionMultimedia } from "../../WorksFormComponents/ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia";
+import { useAlert } from "@/src/users/context/AlertContext";
+import { useParams, useRouter } from "next/navigation";
+import { saveGroupingForm } from "@/src/app/dashboard/forms/groupingForm/actions/save-grouping-form";
 
 
 export const GroupingCriticismsForm = () => {
@@ -24,6 +27,10 @@ export const GroupingCriticismsForm = () => {
     const { values, setFieldValue } = useFormikContext<GroupingFormValues>();
     const [isFormVisible, setIsFormVisible] = useState(false);
 
+    const { showAlert } = useAlert();
+    const { id } = useParams();
+    const router = useRouter();
+    
     const [multimediaField, setMultimediaField] = useState(
         { title: '', link: '', type: '', description: '' }
     );
@@ -179,6 +186,18 @@ export const GroupingCriticismsForm = () => {
         setEditingIndex(index);
         setIsFormVisible(true); // Muestra el formulario para editar
     };
+
+    const handleSafeForm = async () => {
+
+        const response = await saveGroupingForm(values, id);
+
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/groupingForm/${id}/groupingFormReview`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
 
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
@@ -351,27 +370,26 @@ export const GroupingCriticismsForm = () => {
                                     handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
-                                    <Link href={'/dashboard/forms/groupingForm/groupingDetails'}>
+                                    <Link href={`/dashboard/forms/groupingForm/${id}/groupingDetails`}>
                                         <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                                             <ArrowLeftIcon className="w-6 h-6 text-white mr-4" />
                                             <span className="text-[15px] font-medium">Anterior</span>
                                         </button>
                                     </Link>
-                                    <Link href={'/dashboard/forms/groupingForm/groupingFormReview'}>
-                                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                                        </button>
-                                    </Link>
-
-
+                                    <button
+                                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                                        onClick={() => handleSafeForm()}
+                                    >
+                                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                                    </button>
                                 </div>
                             </div>
                         )
                 }
 
             </div>
-            <DebugFormikValues/>
+            {/* <DebugFormikValues/> */}
         </div>
     )
 }

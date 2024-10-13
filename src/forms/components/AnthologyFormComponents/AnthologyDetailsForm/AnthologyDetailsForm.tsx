@@ -1,6 +1,6 @@
 'use client'
 
-
+import { useParams, useRouter} from "next/navigation";
 import React, { useEffect, useState } from 'react'
 import { DebugFormikValues } from '../../DebugFormikValues/DebugFormikValues'
 import { SimpleInputWithLabel } from '../../SimpleInputWithLabel/SimpleInputWithLabel'
@@ -15,10 +15,16 @@ import { PlusIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { PlacePublicationAnthologyForm } from './PlacePublicationAnthologyForm'
 import { DescriptionMultimedia } from '../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia'
+import { saveAnthologyForm } from '@/src/app/dashboard/forms/anthologyForm/actions/save-anthology-form'
+import { useAlert } from '@/src/users/context/AlertContext'
 
 export const AnthologyDetailsForm = () => {
 
     const { values, setFieldValue } = useFormikContext<AnthologyFormValues>();
+
+    const { showAlert } = useAlert();
+    const { id } = useParams();
+    const router = useRouter();
 
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'anthologiesPreset';
@@ -92,6 +98,16 @@ export const AnthologyDetailsForm = () => {
         }
     }, [multimediaField.description]);
 
+    const handleSafeForm = async () => {
+        const response = await saveAnthologyForm(values, id);
+
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/anthologyForm/${id}/anthologyCriticism`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div className="grid grid-cols-1 gap-y-8 md:grid-cols-3 xl:gap-x-14 md:gap-y-7 md:gap-x-7 xl:gap-y-8">
@@ -204,16 +220,15 @@ export const AnthologyDetailsForm = () => {
                 />
 
                 <div className='flex col-span-full max-md:w-full justify-end md:col-span-3 mt-6'>
-
-                    <Link href={'/dashboard/forms/magazineForm/magazineCriticisms'}>
-                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                        </button>
-                    </Link>
-
+                    <button
+                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                        onClick={() => handleSafeForm()}
+                    >
+                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                    </button>
                 </div>
-                <DebugFormikValues />
+                {/* <DebugFormikValues /> */}
             </div>
         </div>
     )
