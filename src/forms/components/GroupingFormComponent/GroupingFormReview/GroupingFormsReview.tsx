@@ -76,10 +76,10 @@ export const GroupingFormsReview = () => {
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Lugar de Encuento</dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             <span>
-                                                <span className="text-sm font-semibold">Ciudad: </span>{values.meetingPlace.city}<br />
+                                                <span className="text-sm font-semibold">Ciudad: </span>{values.meetingPlace?.city}<br />
                                             </span>
                                             <span>
-                                                <span className="text-sm font-semibold">Municipio: </span>{values.meetingPlace.municipality}<br />
+                                                <span className="text-sm font-semibold">Municipio: </span>{values.meetingPlace?.municipality}<br />
                                             </span>
                                         </dd>
                                     </div>

@@ -15,6 +15,9 @@ import { useEffect, useState } from "react"
 import { PlusIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 import { Criticism } from "../../AuthorFormComponents/interfaces/AuthorForm"
 import { ExpandableDescriptionMultimedia } from "../../WorksFormComponents/ExpandableDescriptionMultimedia/ExpandableDescriptionMultimedia"
+import { saveAnthologyForm } from "@/src/app/dashboard/forms/anthologyForm/actions/save-anthology-form"
+import { useAlert } from "@/src/users/context/AlertContext"
+import { useParams, useRouter } from "next/navigation"
 
 export const AnthologysCriticism = () => {
 
@@ -22,6 +25,10 @@ export const AnthologysCriticism = () => {
     const uploadPreset = 'magazineCriticismsPreset';
     const { values, setFieldValue } = useFormikContext<AnthologyFormValues>();
     const [isFormVisible, setIsFormVisible] = useState(false);
+
+    const { showAlert } = useAlert();
+    const { id } = useParams();
+    const router = useRouter();
 
     const [multimediaField, setMultimediaField] = useState(
         { title: '', link: '', type: '', description: '' }
@@ -175,6 +182,18 @@ export const AnthologysCriticism = () => {
             setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
+
+    const handleSafeForm = async () => {
+        const response = await saveAnthologyForm(values, id);
+
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/anthologyForm/${id}/anthologyFormReview`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
+    
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
             <div>
@@ -348,27 +367,26 @@ export const AnthologysCriticism = () => {
                                     handleEditCriticism={handleEditCriticism}
                                 />
                                 <div className='flex max-md:flex-col max-md:space-y-6 md:flex-row md:justify-between'>
-                                    <Link href={'dashboard/forms/magazineForm/magazineDetails'}>
+                                    <Link href={`/dashboard/forms/anthologyForm/${id}/anthologyDetails`}>
                                         <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
                                             <ArrowLeftIcon className="w-6 h-6 text-white mr-4" />
                                             <span className="text-[15px] font-medium">Anterior</span>
                                         </button>
                                     </Link>
-                                    <Link href={'/dashboard/forms/magazineForm/magazineFormReview'}>
-                                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                                        </button>
-                                    </Link>
-
-
+                                    <button
+                                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                                        onClick={() => handleSafeForm()}
+                                    >
+                                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                                    </button>
                                 </div>
                             </div>
                         )
                 }
 
             </div>
-            <DebugFormikValues />
+            {/* <DebugFormikValues /> */}
         </div>
     )
 }

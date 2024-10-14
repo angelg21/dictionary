@@ -94,13 +94,13 @@ export const AnthologyFormsReview = () => {
                                         <dt className="text-sm font-medium leading-6 text-gray-900">Lugar de publicación</dt>
                                         <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                                             <span>
-                                                <span className="text-sm font-semibold">Ciudad: </span>{values.publicationPlace.city}<br />
+                                                <span className="text-sm font-semibold">Ciudad: </span>{values.publicationPlace?.city || ''}<br />
                                             </span>
                                             <span>
-                                                <span className="text-sm font-semibold">Imprenta: </span>{values.publicationPlace.printingHouse}<br />
+                                                <span className="text-sm font-semibold">Imprenta: </span>{values.publicationPlace?.printingHouse || ''}<br />
                                             </span>
                                             <span>
-                                                <span className="text-sm font-semibold">Editorial: </span>{values.publicationPlace.publisher}<br />
+                                                <span className="text-sm font-semibold">Editorial: </span>{values.publicationPlace?.publisher || ''}<br />
                                             </span>
                                         </dd>
                                     </div>

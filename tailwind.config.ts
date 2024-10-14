@@ -36,8 +36,25 @@ const config: Config = {
       textColor: {
         'd-darkgray': '#8a8f98',
       },
+      // Add keyframes and animations for bounce-slow
+      keyframes: {
+        bounceSlow: {
+          '0%, 100%': {
+            transform: 'translateY(-50%)',  // reduced bounce height
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(0)',  // resting position
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
+        },
+      },
+      animation: {
+        'bounce-slow': 'bounceSlow 0.8s infinite',  // applying the keyframe with reduced height
+      },
     },
   },
   plugins: [formsPlugin],
 };
+
 export default config;

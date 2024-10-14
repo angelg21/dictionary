@@ -43,6 +43,10 @@ export const RenderList = ({ title, items }: List) => {
     const audioRefs = useRef<HTMLAudioElement[][]>([]);
     const [audioStates, setAudioStates] = useState<boolean[][]>([]);
 
+    //Narracion del texto
+    const [isSpeaking, setIsSpeaking] = useState(false); // Controla si está narrando
+    const [speakingIndex, setSpeakingIndex] = useState<number | null>(null);
+
     const handleVideoClick = (videoLink: string) => {
         setSelectedVideo(videoLink);
         setShowDescription(true); // Mostrar la descripción cuando se selecciona un video
@@ -112,7 +116,18 @@ export const RenderList = ({ title, items }: List) => {
         }
     }, [showMultimedia, items]);
 
-    const handleSpeech = (text: string) => {
+    const handleSpeech = (text: string, index: number) => {
+        // Si ya está hablando, detener la narración
+        if (isSpeaking && speakingIndex === index) {
+            window.speechSynthesis.cancel(); // Detener la narración actual
+            setIsSpeaking(false); // Cambiar el estado a no hablando
+            setSpeakingIndex(null); // Limpiar el índice de narración
+            return; // Salir de la función
+        }
+
+        // Asegurarse de que no haya otra narración en curso antes de comenzar
+        window.speechSynthesis.cancel();
+
         // Dividir el texto en fragmentos por múltiples delimitadores
         const sentences = text.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!|\n|,|;)/).filter(sentence => sentence.trim() !== '');
 
@@ -126,15 +141,20 @@ export const RenderList = ({ title, items }: List) => {
                 // Cuando termina una oración, pasar a la siguiente
                 utterance.onend = () => {
                     currentIndex++;
-                    speakSentence(); // Reproducir la siguiente oración
+                    if (currentIndex < sentences.length) {
+                        speakSentence(); // Reproducir la siguiente oración
+                    } else {
+                        setIsSpeaking(false); // Cuando termine de leer todo, cambia el estado
+                        setSpeakingIndex(null); // Limpiar el índice de narración
+                    }
                 };
 
                 window.speechSynthesis.speak(utterance);
             }
         };
 
-        // Asegurarse de que no haya otra narración en curso
-        window.speechSynthesis.cancel();
+        setIsSpeaking(true); // Cambiar el estado a hablando
+        setSpeakingIndex(index); // Establecer el índice del botón que está hablando
         speakSentence(); // Comenzar la narración
     };
 
@@ -146,7 +166,13 @@ export const RenderList = ({ title, items }: List) => {
     }, []);
 
     const handleCopy = (textToCopy: string) => {
-        navigator.clipboard.writeText(textToCopy).then(() => {
+        const currentYear = new Date().getFullYear(); // Obtiene el año actual
+        const additionalText = `\n\nTomado de: LetraScopio. Diccionario de literatura del estado Bolívar. Ciudad Guayana: Universidad Católica Andres Bello, ${currentYear}. https://letrascopio.vercel.app/`;
+
+        // El texto final que se copiará, incluyendo el enlace clickeable
+        const finalText = `${textToCopy}${additionalText}`;
+
+        navigator.clipboard.writeText(finalText).then(() => {
             showAlert("Texto copiado en el portapapeles", "success");
         });
     };
@@ -161,34 +187,55 @@ export const RenderList = ({ title, items }: List) => {
                             <h2 className="text-xl font-bold mb-5">{item.title}</h2>
                             <p className="mt-2 text-gray-700 dark:text-gray-300 mb-4 break-words whitespace-normal">{item.text}</p>
                             <button
-                                onClick={() => handleSpeech(item.text)}
-                                className="p-1 text-gray-400 dark:text-gray-500"
+                                onClick={() => handleSpeech(item.text, index)}
+                                className={`p-1 text-gray-400 dark:text-gray-500 ${speakingIndex === index ? 'animate-ping' : ''}`}
                             >
-                                <Volume2 className="w-4 h-4" />
+                                <Volume2 className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
                             </button>
                             <button
                                 onClick={() => handleCopy(item.text)}
                                 //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
-                                className='p-1 text-gray-400 dark:text-gray-500 mb-8'
+                                className='p-1 text-gray-400 dark:text-gray-500'
                             >
-                                <Copy className="h-4 w-4" />
+                                <Copy className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
                             </button>
                             <button
-                                onClick={() => toggleMultimedia(index)}
-                                className="text-sm font-semibold text-d-blue dark:text-blue-400 hover:underline dark:hover:hover:underline transition-all flex items-center gap-2"
+                                //onClick={() => handleRating(index, 'up')}
+                                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                                className='p-1 text-gray-400 dark:text-gray-500'
                             >
-                                {showMultimedia[index] ? (
-                                    <>
-                                        <BookOpen className="h-5 w-5" />
-                                        Cerrar contenido multimedia
-                                    </>
-                                ) : (
-                                    <>
-                                        <BookText className="h-5 w-5" />
-                                        Explorar contenido multimedia
-                                    </>
-                                )}
+                                <ThumbsUp className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
                             </button>
+                            <button
+                                //onClick={() => handleRating(index, 'down')}
+                                //className={`p-1 ${message.rating === 'down' ? 'text-red-500' : 'text-gray-500'}`}
+                                className='p-1  text-gray-400 dark:text-gray-500 mb-8'
+                            >
+                                <ThumbsDown className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
+                            </button>
+
+                            {(item.multimedia.images.length > 0 ||
+                                item.multimedia.videos.length > 0 ||
+                                item.multimedia.audios.length > 0 ||
+                                item.multimedia.documents.length > 0) && (
+
+                                    <button
+                                        onClick={() => toggleMultimedia(index)}
+                                        className="text-sm font-semibold text-d-blue dark:text-blue-400 hover:underline dark:hover:hover:underline transition-all flex items-center gap-2"
+                                    >
+                                        {showMultimedia[index] ? (
+                                            <>
+                                                <BookOpen className="h-5 w-5" />
+                                                Cerrar contenido multimedia
+                                            </>
+                                        ) : (
+                                            <>
+                                                <BookText className="h-5 w-5" />
+                                                Explorar contenido multimedia
+                                            </>
+                                        )}
+                                    </button>
+                                )}
 
                             {/* Renderizar multimedia si está activa */}
                             {showMultimedia[index] && (

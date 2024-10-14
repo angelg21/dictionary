@@ -16,6 +16,9 @@ import { MultimediaCharged } from "../../MultimediaCharged/MultimediaCharged"
 import { ExpandableInput } from "../../ExandableInput/ExpandableInput"
 import Link from "next/link"
 import { DescriptionMultimedia } from "../../AuthorFormComponents/DescriptionMultimedia/DescriptionMultimedia"
+import { useAlert } from "@/src/users/context/AlertContext"
+import { useParams, useRouter } from "next/navigation"
+import { saveGroupingForm } from "@/src/app/dashboard/forms/groupingForm/actions/save-grouping-form"
 
 
 export const GroupingDetailForm = () => {
@@ -23,6 +26,10 @@ export const GroupingDetailForm = () => {
     const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
     const uploadPreset = 'groupingsPreset';
 
+    const { showAlert } = useAlert();
+    const { id } = useParams();
+    const router = useRouter();
+    
     const [imageUrl, setImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [multimediaField, setMultimediaField] = useState(
@@ -91,6 +98,18 @@ export const GroupingDetailForm = () => {
             setTypeMultimediaField(undefined)
         }
     }, [multimediaField.description]);
+
+    const handleSafeForm = async () => {
+
+        const response = await saveGroupingForm(values, id);
+
+        if (response.ok) {
+            showAlert("Informacion guardada", "success");
+            router.push(`/dashboard/forms/groupingForm/${id}/groupingCriticism`);
+        } else {
+            showAlert("Error", "error");
+        }
+    }
 
     return (
         <div className="h-calc(100vh) overflow-y-auto mb-14 px-1">
@@ -194,16 +213,16 @@ export const GroupingDetailForm = () => {
                 />
 
                 <div className='flex col-span-full max-md:w-full justify-end md:col-span-3 mt-6'>
-
-                    <Link href={'/dashboard/forms/groupingForm/groupingCriticism'}>
-                        <button className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}>
-                            <span className="text-[15px] font-medium mr-4">Siguiente</span>
-                            <ArrowRightIcon className="w-6 h-6 text-white" />
-                        </button>
-                    </Link>
+                    <button
+                        className={`flex max-md:justify-center rounded-full px-5 py-3 text-white bg-d-blue`}
+                        onClick={() => handleSafeForm()}
+                    >
+                        <span className="text-[15px] font-medium mr-4">Siguiente</span>
+                        <ArrowRightIcon className="w-6 h-6 text-white" />
+                    </button>
                 </div>
             </div>
-            <DebugFormikValues />
+            {/* <DebugFormikValues /> */}
         </div>
     )
 }

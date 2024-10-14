@@ -27,11 +27,12 @@ interface Item {
 }
 
 interface Comparison {
-    items: Item[];
+    title: string;
     text: string;
+    items: Item[];
 }
 
-export const RenderComparison = ({ text, items }: Comparison) => {
+export const RenderComparison = ({ title, text, items }: Comparison) => {
 
     const { showAlert } = useAlert();
     const [showMultimedia, setShowMultimedia] = useState<{ [key: number]: boolean }>({}); // Estado para mostrar/ocultar multimedia
@@ -42,6 +43,9 @@ export const RenderComparison = ({ text, items }: Comparison) => {
     //Audio
     const audioRefs = useRef<HTMLAudioElement[][]>([]);
     const [audioStates, setAudioStates] = useState<boolean[][]>([]);
+
+    //Narracion del texto
+    const [isSpeaking, setIsSpeaking] = useState(false); // Controla si está narrando
 
     const handleVideoClick = (videoLink: string) => {
         setSelectedVideo(videoLink);
@@ -113,6 +117,16 @@ export const RenderComparison = ({ text, items }: Comparison) => {
     }, [showMultimedia, items]);
 
     const handleSpeech = (text: string) => {
+        // Si ya está hablando, detener la narración
+        if (isSpeaking) {
+            window.speechSynthesis.cancel(); // Detener la narración actual
+            setIsSpeaking(false); // Cambiar el estado a no hablando
+            return; // Salir de la función
+        }
+
+        // Asegurarse de que no haya otra narración en curso antes de comenzar
+        window.speechSynthesis.cancel();
+
         // Dividir el texto en fragmentos por múltiples delimitadores
         const sentences = text.split(/(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?|!|\n|,|;)/).filter(sentence => sentence.trim() !== '');
 
@@ -126,15 +140,18 @@ export const RenderComparison = ({ text, items }: Comparison) => {
                 // Cuando termina una oración, pasar a la siguiente
                 utterance.onend = () => {
                     currentIndex++;
-                    speakSentence(); // Reproducir la siguiente oración
+                    if (currentIndex < sentences.length) {
+                        speakSentence(); // Reproducir la siguiente oración
+                    } else {
+                        setIsSpeaking(false); // Cuando termine de leer todo, cambia el estado
+                    }
                 };
 
                 window.speechSynthesis.speak(utterance);
             }
         };
 
-        // Asegurarse de que no haya otra narración en curso
-        window.speechSynthesis.cancel();
+        setIsSpeaking(true); // Cambiar el estado a hablando
         speakSentence(); // Comenzar la narración
     };
 
@@ -146,18 +163,53 @@ export const RenderComparison = ({ text, items }: Comparison) => {
     }, []);
 
     const handleCopy = (textToCopy: string) => {
-        navigator.clipboard.writeText(textToCopy).then(() => {
+        const currentYear = new Date().getFullYear(); // Obtiene el año actual
+        const additionalText = `\n\nTomado de: LetraScopio. Diccionario de literatura del estado Bolívar. Ciudad Guayana: Universidad Católica Andres Bello, ${currentYear}. https://letrascopio.vercel.app/`;
+
+        // El texto final que se copiará, incluyendo el enlace clickeable
+        const finalText = `${textToCopy}${additionalText}`;
+
+        navigator.clipboard.writeText(finalText).then(() => {
             showAlert("Texto copiado en el portapapeles", "success");
         });
     };
 
     return (
         <div className="bg-white dark:bg-[#2D2D2D]">
+            <h2 className="text-xl font-bold mb-5">{title}</h2>
+            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-4 break-words whitespace-normal">{text}</p>
+            <button
+                onClick={() => handleSpeech(text)}
+                className={`p-1 text-gray-400 dark:text-gray-500 ${isSpeaking ? 'animate-ping' : ''}`}
+            >
+                <Volume2 className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
+            </button>
+            <button
+                onClick={() => handleCopy(text)}
+                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                className='p-1 text-gray-400 dark:text-gray-500 '
+            >
+                <Copy className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
+            </button>
+            <button
+                //onClick={() => handleRating(index, 'up')}
+                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
+                className='p-1 text-gray-400 dark:text-gray-500'
+            >
+                <ThumbsUp className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
+            </button>
+            <button
+                //onClick={() => handleRating(index, 'down')}
+                //className={`p-1 ${message.rating === 'down' ? 'text-red-500' : 'text-gray-500'}`}
+                className='p-1  text-gray-400 dark:text-gray-500 mb-8'
+            >
+                <ThumbsDown className="max-sm:w-5 max-sm:h-5 w-4 h-4" />
+            </button>
             {items &&
                 items.map((item, index) => (
                     <div key={index} className='flex mb-9'>
                         <div className="bg-white dark:bg-[#2D2D2D]">
-                            <h2 className="text-xl font-bold mb-5">{item.title}</h2>
+                            <p className="text-lg font-bold mb-4">{item.title}</p>
                             <button
                                 onClick={() => toggleMultimedia(index)}
                                 className="text-sm font-semibold text-d-blue dark:text-blue-400 hover:underline dark:hover:hover:underline transition-all flex items-center gap-2"
@@ -425,20 +477,6 @@ export const RenderComparison = ({ text, items }: Comparison) => {
                     </div>
                 ))
             }
-            <p className="mt-2 text-gray-700 dark:text-gray-300 mb-4 break-words whitespace-normal">{text}</p>
-            <button
-                onClick={() => handleSpeech(text)}
-                className="p-1 text-gray-400 dark:text-gray-500"
-            >
-                <Volume2 className="w-4 h-4" />
-            </button>
-            <button
-                onClick={() => handleCopy(text)}
-                //className={`p-1 ${message.rating === 'up' ? 'text-green-500' : 'text-gray-500'}`}
-                className='p-1 text-gray-400 dark:text-gray-500 mb-8'
-            >
-                <Copy className="h-4 w-4" />
-            </button>
         </div>
     )
 }

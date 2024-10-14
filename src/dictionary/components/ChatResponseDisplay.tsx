@@ -29,8 +29,9 @@ interface ComparisonItem {
 }
 
 interface Comparison {
-    items: ComparisonItem[];
+    title: string;
     text: string;
+    items: ComparisonItem[];
 }
 
 interface ListItem {
@@ -63,7 +64,7 @@ interface ChatResponse {
     data: {
         type: 'biography' | 'comparison' | 'list' | 'similarity' | 'multimedia' | 'model'; // Los tipos que puede recibir
         query: string;
-        result: Biography | Comparison | List | Similarity | Multimedia | Model; // Definición más específica de result
+        result: Biography | Comparison | List | Similarity | MultimediaQA | Model; // Definición más específica de result
     }
 }
 

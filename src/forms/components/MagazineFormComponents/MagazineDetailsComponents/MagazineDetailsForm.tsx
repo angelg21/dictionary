@@ -264,7 +264,7 @@ export const MagazineDetailsForm = () => {
                     </button>
 
                 </div>
-                <DebugFormikValues />
+                {/* <DebugFormikValues /> */}
             </div>
         </div>
     )

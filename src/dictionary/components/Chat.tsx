@@ -1,13 +1,16 @@
 'use client'
 
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
-import { Send, PenSquare, Leaf, Brain, Lightbulb, Moon, Sun } from 'lucide-react';
+import { Send, PenSquare, Leaf, Brain, Lightbulb, Moon, Sun, ArrowLeft, UserPen, Bot, FileText, Pencil, Image } from 'lucide-react';
 import { useTheme } from "next-themes";
 import Loader from './Loader';
 import { ShieldCheckIcon } from '@heroicons/react/24/outline';
 import ChatResponseDisplay from './ChatResponseDisplay';
 import { SendMessage } from '@/src/app/dictionary/actions/send-message';
 import { AlertProvider } from '@/src/users/context/AlertContext';
+import { useSession } from 'next-auth/react';
+import { link } from 'fs';
+import Link from 'next/link';
 
 // Define el tipo para cada mensaje
 interface Message {
@@ -28,7 +31,9 @@ export default function Chat() {
     const messagesContainerRef = useRef<HTMLDivElement | null>(null);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [loading, setLoading] = useState(false);
-
+    const { data: session } = useSession();
+    const [fichasPath, setFichasPath] = useState('');
+    const [name, setName] = useState('Investigador')
     const prueba = "json\n{\n  \"title\": \"Teresa Coraspe\",\n  \"text\": \"Teresa Coraspe vivió en Ciudad Bolívar durante la segunda mitad del siglo XX y la primera del siglo XXI.\",\n  \"multimedia\": {\n    \"images\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa Foto de Teresa en su casa \"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Teresa en su casa\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Teresa en su casa\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1727805937/Teresa_Coraspe_ciwt8q.jpg\",\n        \"description\": \"Foto de Tereszxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxz xxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxx xxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxx xxxxxxxxxx xxxxxxxxxxxxxxxxx xxxxxxxxxxxxxxx xa en su casa\"\n      }\n    ],\n    \"videos\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4\",\n        \"description\": \"Entrevista a Teresa Coraspe sobre su obra literaria\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728052102/WhatsApp_Video_2024-07-29_at_09.07.13_iwwdjo.mp4\",\n        \"description\": \"Documental sobre la vida de Teresa Coraspe\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4\",\n        \"description\": \"Conferencia de Teresa sobre poesía en Ciudad Bolívar\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728052102/WhatsApp_Video_2024-07-29_at_09.07.13_iwwdjo.mp4\",\n        \"description\": \"Evento en el cual Teresa discute sus escritos\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728086505/Dictionary/Authors/l7x5gzqarvfsq1llhee2.mp4\",\n        \"description\": \"Teresa hablando sobre los desafíos de ser una autora en su tiempo\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728052102/WhatsApp_Video_2024-07-29_at_09.07.13_iwwdjo.mp4\",\n        \"description\": \"Video homenaje a Teresa y su legado literario\"\n      }\n    ],\n    \"audios\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/ysuegjov5yxq8nik2yh1.ogg\",\n        \"description\": \"Entrevista sobre la vida personal de Teresa Coraspe\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/dmhvuwri2p9fhzlhs1kr.ogg\",\n        \"description\": \"Teresa leyendo un poema de su autoría\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/e0cfvuttkknxcqitp2js.ogg\",\n        \"description\": \"Discurso de Teresa sobre la importancia de la poesía en la sociedad\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/video/upload/v1728092963/Dictionary/Authors/bq9lme77hwablsngrief.ogg\",\n        \"description\": \"Reflexión sobre la vida de los escritores de su época\"\n      }\n    ],\n    \"documents\": [\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/image/upload/v1728150241/Dictionary/Authors/fi7lh5jkdgjvwo6vjutu.pdf\",\n        \"description\": \"Biografía de Teresa Coraspe en formato PDF\"\n      },\n      {\n        \"link\": \"https://res.cloudinary.com/dlhvylz4p/raw/upload/v1728150348/Dictionary/Authors/eyrddmcg9ynjawnzt3qi.docx\",\n        \"description\": \"Manuscrito de Teresa Coraspe en formato Word\"\n      }\n    ]\n  }\n}\n";
 
     type ResponseType = "biography" | "comparison" | "list" | "similarity" | "multimedia" | "model";
@@ -293,6 +298,7 @@ export default function Chat() {
                 },
             ],
             text: 'Análisis comparativo entre las obras "Las fieras se dan golpes de pecho" y "Vuelvo con mis huesos", donde ambas exploran temáticas de dolor, soledad y la batalla interna de los personajes frente a su entorno. La primera obra se enfoca en la cotidianidad mientras que la segunda profundiza en el dolor del desarraigo.',
+            title: 'Comparracion entre las obras vuelvo con mis huesos y vertice del circulo'
         },
     };
 
@@ -325,20 +331,34 @@ export default function Chat() {
         },
     };
 
+
+
     // Acceso al tema actual y a la función para cambiarlo
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        if (session) {
+            const userName = session?.user.fullName
+            setName(userName)
+        }
         setMounted(true);
     }, []);
 
     // Función para hacer scroll hasta el final
     const scrollToBottom = () => {
-        if (messagesContainerRef.current) {
-            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+
+            // Agregar un delay para hacer que el desplazamiento sea más lento
+            setTimeout(() => {
+                messagesEndRef.current?.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'end',  // Asegura que se mueva hacia el final
+                });
+            }, 2000); // Ajusta el tiempo aquí para hacerlo más lento
         }
-    };
+    }
 
     // Forzar el scroll al final cuando cambian los mensajes o el estado de carga
     useEffect(() => {
@@ -412,18 +432,43 @@ export default function Chat() {
     };
 
     const suggestions = [
-        { text: "Consejos para una carta de presentación", icon: PenSquare },
-        { text: "Consejos para el cuidado de plantas", icon: Leaf },
-        { text: "Poner a prueba mis conocimientos", icon: Brain },
-        { text: "Cómo funciona algo", icon: Lightbulb },
+        { text: "¿Quién creó LetraScopio y cuál es su propósito?", icon: Bot, colorIcon: 'text-d-blue dark:text-d-fondo' },
+        { text: "¿Quién es Oscar Pirrongeli y cuál es su legado en la literatura?", icon: UserPen, colorIcon: 'text-d-green' },
+        { text: "¿Qué temas aborda la obra Vuelvo con mis huesos de Teresa Coraspe?", icon: FileText, colorIcon: 'text-d-yellow' },
+        { text: "Quiero ver material multimedia (fotos, videos, audios) de Teresa Coraspe", icon: Image, colorIcon: 'text-d-red' },
     ];
+
+    const [darkMode, setDarkMode] = useState(false);
+
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light')
+    }
+
+    useEffect(() => {
+        // Si session es null o undefined, evita la actualización del estado
+        if (!session) return;
+
+        const { roles } = session.user;
+
+        if (roles.includes('admin')) {
+            setFichasPath('/dashboard/worksheets/validatedSheets');
+        } else if (roles.includes('editor') && !roles.includes('reviewer')) {
+            setFichasPath('/dashboard/worksheets/sheetsToComplete');
+        } else if (roles.includes('reviewer') && !roles.includes('editor')) {
+            setFichasPath('/dashboard/worksheets/sheetsToReview');
+        } else if (roles.includes('editor') && roles.includes('reviewer')) {
+            setFichasPath('/dashboard/worksheets/sheetsToComplete');
+        } else {
+            setFichasPath(''); // Opcional: Maneja el caso por defecto si es necesario
+        }
+    }, [session]);
 
     if (!mounted) return null;
 
     return (
         <AlertProvider>
             <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
-                <div className="relative flex flex-col pl-2 py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/bg-dark-header.png')]">
+                <div className="relative flex flex-col pl-2 py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/header-oscuro.png')]">
                     <div className="flex items-center  text-center space-x-0">
                         <span className="text-gray-900 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
                         <span className="text-gray-900 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
@@ -436,51 +481,83 @@ export default function Chat() {
                         LetraScopio-preview
                     </p>
                 </div>
-                <button
-                    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-                    className="mx-6 mt-6 text-gray-500 dark:text-gray-400"
-                >
-                    {theme === 'light' ? (
-                        <Moon className="h-[1.2rem] w-[1.2rem] text-d-blue" />
-                    ) : (
-                        <Sun className="h-[1.2rem] w-[1.2rem] text-d-yellow" />
+                <div className='flex justify-between mx-6 mt-6'>
+                    <div className="flex items-center">
+                        <button
+                            onClick={toggleTheme}
+                            className={`relative flex items-center w-[154px] h-[40px] rounded-full p-1 transition-colors duration-300 focus:outline-none ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-800'
+                                }`}
+                        >
+                            <span
+                                className={`absolute text-xs font-medium transition-opacity duration-300 ${theme === 'light' ? 'left-12 opacity-100' : 'left-3 opacity-0'
+                                    }`}
+                            >
+                                TEMA CLARO
+                            </span>
+                            <span
+                                className={`absolute text-xs font-medium transition-opacity duration-300 ${theme === 'dark' ? 'right-12 opacity-100' : 'right-3 opacity-0'
+                                    }`}
+                            >
+                                TEMA OSCURO
+                            </span>
+                            <span
+                                className={`flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white dark:bg-d-fondo shadow-md transform transition-transform duration-300 ${theme === 'dark' ? 'translate-x-[112px]' : ''
+                                    }`}
+                            >
+                                {theme === 'light' ? (
+                                    <Sun className="w-5 h-5 text-yellow-500" />
+                                ) : (
+                                    <Moon className="w-5 h-5 text-blue-500" />
+                                )}
+                            </span>
+                        </button>
+                    </div>
+                    {session && (
+                        <Link href={fichasPath}>
+                            <button className="h-[40px] rounded-full bg-d-blue text-white dark:bg-d-fondo dark:text-gray-800 px-4 flex items-center space-x-2 hover:bg-blue-950 dark:hover:bg-d-gray-light transition-colors">
+                                <ArrowLeft className="w-5 h-5" />
+                                <span className='text-sm font-medium'>Dashboard</span>
+                            </button>
+                        </Link>
                     )}
-                    <span className="sr-only">Cambiar tema</span>
-                </button>
+                </div>
+                {/* Select Theme */}
                 <div className="flex-1 overflow-y-auto">
                     <div className="max-w-[800px] mx-auto w-full h-full">
                         {messages.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-full">
+                            <div className="flex flex-col items-center justify-start h-full max-sm:mx-3">
                                 <h1 className="text-4xl font-bold mb-4">
-                                    <h1 className="text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
-                                        Hola, Angel
+                                    <h1 className="max-sm:text-4xl text-6xl font-bold py-3 mb-2 text-center bg-gradient-to-r from-d-blue via-d-blue-light-button to-pink-500 text-transparent bg-clip-text" style={{ fontFamily: 'Arial, sans-serif' }}>
+                                        Hola, {name}
                                     </h1>
-                                    <p className="text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
+                                    <p className="max-sm:text-4xl text-6xl text-gray-400 dark:text-gray-500 mb-8 text-center font-bold" style={{ fontFamily: 'Arial, sans-serif' }}>
                                         ¿En qué puedo ayudarte?
                                     </p>
                                 </h1>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-1 gap-4 max-w-[560px]">
                                     {suggestions.map((suggestion, index) => (
                                         <button
                                             key={index}
-                                            className="h-24 flex flex-col items-center justify-center text-center border-gray-300 dark:border-gray-700"
+                                            className="group relative h-12 w-full flex items-center justify-start rounded-lg shadow-lg bg-white dark:bg-[#2D2D2D] border border-gray-300 dark:border-gray-700 transition-all hover:scale-105 hover:shadow-2xl dark:hover:bg-gray-800 hover:bg-gray-100"
                                             onClick={() => handleSend(suggestion.text)}
                                         >
-                                            <suggestion.icon className="h-6 w-6 mb-2" />
-                                            {suggestion.text}
+                                            <div className="flex items-center justify-start w-full mx-4">
+                                                <suggestion.icon className={`max-sm:h-7 max-sm:w-7 h-6 w-6 mr-3 ${suggestion.colorIcon}`} />
+                                                <span className="text-sm font-medium text-gray-900 dark:text-gray-100 whitespace-normal text-left">{suggestion.text}</span>
+                                            </div>
                                         </button>
                                     ))}
                                 </div>
                             </div>
                         ) : (
 
-                            <div ref={messagesContainerRef}>
+                            <div ref={messagesContainerRef} className='max-sm:mx-2'>
                                 {messages.map((message, index) => (
                                     <div key={index} className={`mb-4 flex ${message.role === 'user' ? 'justify-end' : 'items-start'}`}>
                                         {message.role === 'assistant' && (
-                                            <div className="hidden sm:flex  w-8 h-8 rounded-full bg-blue-500 flex-shrink-0 items-center justify-center">
-                                                <span className="text-white text-sm font-bold">AI</span>
+                                            <div className="hidden sm:flex  w-8 h-8 rounded-full bg-d-blue dark:bg-d-fondo flex-shrink-0 items-center justify-center">
+                                                <span className="text-white dark:text-gray-800 text-sm font-bold">LS</span>
                                             </div>
                                         )}
                                         <div className={`my-4 max-w-[800px] inline-block px-4 ${message.role === 'user'
