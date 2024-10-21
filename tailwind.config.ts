@@ -38,6 +38,10 @@ const config: Config = {
       },
       // Add keyframes and animations for bounce-slow
       keyframes: {
+        wiggleX: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '50%': { transform: 'translateX(5px)' },
+        },
         bounceSlow: {
           '0%, 100%': {
             transform: 'translateY(-50%)',  // reduced bounce height
@@ -50,6 +54,7 @@ const config: Config = {
         },
       },
       animation: {
+        'wiggleX': 'wiggleX 1s ease-in-out infinite',
         'bounce-slow': 'bounceSlow 0.8s infinite',  // applying the keyframe with reduced height
       },
     },
