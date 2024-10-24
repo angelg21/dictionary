@@ -2,51 +2,7 @@
 
 import { Newspaper } from "lucide-react"
 import { useEffect, useState } from "react";
-
-// const newsItems = [
-//     {
-//         title: "Nuevo análisis de IA revela patrones ocultos en 'Cien años de soledad'",
-//         excerpt: "Un estudio reciente utilizando inteligencia artificial ha descubierto nuevas conexiones temáticas en la obra maestra de Gabriel García Márquez.",
-//         date: "15 de octubre, 2024",
-//         image: "/placeholder.svg?height=200&width=300"
-//     },
-//     {
-//         title: "LiteraturAI lanza función de recomendación de libros personalizada",
-//         excerpt: "Nuestra plataforma ahora ofrece recomendaciones de lectura basadas en tus preferencias literarias y historial de conversación.",
-//         date: "3 de octubre, 2024",
-//         image: "/placeholder.svg?height=200&width=300"
-//     },
-//     {
-//         title: "Colaboración entre IA y autores humanos gana premio literario",
-//         excerpt: "Por primera vez, una novela co-escrita por un autor humano y un sistema de IA ha sido galardonada con un prestigioso premio de literatura.",
-//         date: "28 de septiembre, 2024",
-//         image: "/placeholder.svg?height=200&width=300"
-//     }
-// ]
-
-// const fetchNewsData = async () => {
-//     const url = `https://newsapi.org/v2/everything?qInTitle=literatura&language=es&sortBy=relevancy&apiKey=3d1620013366400faa5d7c3ca9b88280`;
-
-//     try {
-//         const response = await fetch(url);
-
-//         if (!response.ok) {
-//             throw new Error(`Error en la solicitud: ${response.statusText}`);
-//         }
-
-//         const data = await response.json();
-
-//         // Verifica si hay noticias
-//         if (data.status === "ok" && data.articles.length > 0) {
-//             return data.articles; // Retorna los artículos de noticias
-//         } else {
-//             throw new Error("No se encontraron noticias relevantes");
-//         }
-//     } catch (error) {
-//         console.error("Error al obtener las noticias:", (error as Error).message);
-//         return [];
-//     }
-// };
+import { getNews } from "./actions/get-news";
 
 const News = () => {
     const [newsItems, setNewsItems] = useState<any[]>([]);
@@ -62,35 +18,21 @@ const News = () => {
         },
     };
 
-    // Función para traer las noticias de la API
+    // Función para traer las noticias usando la server action
     const fetchNewsData = async () => {
-        const url = 'https://newsapi.org/v2/everything?qInTitle=literatura&language=es&sortBy=relevancy&apiKey=3d1620013366400faa5d7c3ca9b88280';
-
         try {
-            const response = await fetch(url);
-            const data = await response.json();
+            // Llama a la server action para obtener las noticias filtradas
+            const fetchedNews = await getNews();
 
-            if (data.status === 'ok') {
-                // Filtrar por las fuentes "Muyinteresante.com" y "Noticiaslatam.lat"
-                const filteredNews = data.articles.filter((article: any) =>
-                    article.source.name === "Muyinteresante.com" ||
-                    article.source.name === "Noticiaslatam.lat" ||
-                    article.title.includes("Venezuela") ||
-                    article.description.includes("Venezuela")
-                );
-
-                // Agregar la noticia personalizada al conjunto de noticias
-                setNewsItems([customNews, ...filteredNews]);
-            } else {
-                console.error('Error al obtener las noticias');
-            }
+            // Combina la noticia personalizada con las noticias obtenidas
+            setNewsItems([customNews, ...fetchedNews]);
         } catch (error) {
             console.error('Error al obtener las noticias:', error);
         }
     };
 
     useEffect(() => {
-        fetchNewsData();
+        fetchNewsData(); // Llama a la función que usa la server action
     }, []);
 
     return (
