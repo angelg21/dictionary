@@ -107,7 +107,7 @@ export const LandingPage = () => {
                 <section id="caracteristicas" className="bg-white dark:bg-[#2D2D2D]">
                     <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
                         <div className="lg:text-center">
-                            <h2 className="text-base text-gray-400  font-semibold tracking-wide uppercase">Características</h2>
+                            <h2 className="text-base text-gray-400  font-semibold tracking-wide uppercase text-center">Características</h2>
                             <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
                                 Una nueva forma de explorar el fascinante mundo de la literatura del estado Bolívar
                             </p>
@@ -173,7 +173,7 @@ export const LandingPage = () => {
                 </section>
 
                 <section id="estadisticas" className="bg-white dark:bg-[#2D2D2D]">
-                    <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                    <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 ">
                         <StatsSection />
                     </div>
                 </section>
@@ -186,37 +186,6 @@ export const LandingPage = () => {
             </main>
             <footer className="bg-white dark:bg-[#2D2D2D]">
                 <Footer />
-                {/* <footer className="bg-gray-800 text-white py-8">
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div>
-                                <h3 className="text-lg font-semibold">Contacto</h3>
-                                <p>Email: info@letrascopio.com</p>
-                                <p>Teléfono: +58 123 456789</p>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold">Enlaces</h3>
-                                <ul>
-                                    <li><a href="#" className="hover:underline">Sobre nosotros</a></li>
-                                    <li><a href="#" className="hover:underline">Términos y condiciones</a></li>
-                                    <li><a href="#" className="hover:underline">Política de privacidad</a></li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-semibold">Síguenos</h3>
-                                <div className="flex space-x-4">
-                                    <a href="#"><i className="fab fa-facebook"></i></a>
-                                    <a href="#"><i className="fab fa-twitter"></i></a>
-                                    <a href="#"><i className="fab fa-instagram"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="mt-8 text-center">
-                            <p>&copy; 2024 LetraScopio. Todos los derechos reservados.</p>
-                        </div>
-                    </div>
-                </footer> */}
-
             </footer>
         </div>
     )

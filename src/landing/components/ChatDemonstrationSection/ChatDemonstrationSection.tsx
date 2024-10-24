@@ -55,9 +55,9 @@ export const ChatDemonstrationSection = () => {
     };
 
     return (
-        <div className="max-w-[1420px] h-full mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="max-w-[1420px] h-full mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-18">
             <div className="lg:text-center mb-10">
-                <h2 className="text-base text-d-green font-semibold tracking-wide uppercase">Demostración</h2>
+                <h2 className="text-base text-d-green font-semibold tracking-wide uppercase text-center">Demostración</h2>
                 <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
                     Descubre el poder de nuestro agente literario
                 </p>

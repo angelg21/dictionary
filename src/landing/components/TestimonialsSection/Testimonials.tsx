@@ -71,7 +71,7 @@ function classNames(...classes: any[]) {
 
 export const Testimonials = () => {
     return (
-        <div className="relative isolate bg-white dark:bg-[#2D2D2D] pb-20 pt-18 sm:pt-20">
+        <div className="relative isolate bg-white dark:bg-[#2D2D2D] pb-20 pt-18 ">
             <div
                 aria-hidden="true"
                 className="absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 transform-gpu overflow-hidden opacity-30 blur-3xl"

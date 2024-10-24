@@ -36,9 +36,9 @@ const News = () => {
     }, []);
 
     return (
-        <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 pb-20 pt-18">
             <div className="lg:text-center mb-10">
-                <h2 className="text-base text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase">NOTICIAS</h2>
+                <h2 className="text-base text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase text-center">NOTICIAS</h2>
                 <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
                     Lo más reciente en literatura y LetraScopio
                 </p>
