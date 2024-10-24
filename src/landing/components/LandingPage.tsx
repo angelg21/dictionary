@@ -15,25 +15,11 @@ import { Footer } from './FooterSection/Footer'
 
 export const LandingPage = () => {
 
-    const [demoQuestion, setDemoQuestion] = useState('');
-    const [demoAnswer, setDemoAnswer] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const [isClient, setIsClient] = useState(false);
 
     // Acceso al tema actual y a la función para cambiarlo
     const { theme, setTheme } = useTheme();
 
-    const handleDemoSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        if (demoQuestion.trim()) {
-            setIsLoading(true)
-            // Simular una respuesta del API
-            setTimeout(() => {
-                setDemoAnswer('Esta es una respuesta de demostración. Para continuar la conversación, por favor ve a la página principal del chat.')
-                setIsLoading(false)
-            }, 2000)
-        }
-    }
 
     // Manejar el cambio de tema
     const toggleTheme = () => {
@@ -61,24 +47,25 @@ export const LandingPage = () => {
                 <nav className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex-shrink-0 flex items-center">
-                            {/* <BookOpen className="h-8 w-8 text-blue-600 dark:text-blue-400" /> */}
-                            <div className="relative flex flex-col pl-2 py-[2px]">
-                                <div className="flex items-center  text-center space-x-0">
+                            <div className="relative flex flex-col pl-2 py-[2px] max-w-full">
+                                <div className="flex items-center text-center space-x-0">
                                     <span className="text-gray-200 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
                                     <span className="text-gray-200 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
                                 </div>
-                                <span className="text-gray-200 dark:text-gray-100 text-xs font-normal leading-tight align-middle">Diccionario de Literatura del Estado Bolívar</span>
+                                <p className="text-gray-200 dark:text-gray-100 text-xs font-normal leading-tight align-middle break-words whitespace-normal max-w-full">
+                                    Diccionario de Literatura del Estado Bolívar
+                                </p>
                             </div>
                         </div>
-                        <div className='hidden md:flex justify-between space-x-5'>
-                            <button onClick={() => handleScroll('caracteristicas')} className='text-base font-medium hover:font-semibold hover:text-gray-400 text-white'>Carasteristicas</button>
-                            <button onClick={() => handleScroll('demostracion')} className='text-base font-medium hover:font-semibold hover:text-d-green-light text-white'>Demostracion</button>
+                        <div className='hidden lg:flex justify-between space-x-5'>
+                            <button onClick={() => handleScroll('caracteristicas')} className='text-base font-medium hover:font-semibold hover:text-gray-400 text-white'>Carasterísticas</button>
+                            <button onClick={() => handleScroll('demostracion')} className='text-base font-medium hover:font-semibold hover:text-d-green-light text-white'>Demostración</button>
                             <button onClick={() => handleScroll('testimonios')} className='text-base font-medium hover:font-semibold hover:text-d-yellow text-white'>Testimonios</button>
                             <button onClick={() => handleScroll('noticias')} className='text-base font-medium hover:font-semibold hover:text-blue-600 text-white'>Noticias</button>
                         </div>
                         <div className="flex items-center">
                             {/* <ThemeToggle /> */}
-                            <div className="flex items-center">
+                            <div className="hidden sm:flex items-center">
                                 <button
                                     onClick={toggleTheme}
                                     className={`relative flex items-center w-[154px] h-[40px] rounded-full p-1 transition-colors duration-300 focus:outline-none ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-800'
@@ -122,10 +109,10 @@ export const LandingPage = () => {
                         <div className="lg:text-center">
                             <h2 className="text-base text-gray-400  font-semibold tracking-wide uppercase">Características</h2>
                             <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                                Una nueva forma de explorar la literatura
+                                Una nueva forma de explorar el fascinante mundo de la literatura del estado Bolívar
                             </p>
                             <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-300 lg:mx-auto">
-                                Descubre todo lo que puedes hacer con nuestro asistente de IA especializado en literatura.
+                                Descubre todo lo que puedes hacer con nuestro agente de IA especializado en literatura del estado Bolívar.
                             </p>
                         </div>
                         <div className="mt-10">
@@ -133,7 +120,7 @@ export const LandingPage = () => {
                                 {[
                                     {
                                         name: 'Exploración de autores locales',
-                                        description: 'Descubre a los autores literarios del Estado Bolívar y sus obras más relevantes.',
+                                        description: 'Descubre a los autores literarios del estado Bolívar y sus obras más relevantes.',
                                         icon: PenTool,
                                         color: 'bg-d-blue',
                                     },
@@ -198,7 +185,7 @@ export const LandingPage = () => {
 
             </main>
             <footer className="bg-white dark:bg-[#2D2D2D]">
-                <Footer/>
+                <Footer />
                 {/* <footer className="bg-gray-800 text-white py-8">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

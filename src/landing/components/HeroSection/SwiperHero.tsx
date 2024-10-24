@@ -14,6 +14,8 @@ import 'swiper/css/pagination';
 // import required modules
 import { Autoplay, EffectFade, Navigation, Pagination } from 'swiper/modules'
 import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react';
 
 const handleScroll = (sectionId: string) => {
     const section = document.getElementById(sectionId);
@@ -23,6 +25,14 @@ const handleScroll = (sectionId: string) => {
 };
 
 export const SwiperHero = () => {
+
+    const { theme, setTheme } = useTheme();
+
+    // Manejar el cambio de tema
+    const toggleTheme = () => {
+        setTheme(theme === 'light' ? 'dark' : 'light')
+    }
+
     return (
         <section className="relative w-full max-h-[400px]">
             {/* Swiper de fondo */}
@@ -41,7 +51,7 @@ export const SwiperHero = () => {
                 className="absolute inset-0 z-0 w-full max-h-[400px]"
             >
                 <SwiperSlide>
-                <img className="w-full object-cover" src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1728960587/Dictionary/Landing/SwiperHero/dawg8viw0hmvjvrnvlok.jpg" alt="Nature 1" />
+                    <img className="w-full object-cover" src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1728960587/Dictionary/Landing/SwiperHero/dawg8viw0hmvjvrnvlok.jpg" alt="Nature 1" />
                 </SwiperSlide>
                 <SwiperSlide>
                     <img className="w-full object-cover" src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1728960587/Dictionary/Landing/SwiperHero/dawg8viw0hmvjvrnvlok.jpg" alt="Nature 2" />
@@ -56,6 +66,20 @@ export const SwiperHero = () => {
 
             {/* Contenido de texto superpuesto */}
             <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
+                <div className="absolute m-4 top-0 left-0 sm:hidden items-center">
+                    <button
+                        onClick={toggleTheme}
+                    >
+                        <span
+                        >
+                            {theme === 'light' ? (
+                                <Sun className="w-6 h-6 text-yellow-500" />
+                            ) : (
+                                <Moon className="w-6 h-6 text-d-blue" />
+                            )}
+                        </span>
+                    </button>
+                </div>
                 <h1 className="text-4xl font-extrabold sm:text-5xl md:text-6xl">
                     Explora la literatura con IA
                 </h1>

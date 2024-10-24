@@ -16,7 +16,7 @@ export const StatsSection = () => {
                             Impacto de la plataforma en la literatura del estado Bolívar
                         </h2>
                         <p className="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
-                            Nuestra plataforma ha unido a una comunidad de lectores, autores y académicos que comparten su pasión por la literatura del Estado Bolívar, creando nuevas oportunidades para el descubrimiento y la colaboración.
+                            Nuestra plataforma ha unido a una comunidad de lectores, autores y académicos que comparten su pasión por la literatura del estado Bolívar, creando nuevas oportunidades para el descubrimiento y la colaboración.
                         </p>
                     </div>
                     <dl className="mt-16 grid grid-cols-1 gap-0.5 overflow-hidden rounded-2xl text-center sm:grid-cols-2 lg:grid-cols-4">

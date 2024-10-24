@@ -57,9 +57,9 @@ const News = () => {
         urlToImage: "https://res.cloudinary.com/dlhvylz4p/image/upload/v1729143682/Dictionary/Landing/Testimonials/ckqmt7skpz7p864iyk3z.png",
         publishedAt: new Date().toISOString().split('T')[0], // Fecha actual
         source: {
-                id: null,
-                name: "UCAB extensión Guayana"
-            },
+            id: null,
+            name: "UCAB extensión Guayana"
+        },
     };
 
     // Función para traer las noticias de la API
@@ -108,34 +108,36 @@ const News = () => {
             <div className="mt-10 grid gap-10 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-10">
                 {newsItems.map((item, index) => (
                     <div key={index} className="flex flex-col rounded-lg shadow-lg overflow-hidden transition-all hover:scale-105 hover:shadow-2xl">
-                        <div className="flex-shrink-0">
-                            <img className="h-48 w-full object-cover" src={item.urlToImage} alt={item.title} />
-                        </div>
-                        <div className="flex-1 bg-white dark:bg-gray-700 p-6 flex flex-col justify-between">
-                            <div className="flex-1">
-                                <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
-                                    Noticia
-                                </p>
-                                <a href={item.url || '#'} target="_blank" rel="noopener noreferrer" className="block mt-2">
-                                    <p className="text-xl font-semibold text-gray-900 dark:text-white">{item.title}</p>
-                                    <p className="mt-3 text-base text-gray-500 dark:text-gray-300">{item.description}</p>
-                                    <p className="mt-2 text-base text-gray-500 dark:text-gray-300">Fuente: <span className="text-sm font-serif text-gray-400 dark:text-gray-300">{item.source.name}</span></p>
-                                </a>
+                        <a href={item.url || '#'} target="_blank" rel="noopener noreferrer">
+                            <div className="flex-shrink-0">
+                                <img className="h-48 w-full object-cover" src={item.urlToImage} alt={item.title} />
                             </div>
-                            <div className="mt-6 flex items-center">
-                                <div className="flex-shrink-0">
-                                    <Newspaper className="h-5 w-5 text-gray-400" />
-                                </div>
-                                <div className="ml-3">
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                        Publicado el
+                            <div className="flex-1 bg-white dark:bg-gray-700 p-6 flex flex-col justify-between">
+                                <div className="flex-1">
+                                    <p className="text-sm font-medium text-blue-600 dark:text-blue-400">
+                                        Noticia
                                     </p>
-                                    <div className="flex space-x-1 text-sm text-gray-500 dark:text-gray-300">
-                                        <time dateTime={item.publishedAt}>{item.publishedAt.split('T')[0]}</time>
+                                    <div className="block mt-2">
+                                        <p className="text-xl font-semibold text-gray-900 dark:text-white">{item.title}</p>
+                                        <p className="mt-3 text-base text-gray-500 dark:text-gray-300">{item.description}</p>
+                                        <p className="mt-2 text-base text-gray-500 dark:text-gray-300">Fuente: <span className="text-sm font-serif text-gray-400 dark:text-gray-300">{item.source.name}</span></p>
+                                    </div>
+                                </div>
+                                <div className="mt-6 flex items-center">
+                                    <div className="flex-shrink-0">
+                                        <Newspaper className="h-5 w-5 text-gray-400" />
+                                    </div>
+                                    <div className="ml-3">
+                                        <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                            Publicado el
+                                        </p>
+                                        <div className="flex space-x-1 text-sm text-gray-500 dark:text-gray-300">
+                                            <time dateTime={item.publishedAt}>{item.publishedAt.split('T')[0]}</time>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 ))}
             </div>
