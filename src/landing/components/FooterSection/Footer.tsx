@@ -97,11 +97,23 @@ export const Footer = () => {
                 </div>
 
                 {/* Sección de la UCAB con logo */}
-                <div className="mt-10 flex items-center justify-center md:justify-between">
+                <div className="mt-10 flex max-md:flex-col max-md:space-y-6 items-center justify-center md:justify-between">
                     <div className="mt-4 md:mt-0">
-                        <img src={'https://res.cloudinary.com/dlhvylz4p/image/upload/v1729192429/Dictionary/Landing/Testimonials/czd27iqao75izitnyh4g.png'} alt="Logo UCAB" className="h-12 w-auto mx-auto md:ml-4" />
+                        {/* Logo para pantallas pequeñas */}
+                        {/* <img
+                            src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1729735717/Dictionary/Landing/Testimonials/hlywwutvwnmddb0iafgh.png"
+                            alt="Logo LetraScopio"
+                            className="h-12 w-auto mx-auto md:ml-4 block md:hidden object-contain flex-shrink-0"
+                        /> */}
+
+                        {/* Logo para pantallas medianas o mayores */}
+                        <img
+                            src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1729192429/Dictionary/Landing/Testimonials/czd27iqao75izitnyh4g.png"
+                            alt="Logo UCAB"
+                            className="h-12 w-auto mx-auto object-contain flex-shrink-0"
+                        />
                     </div>
-                    <div className="text-center md:text-left">
+                    <div className="flex text-center md:text-left">
                         <p className="text-sm text-gray-400">En colaboración con la <span className="font-semibold text-gray-300">Universidad Católica Andrés Bello (UCAB)</span></p>
                     </div>
                 </div>
