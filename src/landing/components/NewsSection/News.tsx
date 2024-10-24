@@ -40,10 +40,10 @@ const News = () => {
             <div className="lg:text-center mb-10">
                 <h2 className="text-base text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase">NOTICIAS</h2>
                 <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
-                    Últimas novedades en LiteraturAI
+                    Lo más reciente en literatura y LetraScopio
                 </p>
                 <p className="mt-4 max-w-2xl text-xl text-gray-500 dark:text-gray-300 lg:mx-auto">
-                    Mantente al día con las últimas noticias y actualizaciones de nuestra plataforma.
+                    Explora las últimas noticias y actualizaciones del mundo literario, junto con las novedades de nuestra plataforma.
                 </p>
             </div>
 
