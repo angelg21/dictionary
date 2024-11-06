@@ -468,12 +468,24 @@ export default function Chat() {
     return (
         <AlertProvider>
             <div className="flex flex-col h-screen w-full mx-auto bg-white dark:bg-[#2D2D2D] text-gray-900 dark:text-gray-100">
-                <div className="relative flex flex-col pl-2 py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/header-oscuro.png')]">
-                    <div className="flex items-center  text-center space-x-0">
-                        <span className="text-gray-900 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
-                        <span className="text-gray-900 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
+                <div className="relative flex flex-col pl-2 max-sm:h-[60px] h-[80px] py-[2px] bg-cover bg-center bg-[url('/assets/bg-header-chat.png')] dark:bg-[url('/assets/header-oscuro.png')]">
+                    <div className="flex-shrink-0 flex items-center">
+                        <div className="relative flex flex-col pl-2 py-[2px] max-w-full">
+                            <div className="flex items-center text-center space-x-0">
+                                {/* Imagen que contiene las letras */}
+                                <img
+                                    src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1730857447/Dictionary/Landing/Logo/obrxazplo9eu4rtzfngk.png"
+                                    className="h-auto  max-sm:h-[55px] w-auto max-w-full max-h-[75px] dark:hidden" // Imagen para tema claro
+                                    alt="Logo Light Mode"
+                                />
+                                <img
+                                    src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1730827012/Dictionary/Landing/Logo/l3etfqufly29esdimqtz.png"
+                                    className="h-auto max-sm:h-[55px] w-auto max-w-full max-h-[75px] hidden dark:block" // Imagen para tema oscuro
+                                    alt="Logo Dark Mode"
+                                />
+                            </div>
+                        </div>
                     </div>
-                    <span className="text-gray-900 dark:text-gray-100 text-xs font-normal leading-tight align-middle">Diccionario de Literatura del Estado Bolívar</span>
                 </div>
                 <div className='w-full h-[26px] bg-d-blue flex items-center justify-center'>
                     <ShieldCheckIcon className='h-4 w-4 text-white mr-1' />

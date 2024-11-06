@@ -85,13 +85,13 @@ export const MagazineReview = () => {
                                         <div className="sm:col-span-2">
 
                                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                                <span className="text-sm leading-6 text-gray-900">Ciudad: </span>{values.publicationPlace.city}
+                                                <span className="text-sm leading-6 text-gray-900">Ciudad: </span>{values.publicationPlace?.city}
                                             </dd>
                                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                                <span className="text-sm leading-6 text-gray-900">Imprenta: </span>{values.publicationPlace.printingHouse}
+                                                <span className="text-sm leading-6 text-gray-900">Imprenta: </span>{values.publicationPlace?.printingHouse}
                                             </dd>
                                             <dd className="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                                                <span className="text-sm leading-6 text-gray-900">Editorial: </span>{values.publicationPlace.publisher}
+                                                <span className="text-sm leading-6 text-gray-900">Editorial: </span>{values.publicationPlace?.publisher}
                                             </dd>
                                         </div>
                                     </div>

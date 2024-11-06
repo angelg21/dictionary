@@ -22,7 +22,7 @@ export const PlacePublicationForm = ({ type, globalStyle, labelTextStyle, label,
             <div className="flex flex-col md:flex-row md:space-x-4 max-md:space-y-4 ">
 
                 <input
-                    value={values.publicationPlace.city}
+                    value={values.publicationPlace?.city}
                     type={type}
                     className={`text-input ${inputWidth} rounded-md border-0 text-gray-900 shadow-sm ring-1 ring-inset 
                 ring-gray-300 hover:ring-gray-400 h-9 placeholder:text-gray-400 focus:ring-2 ${focusBorderColor} sm:text-sm sm:leading-6 font-normal disabled:opacity-70 disabled:cursor-not-allowed`}
@@ -34,7 +34,7 @@ export const PlacePublicationForm = ({ type, globalStyle, labelTextStyle, label,
                 />
 
                 <input
-                    value={values.publicationPlace.printingHouse}
+                    value={values.publicationPlace?.printingHouse}
                     onChange={(e) => setFieldValue("publicationPlace", {
                         ...values.publicationPlace, // Mantén las otras propiedades de publicationPlace
                         printingHouse: e.target.value        // Cambia solo el campo city
@@ -47,7 +47,7 @@ export const PlacePublicationForm = ({ type, globalStyle, labelTextStyle, label,
                 />
 
                 <input
-                    value={values.publicationPlace.publisher}
+                    value={values.publicationPlace?.publisher}
                     onChange={(e) => setFieldValue("publicationPlace", {
                         ...values.publicationPlace, // Mantén las otras propiedades de publicationPlace
                         publisher: e.target.value        // Cambia solo el campo city

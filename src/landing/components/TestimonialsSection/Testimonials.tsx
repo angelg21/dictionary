@@ -14,12 +14,12 @@ const testimonials = [
     [
         [
             {
-                body: 'Laborum quis quam. Dolorum et ut quod quia. Voluptas numquam delectus nihil. Aut enim doloremque et ipsam.',
+                body: 'El Diccionario de literatura del estado Bolívar es un maravilloso ejemplo de construcción interdisciplinar del conocimiento. En él, los diseñadores han puesto todo su saber e ingenio y estoy segura de que será una valiosa herramienta de consulta permanente para redescubrir nuestro estado. Felicitaciones para los creadores.',
                 author: {
-                    name: 'Leslie Alexander',
-                    handle: 'lesliealexander',
+                    name: 'Dra. Nay Valero',
+                    handle: 'Educación Ambiental para la Sostenibilidad. UNEG.',
                     imageUrl:
-                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                        'https://res.cloudinary.com/dlhvylz4p/image/upload/v1730825035/Dictionary/Landing/Testimonials/msthbwlkkbcbcqomm3vk.jpg',
                 },
             },
             // More testimonials...
@@ -139,7 +139,7 @@ export const Testimonials = () => {
                                             key={testimonial.author.handle}
                                             className="relative rounded-2xl bg-white p-6 shadow-lg ring-1 ring-gray-900/5"
                                         >
-                                            <blockquote className="text-gray-900">
+                                            <blockquote className="text-gray-900 font-medium">
                                                 <p>{`${testimonial.body}`}</p>
                                             </blockquote>
                                             <figcaption className="mt-6 flex items-center gap-x-4 relative">
@@ -147,8 +147,8 @@ export const Testimonials = () => {
                                                     alt=""
                                                     src={testimonial.author.imageUrl}
                                                     className={classNames(
-                                                        'absolute max-sm:h-[90px] max-sm:w-[90px] h-[118px] w-[118px] rounded-full bg-gray-50 border-4 border-white shadow-lg transform translate-y-7',
-                                                        // Si está en la columna de la derecha, alinearlo a la derecha, si no, alinearlo a la izquierda
+                                                        'absolute max-sm:h-[90px] max-sm:w-[90px] h-[125px] w-[125px] rounded-full bg-gray-50 border-4 border-white shadow-lg transform translate-y-7 ',
+                                                        // Si está en la columna de la derecha, alinearlo a la derecha; si no, alinearlo a la izquierda
                                                         columnIdx % 2 === 0 ? '-translate-x-16 left-0' : 'translate-x-16 right-0'
                                                     )}
                                                 />

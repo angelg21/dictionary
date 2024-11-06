@@ -43,18 +43,18 @@ export const LandingPage = () => {
     }
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-[#2D2D2D]">
-            <header className="bg-cover bg-center bg-[url('/assets/bg-blue-header.png')] dark:bg-[url('/assets/header-oscuro.png')] shadow-sm">
+            <header className="bg-cover bg-center h-[80px] bg-[url('/assets/bg-blue-header.png')] dark:bg-[url('/assets/header-oscuro.png')] shadow-sm">
                 <nav className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-16">
+                    <div className="flex justify-between items-center h-[80px]">
                         <div className="flex-shrink-0 flex items-center">
                             <div className="relative flex flex-col pl-2 py-[2px] max-w-full">
                                 <div className="flex items-center text-center space-x-0">
-                                    <span className="text-gray-200 dark:text-gray-100 text-2xl font-sans leading-tight align-middle">Letra</span>
-                                    <span className="text-gray-200 dark:text-gray-100 text-2xl font-serif leading-tight align-middle pt-1">Scopio</span>
+                                    {/* Imagen que contiene las letras */}
+                                    <img
+                                        src="https://res.cloudinary.com/dlhvylz4p/image/upload/v1730827012/Dictionary/Landing/Logo/l3etfqufly29esdimqtz.png" 
+                                        className="h-auto w-auto max-w-full max-md:max-h-[60px] max-h-[75px] " // Ajusta la altura máxima según el diseño
+                                    />
                                 </div>
-                                <p className="text-gray-200 dark:text-gray-100 text-xs font-normal leading-tight align-middle break-words whitespace-normal max-w-full">
-                                    Diccionario de Literatura del Estado Bolívar
-                                </p>
                             </div>
                         </div>
                         <div className='hidden lg:flex justify-between space-x-5'>

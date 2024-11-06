@@ -32,6 +32,10 @@ const config: Config = {
       },
       fontFamily: {
         georgia: ['Georgia', 'serif'],
+        // Definir tus fuentes personalizadas
+        'josefin': ['Josefin Sans', 'sans-serif'],
+        'playwrite': ['"Playwrite GB S"', 'cursive'], // Fuente personalizada que agregaste en global.css
+        'calibri': ['Calibri', 'sans-serif'], // Fuente del sistema
       },
       textColor: {
         'd-darkgray': '#8a8f98',
