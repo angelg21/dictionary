@@ -105,7 +105,7 @@ export const LandingPage = () => {
             <main>
                 <SwiperHero />
                 <section id="caracteristicas" className="bg-white dark:bg-[#2D2D2D]">
-                    <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                    <div className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-20">
                         <div className="lg:text-center">
                             <h2 className="text-base text-gray-400  font-semibold tracking-wide uppercase text-center">Características</h2>
                             <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
