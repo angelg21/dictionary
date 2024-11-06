@@ -43,9 +43,9 @@ export const LandingPage = () => {
     }
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-[#2D2D2D]">
-            <header className="bg-cover bg-center h-[80px] bg-[url('/assets/bg-blue-header.png')] dark:bg-[url('/assets/header-oscuro.png')] shadow-sm">
+            <header className="bg-cover bg-center h-[120px] bg-[url('/assets/bg-blue-header.png')] dark:bg-[url('/assets/header-oscuro.png')] shadow-sm">
                 <nav className="max-w-[1420px] mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-[80px]">
+                    <div className="flex justify-between items-center h-[120px]">
                         <div className="flex-shrink-0 flex items-center">
                             <div className="relative flex flex-col pl-2 py-[2px] max-w-full">
                                 <div className="flex items-center text-center space-x-0">
@@ -57,18 +57,21 @@ export const LandingPage = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='hidden lg:flex justify-between space-x-5'>
+                        <div className='hidden lg:flex mt-12 justify-between space-x-5'>
                             <button onClick={() => handleScroll('caracteristicas')} className='text-base font-medium hover:font-semibold hover:text-gray-400 text-white'>Carasterísticas</button>
                             <button onClick={() => handleScroll('demostracion')} className='text-base font-medium hover:font-semibold hover:text-d-green-light text-white'>Demostración</button>
                             <button onClick={() => handleScroll('testimonios')} className='text-base font-medium hover:font-semibold hover:text-d-yellow text-white'>Testimonios</button>
                             <button onClick={() => handleScroll('noticias')} className='text-base font-medium hover:font-semibold hover:text-blue-600 text-white'>Noticias</button>
                         </div>
                         <div className="flex items-center">
+                            <Link href={'/auth/login'}>
+                                <button className="sm:mr-6 text-base font-semibold text-d-yellow hover:text-white hover:font-bold">¿Eres Colaborador?</button>
+                            </Link>
                             {/* <ThemeToggle /> */}
                             <div className="hidden sm:flex items-center">
                                 <button
                                     onClick={toggleTheme}
-                                    className={`relative flex items-center w-[154px] h-[40px] rounded-full p-1 transition-colors duration-300 focus:outline-none ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-800'
+                                    className={`relative flex items-center w-[147px] h-[30px] rounded-full p-1 transition-colors duration-300 focus:outline-none ${theme === 'light' ? 'bg-gray-200' : 'bg-gray-800'
                                         }`}
                                 >
                                     <span
@@ -84,7 +87,7 @@ export const LandingPage = () => {
                                         TEMA OSCURO
                                     </span>
                                     <span
-                                        className={`flex items-center justify-center w-[32px] h-[32px] rounded-full bg-white dark:bg-d-fondo shadow-md transform transition-transform duration-300 ${theme === 'dark' ? 'translate-x-[112px]' : ''
+                                        className={`flex items-center justify-center w-[26px] h-[26px] rounded-full bg-white dark:bg-d-fondo shadow-md transform transition-transform duration-300 ${theme === 'dark' ? 'translate-x-[112px]' : ''
                                             }`}
                                     >
                                         {theme === 'light' ? (
@@ -95,9 +98,6 @@ export const LandingPage = () => {
                                     </span>
                                 </button>
                             </div>
-                            <Link href={'/auth/login'}>
-                                <button className="ml-4 text-base font-semibold text-d-yellow hover:text-white hover:font-bold">¿Eres Colaborador?</button>
-                            </Link>
                         </div>
                     </div>
                 </nav>
