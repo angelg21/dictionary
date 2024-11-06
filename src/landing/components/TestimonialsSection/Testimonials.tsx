@@ -147,7 +147,7 @@ export const Testimonials = () => {
                                                     alt=""
                                                     src={testimonial.author.imageUrl}
                                                     className={classNames(
-                                                        'absolute max-sm:h-[90px] max-sm:w-[90px] h-[125px] w-[125px] rounded-full bg-gray-50 border-4 border-white shadow-lg transform translate-y-7 ',
+                                                        'absolute max-sm:h-[90px] max-sm:w-[90px] h-[115px] w-[115px] rounded-full bg-gray-50 border-4 border-white shadow-lg transform translate-y-7 ',
                                                         // Si está en la columna de la derecha, alinearlo a la derecha; si no, alinearlo a la izquierda
                                                         columnIdx % 2 === 0 ? '-translate-x-16 left-0' : 'translate-x-16 right-0'
                                                     )}
