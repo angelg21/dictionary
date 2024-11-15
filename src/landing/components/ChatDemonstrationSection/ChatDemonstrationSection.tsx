@@ -11,7 +11,7 @@ interface Message {
     content?: string;
     query?: string;
     data?: {
-        type: 'biography' | 'comparison' | 'list' | 'similarity' | 'multimedia' | 'model';
+        type: 'biography' | 'comparison' | 'list' | 'similarity' | 'multimedia' | 'model' | 'summary';
         query: string;
         result: any;
     }
