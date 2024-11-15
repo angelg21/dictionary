@@ -1,12 +1,12 @@
 
 
 const featuredTestimonial = {
-    body: 'Integer id nunc sit semper purus. Bibendum at lacus ut arcu blandit montes vitae auctor libero. Hac condimentum dignissim nibh vulputate ut nunc. Amet nibh orci mi venenatis blandit vel et proin. Non hendrerit in vel ac diam.',
+    body: 'Letrascopio es un diccionario IA de literatura regional venezolana hecho para todos los niveles, desde el investigador experto hasta el estudiante de las últimas etapas de la educación básica. Pretende ser un primer paso para remediar la ausencia de historias y críticas acerca de nuestras letras y además constituye una suerte de biblioteca digital (con bibliotecario incluido) que preserva y difunde la literatura del estado Bolívar. Con Letrascopio redescubriremos un universo de nuestra cultura regional que nos deparará grandiosas sorpresas',
     author: {
-        name: 'Diego Rojas Ajmad',
-        handle: 'Profesor de la UCAB en la Escuela de Comunicación Social',
+        name: 'Dr. Diego Rojas Ajmad',
+        handle: 'Universidad Nacional Experimental de Guayana y Universidad Católica Andrés Bello-Guayana.',
         imageUrl:
-            'https://res.cloudinary.com/dlhvylz4p/image/upload/v1729138961/Dictionary/Landing/Testimonials/rgdulhd72lpzq5qjtuk2.jpg',
+            'https://res.cloudinary.com/dlhvylz4p/image/upload/v1731637786/Dictionary/Landing/Testimonials/b3e7pidza3jyzu5dekcf.jpg',
         logoUrl: 'https://res.cloudinary.com/dlhvylz4p/image/upload/v1729139215/Dictionary/Landing/Testimonials/zbsgps0fv74j3e55uo6m.png',
     },
 }
@@ -52,12 +52,12 @@ const testimonials = [
         ],
         [
             {
-                body: 'Molestias ea earum quos nostrum doloremque sed. Quaerat quasi aut velit incidunt excepturi rerum voluptatem minus harum.',
+                body: 'Es como tener un amigo al que puedo consultar cuando deseo saber algo o aclarar alguna duda acerca de la literatura del estado Bolívar, porque tiene la información que necesito y está disponible las 24 horas del día',
                 author: {
-                    name: 'Leonard Krasner',
-                    handle: 'leonardkrasner',
+                    name: 'Dra. Aura Balbi',
+                    handle: 'Profesora de la UCAB Guayana.',
                     imageUrl:
-                        'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                        'https://res.cloudinary.com/dlhvylz4p/image/upload/v1731638137/Dictionary/Landing/Testimonials/zolenmdfug9ugukuz8ik.jpg',
                 },
             },
             // More testimonials...

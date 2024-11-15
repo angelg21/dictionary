@@ -9,6 +9,8 @@ import { RenderBiography } from './reponses/RenderBiography';
 import { RenderList } from './reponses/RenderList';
 import { RenderComparison } from './reponses/RenderComparison';
 import { RenderMultimedia } from './reponses/RenderMultimedia';
+import { RenderModel } from './reponses/RenderModel';
+import { RenderSummary } from './reponses/RenderSummary';
 
 interface Multimedia {
     images: { link: '', description: '' }[]; // Array de URLs de imágenes
@@ -55,6 +57,11 @@ interface Model {
     text: string
 }
 
+interface Summary {
+    title: string;
+    text: string;
+}
+
 interface MultimediaQA {
     title: string;
     multimedia: Multimedia;
@@ -62,9 +69,9 @@ interface MultimediaQA {
 // Definición del tipo ChatResponse
 interface ChatResponse {
     data: {
-        type: 'biography' | 'comparison' | 'list' | 'similarity' | 'multimedia' | 'model'; // Los tipos que puede recibir
+        type: 'biography' | 'comparison' | 'list' | 'similarity' | 'multimedia' | 'model' | 'summary'; // Los tipos que puede recibir
         query: string;
-        result: Biography | Comparison | List | Similarity | MultimediaQA | Model; // Definición más específica de result
+        result: Biography | Comparison | List | Similarity | MultimediaQA | Model | Summary; // Definición más específica de result
     }
 }
 
@@ -77,7 +84,9 @@ const ChatResponseDisplay: React.FC<ChatResponse> = ({ data }) => {
             {type === 'biography' && RenderBiography(result as Biography)}
             {(type === 'list' || type === 'similarity') && RenderList(result as List)}
             {type === 'comparison' && RenderComparison(result as Comparison)}
-            {type === 'multimedia' && RenderMultimedia(result as MultimediaQA)} 
+            {type === 'multimedia' && RenderMultimedia(result as MultimediaQA)}
+            {type === 'model' && RenderModel(result as Model)}
+            {type === 'summary' && RenderSummary(result as Summary)}
             {/* Puedes agregar más tipos si es necesario */}
         </div>
     );

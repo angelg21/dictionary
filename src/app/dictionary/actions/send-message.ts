@@ -43,11 +43,20 @@ interface MultimediaResponse {
     multimedia: Multimedia;
 }
 
+interface Summary {
+    title: string;
+    summary: string;
+}
+
+interface Model {
+    text: string
+}
+
 // Definimos la interfaz que puede manejar tanto biography como list
 interface ApiResponse {
-    type: 'biography' | 'list' | 'similarity' | 'comparison' | 'multimedia';
+    type: 'biography' | 'list' | 'similarity' | 'comparison' | 'multimedia' | 'model' | 'summary';
     query: string;
-    result: BiographyResponse | ListResponse | ComparisonResponse | MultimediaResponse;
+    result: BiographyResponse | ListResponse | ComparisonResponse | MultimediaResponse | Model | Summary;
 }
 
 export const SendMessage = async (question: string | string[]) => {
@@ -82,8 +91,20 @@ export const SendMessage = async (question: string | string[]) => {
 // Lógica para manejar la respuesta de la API
 const handleApiResponse = (responseData: any): ApiResponse => {
     try {
+
+        // Manejar el caso para "model" con texto simple en result
+        if (responseData.type === 'model' && typeof responseData.result === 'string') {
+            return {
+                type: responseData.type,
+                query: responseData.query,
+                result: {
+                    text: responseData.result, // Usamos el texto directamente
+                },
+            };
+        }
+
         // Verificamos si el resultado contiene un bloque de código con el JSON
-        if (responseData.result && responseData.result.includes('```json')) {
+        if (responseData.result.includes('```json')) {
             // Extraemos el bloque de JSON dentro de la cadena
             const jsonString = responseData.result.split('```json')[1].split('```')[0].trim();
 
@@ -145,22 +166,17 @@ const handleApiResponse = (responseData: any): ApiResponse => {
                         })),
                     },
                 };
-            }else if (responseData.type === 'multimedia') {
+            }else if (responseData.type === 'summary') {
                 // Procesar el tipo existente "multimedia"
                 return {
                     type: responseData.type,
                     query: responseData.query,
                     result: {
                         title: apiData.title,
-                        multimedia: {
-                            images: Array.isArray(apiData.multimedia?.images) ? apiData.multimedia.images : [],
-                            videos: Array.isArray(apiData.multimedia?.videos) ? apiData.multimedia.videos : [],
-                            audios: Array.isArray(apiData.multimedia?.audios) ? apiData.multimedia.audios : [],
-                            documents: Array.isArray(apiData.multimedia?.documents) ? apiData.multimedia.documents : [],
-                        },
+                        text: apiData.summary,
                     },
                 };
-            } else {
+            }else {
                 throw new Error('Tipo de respuesta no soportado');
             }
         } else {

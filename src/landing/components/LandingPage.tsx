@@ -58,7 +58,7 @@ export const LandingPage = () => {
                             </div>
                         </div>
                         <div className='hidden lg:flex mt-12 justify-between space-x-5'>
-                            <button onClick={() => handleScroll('caracteristicas')} className='text-base font-medium hover:font-semibold hover:text-gray-400 text-white'>Carasterísticas</button>
+                            <button onClick={() => handleScroll('caracteristicas')} className='text-base font-medium hover:font-semibold hover:text-gray-400 text-white'>Características</button>
                             <button onClick={() => handleScroll('demostracion')} className='text-base font-medium hover:font-semibold hover:text-d-green-light text-white'>Demostración</button>
                             <button onClick={() => handleScroll('testimonios')} className='text-base font-medium hover:font-semibold hover:text-d-yellow text-white'>Testimonios</button>
                             <button onClick={() => handleScroll('noticias')} className='text-base font-medium hover:font-semibold hover:text-blue-600 text-white'>Noticias</button>
