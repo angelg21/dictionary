@@ -4,7 +4,6 @@ import { Sidebar } from "@/src/dashboard/components/Sidebar/Sidebar";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 
-
 export default function DashboardLayout({ children }: { children: React.ReactNode; }) {
 
     const [sidebarOpen, setSidebarOpen] = useState(false)

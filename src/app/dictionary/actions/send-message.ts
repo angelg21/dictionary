@@ -61,7 +61,7 @@ interface ApiResponse {
 
 export const SendMessage = async (question: string | string[]) => {
     try {
-        const response = await fetch(`https://modelai-dictionary.onrender.com/ask`, {
+        const response = await fetch(process.env.MODEL_API_URL + '/ask', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
