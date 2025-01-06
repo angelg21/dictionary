@@ -61,6 +61,7 @@ interface ApiResponse {
 
 export const SendMessage = async (question: string | string[]) => {
     try {
+        console.log(process.env.MODEL_API_URL)
         const response = await fetch(process.env.MODEL_API_URL + '/ask', {
             method: 'POST',
             headers: {
